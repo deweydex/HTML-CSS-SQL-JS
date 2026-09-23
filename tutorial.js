@@ -26,6 +26,13 @@
  */
 
 /**
+ * @typedef {Object} Enrolment
+ * @property {number} id - Unique enrolment identifier
+ * @property {number} student_id - Points at a row in students
+ * @property {number} course_id - Points at a row in courses
+ */
+
+/**
  * @typedef {Object} QueryResult
  * @property {string[][]} values - 2D array of result values
  * @property {string[]} columns - Array of column names
@@ -75,7 +82,7 @@ async function initializeDatabase() {
         // catch(error) { } - What to do if it fails
         // This prevents crashes and allows graceful error handling
         
-        updateStatus('loading', 'Initializing database...');
+        updateStatus('loading', 'Starting the database...');
         
         // AWAIT EXPLAINED:
         // initSqlJs() returns a Promise (asynchronous operation)
@@ -106,7 +113,7 @@ async function initializeDatabase() {
 }
 
 /**
- * Create the students and courses tables
+ * Create the students, courses and enrolments tables
  * 
  * @returns {void}
  */
@@ -135,6 +142,18 @@ function createTables() {
         );
     `;
     
+    // FOREIGN KEYS EXPLAINED:
+    // student_id and course_id hold the id of a row in another table.
+    // REFERENCES records which table and column they point at. That link
+    // is what a JOIN follows to put a name back next to each number.
+    const createEnrolmentsTable = `
+        CREATE TABLE IF NOT EXISTS enrolments (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            student_id INTEGER NOT NULL REFERENCES students(id),
+            course_id INTEGER NOT NULL REFERENCES courses(id)
+        );
+    `;
+    
     // TEMPLATE LITERALS EXPLAINED:
     // Backticks (`) allow multi-line strings and string interpolation
     // Example: `Hello ${name}` - embeds variables in strings
@@ -142,6 +161,7 @@ function createTables() {
     // Execute the CREATE TABLE statements
     db.run(createStudentsTable);
     db.run(createCoursesTable);
+    db.run(createEnrolmentsTable);
 }
 
 /**
@@ -175,11 +195,25 @@ function populateSampleData() {
         { name: 'Computer Networks', instructor: 'Dr. Martinez', credits: 3 }
     ];
     
+    // [student_id, course_id] pairs: who takes what.
+    // Frank Miller (id 6) takes nothing, which Exercise 13 goes looking for.
+    /** @type {Array<[number, number]>} */
+    const enrolments = [
+        [1, 1], [1, 3],   // Alice: Intro to Programming, Web Development
+        [2, 1], [2, 2],   // Bob: Intro to Programming, Data Structures
+        [3, 3],           // Carol: Web Development
+        [4, 2], [4, 4],   // David: Data Structures, Database Systems
+        [5, 4], [5, 5],   // Eve: Database Systems, Computer Networks
+        [7, 1], [7, 5],   // Grace: Intro to Programming, Computer Networks
+        [8, 3], [8, 4]    // Henry: Web Development, Database Systems
+    ];
+    
     // PREPARED STATEMENTS EXPLAINED:
     // The ? placeholders prevent SQL injection attacks
     // Values are safely inserted by the database engine
     const studentStmt = db.prepare('INSERT INTO students (name, age, grade) VALUES (?, ?, ?)');
     const courseStmt = db.prepare('INSERT INTO courses (name, instructor, credits) VALUES (?, ?, ?)');
+    const enrolmentStmt = db.prepare('INSERT INTO enrolments (student_id, course_id) VALUES (?, ?)');
     
     // FOREACH EXPLAINED:
     // Loops through each item in the array
@@ -193,10 +227,15 @@ function populateSampleData() {
         courseStmt.run([course.name, course.instructor, course.credits]);
     });
     
+    enrolments.forEach(pair => {
+        enrolmentStmt.run(pair);
+    });
+    
     // CLEANUP:
     // Free memory used by prepared statements
     studentStmt.free();
     courseStmt.free();
+    enrolmentStmt.free();
 }
 
 /**
@@ -261,14 +300,22 @@ function executeQuery() {
         // Returns an array of result objects
         const results = db.exec(query);
         
+        // ROWS MODIFIED:
+        // How many rows the last INSERT, UPDATE or DELETE changed
+        const rowsChanged = db.getRowsModified();
+        
         // CONDITIONAL EXECUTION:
         // Different display based on query type
         if (results.length === 0) {
             // Query succeeded but returned no data (INSERT, UPDATE, DELETE)
-            displaySuccess('Query executed successfully! (No data to display)');
+            const detail = rowsChanged > 0
+                ? `${rowsChanged} row${rowsChanged === 1 ? '' : 's'} changed.`
+                : '(No data to display)';
+            displaySuccess(`Query executed successfully! ${detail}`);
         } else {
             // Query returned data (SELECT)
-            displayResults(results[0]);
+            // One result per SELECT, so several SELECTs show several tables
+            displayResults(results);
         }
         
     } catch (error) {
@@ -279,15 +326,25 @@ function executeQuery() {
 }
 
 /**
- * Display query results as an HTML table
+ * Display query results as HTML tables, one per result
  * 
- * @param {QueryResult} result - Query result object
+ * @param {QueryResult[]} results - Query result objects
  * @returns {void}
  */
-function displayResults(result) {
+function displayResults(results) {
     const resultsDiv = document.getElementById('query-results');
     if (!resultsDiv) return;
     
+    resultsDiv.innerHTML = results.map(resultToHtml).join('');
+}
+
+/**
+ * Build the HTML table for one query result
+ * 
+ * @param {QueryResult} result - Query result object
+ * @returns {string} - HTML for a heading and a table
+ */
+function resultToHtml(result) {
     // DESTRUCTURING EXPLAINED:
     // Extracts properties from an object into variables
     // const {columns, values} = result;
@@ -315,7 +372,7 @@ function displayResults(result) {
     
     // TEMPLATE LITERAL WITH HTML:
     // Creates multi-line HTML string
-    resultsDiv.innerHTML = `
+    return `
         <h4>Query Results (${values.length} row${values.length === 1 ? '' : 's'})</h4>
         <table>
             <thead>
@@ -402,6 +459,58 @@ function clearQuery() {
 }
 
 /**
+ * List every table in the database with its columns and row count.
+ * Includes any tables the student has created themselves.
+ * 
+ * @returns {void}
+ */
+function showTables() {
+    if (dbStatus !== 'ready') {
+        displayError('Database not ready. Please wait or refresh the page.');
+        return;
+    }
+    
+    const resultsDiv = document.getElementById('query-results');
+    if (!resultsDiv) return;
+    
+    // SQLITE_MASTER EXPLAINED:
+    // SQLite keeps a list of everything in the database in a table of its
+    // own, called sqlite_master. You can query it like any other table.
+    const tables = db.exec(
+        "SELECT name FROM sqlite_master WHERE type = 'table' AND name NOT LIKE 'sqlite_%' ORDER BY name"
+    );
+    
+    if (tables.length === 0) {
+        displaySuccess('There are no tables. Press Reset Database to bring the sample tables back.');
+        return;
+    }
+    
+    const rows = tables[0].values.map(([tableName]) => {
+        // Double any " in the name so a table called, say, my"table still works
+        const quoted = `"${tableName.replace(/"/g, '""')}"`;
+        // PRAGMA table_info lists a table's columns; column 1 of each row
+        // is the column's name and column 2 is its type
+        const columns = db.exec(`PRAGMA table_info(${quoted})`)[0].values
+            .map(col => `${col[1]} (${col[2] || 'any'})`)
+            .join(', ');
+        const count = db.exec(`SELECT COUNT(*) FROM ${quoted}`)[0].values[0][0];
+        return `<tr><td><strong>${escapeHtml(tableName)}</strong></td><td>${escapeHtml(columns)}</td><td>${count}</td></tr>`;
+    }).join('');
+    
+    resultsDiv.innerHTML = `
+        <h4>Tables in the database</h4>
+        <table>
+            <thead>
+                <tr><th>Table</th><th>Columns</th><th>Rows</th></tr>
+            </thead>
+            <tbody>
+                ${rows}
+            </tbody>
+        </table>
+    `;
+}
+
+/**
  * Reset the database to its original state
  * Drops all tables and recreates them with sample data
  * 
@@ -426,6 +535,7 @@ function resetDatabase() {
         // IF EXISTS prevents errors if table doesn't exist
         db.run('DROP TABLE IF EXISTS students');
         db.run('DROP TABLE IF EXISTS courses');
+        db.run('DROP TABLE IF EXISTS enrolments');
         
         // Recreate tables and populate with sample data
         createTables();
@@ -467,6 +577,21 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log('Page loaded. Initializing database...');
     initializeDatabase();
     
+    // "LOAD IT INTO THE PLAYGROUND" BUTTONS:
+    // Each answer's button keeps its query in a data-query attribute.
+    // One listener on the whole page handles all of them (event delegation)
+    document.addEventListener('click', function(event) {
+        const button = event.target.closest('.try-answer');
+        if (!button) return;
+        
+        setQuery(button.dataset.query);
+        const queryInput = document.getElementById('sql-query');
+        if (queryInput) {
+            queryInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            queryInput.focus({ preventScroll: true });
+        }
+    });
+    
     // KEYBOARD SHORTCUTS:
     // Add Enter key support for running queries (Ctrl/Cmd + Enter)
     const queryInput = document.getElementById('sql-query');
@@ -497,6 +622,7 @@ window.executeQuery = executeQuery;
 window.setQuery = setQuery;
 window.clearQuery = clearQuery;
 window.resetDatabase = resetDatabase;
+window.showTables = showTables;
 
 // ============================================
 // DEVELOPER NOTES
@@ -520,6 +646,7 @@ window.resetDatabase = resetDatabase;
 // ✅ CREATE TABLE
 // ✅ INSERT INTO
 // ✅ SELECT with WHERE
+// ✅ JOIN and LEFT JOIN (foreign keys)
 // ✅ ORDER BY
 // ✅ COUNT and aggregate functions
 // ✅ UPDATE and DELETE

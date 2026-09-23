@@ -7,7 +7,8 @@ An interactive, browser-based tutorial for teaching web development fundamentals
 - **Interactive SQL Playground**: Run real SQL queries in the browser (no server needed!)
 - **Comprehensive Coverage**: HTML basics, CSS styling, and SQL fundamentals
 - **Hands-on Learning**: Students can experiment and see results immediately
-- **Teacher Version**: Includes complete solutions and teaching notes
+- **Hints and Answers**: Every exercise has a hint first, then an answer that can be loaded straight into the editor
+- **Appearance Panel**: Each reader can pick light or dark, a font (including Lexend and OpenDyslexic), text size, page width, high contrast and reduced motion; choices are remembered in their browser
 - **Mobile Responsive**: Works on all devices
 - **No Installation Required**: Runs entirely in the browser
 
@@ -16,9 +17,11 @@ An interactive, browser-based tutorial for teaching web development fundamentals
 ```
 sql-tutorial-site/
 ├── index.html          # Main student tutorial page
-├── teacher.html        # Teacher version with solutions
-├── styles.css          # Stylesheet for both pages
+├── styles.css          # Stylesheet for both pages (colours live in CSS variables at the top)
 ├── tutorial.js         # JavaScript for SQL functionality
+├── appearance.js       # The Appearance panel (theme, font, size, contrast)
+├── code-lab.js         # The live HTML/CSS editors in Parts 1 and 2
+├── fonts/              # Lexend and OpenDyslexic, self-hosted (SIL Open Font Licence)
 └── README.md          # This file
 ```
 
@@ -61,6 +64,9 @@ Follow these steps to host the tutorial online so students can access it via a l
    - `index.html`
    - `styles.css`
    - `tutorial.js`
+   - `appearance.js`
+   - `code-lab.js`
+   - the `fonts` folder
    - `README.md` (optional - there's already one)
 3. Scroll down and click **"Commit changes"**
 
@@ -72,7 +78,7 @@ git clone https://github.com/YOUR-USERNAME/sql-tutorial.git
 cd sql-tutorial
 
 # Copy the tutorial files into this directory
-# (copy index.html, styles.css, tutorial.js here)
+# (copy index.html, styles.css, tutorial.js, appearance.js, code-lab.js and fonts/ here)
 
 # Add and commit
 git add .
@@ -106,7 +112,7 @@ For example: `https://johndoe.github.io/sql-tutorial/`
 
 ### File Names Matter!
 - Keep the file named `index.html` (this is the default page GitHub Pages serves)
-- All other files (`styles.css`, `tutorial.js`, `teacher.html`) must be in the same directory
+- All other files (`styles.css`, `tutorial.js`, `appearance.js`, `code-lab.js`) and the `fonts` folder must be in the same directory
 - File names are case-sensitive!
 
 ### HTTPS is Automatic
@@ -150,7 +156,7 @@ For example: `https://johndoe.github.io/sql-tutorial/`
 1. **Start Simple**: Have students run the example queries first
 2. **Encourage Experimentation**: Breaking things is part of learning
 3. **Use DevTools**: Teach students to press F12 to see the console
-4. **Check Solutions**: All answers are in `teacher.html`
+4. **Answers on the Page**: Every exercise has a hint, then a "Show answer" button, so students can check their own work
 5. **Reset Database**: Students can reset to original data anytime
 
 ### Sample Database
@@ -261,9 +267,8 @@ This tutorial is free to use for educational purposes. Feel free to:
 ## Support
 
 ### For Teachers:
-- Review the `teacher.html` file for all solutions
-- The teaching notes section has helpful tips
-- Check the assessment rubric for grading guidance
+- Every exercise's answer is on the page itself, under its hint
+- The earlier teacher version (teaching notes, common errors, marking rubric) is in this repository's history if you want it back
 
 ### For Students:
 - Read error messages carefully - they tell you what's wrong
