@@ -1,4 +1,249 @@
 /* ============================================
+   DESIGN TOKENS (CSS CUSTOM PROPERTIES)
+   ============================================
+   Every colour, font and size the page uses is stored once here as a
+   variable (a "custom property", written --name). The rest of the file
+   refers to them with var(--name).
+
+   Why bother? Because changing one variable changes every place it is
+   used. The Appearance panel (appearance.js) works entirely this way: it
+   sets an attribute such as data-theme="dark" on the <html> element, and
+   the blocks further down swap in a different set of values. Nothing
+   else in this file has to know which theme is active.
+============================================= */
+:root {
+    /* Reader settings, written by appearance.js */
+    --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    --font-size: 16px;
+    --line-width: 62rem;
+    --code-line-height: 1.5;
+    --mono: ui-monospace, 'Cascadia Mono', 'SF Mono', Menlo, Consolas, 'Courier New', monospace;
+
+    /* Page */
+    --bg: #f5f7fa;
+    --fg: #1f2933;
+    --muted: #52606d;
+    --surface: #ffffff;
+    --surface-2: #f6f7f9;
+    --border: #d5dbe3;
+    --shadow: rgba(15, 23, 42, 0.08);
+    --focus: #f59e0b;
+
+    /* Brand: a deeper indigo and purple than before, so white text on
+       the header clears 7:1 instead of 3.7:1 */
+    --accent: #4338ca;
+    --accent-hover: #3730a3;
+    --accent-soft: #eef0ff;
+    --on-accent: #ffffff;
+    --header-from: #3730a3;
+    --header-to: #6b21a8;
+
+    /* Code */
+    --code-fg: #9d174d;
+    --code-bg: #eef1f4;
+    --pre-bg: #1f2937;
+    --pre-fg: #e5e7eb;
+
+    /* Buttons (all clear 4.5:1 with white text) */
+    --run: #15803d;
+    --run-hover: #166534;
+    --clear: #b45309;
+    --clear-hover: #92400e;
+    --reset: #b91c1c;
+    --reset-hover: #991b1b;
+    --chip-bg: #e0ecff;
+    --chip-fg: #1e40af;
+    --chip-border: #3b82f6;
+
+    /* Messages */
+    --success: #166534;
+    --error-fg: #991b1b;
+    --error-bg: #fde8e8;
+
+    /* Coloured callout boxes, one hue per part of the tutorial */
+    --html-bg: #fff4e5;   --html-line: #ea580c;   --html-head: #9a3412;
+    --css-bg: #e8f1fd;    --css-line: #2563eb;    --css-head: #1e40af;
+    --sql-bg: #eaf7ee;    --sql-line: #16a34a;    --sql-head: #166534;
+    --all-bg: #f5ecfb;    --all-line: #9333ea;    --all-head: #6b21a8;
+
+    /* Box model diagram */
+    --margin-bg: #ffe4e1;   --margin-line: #e03131;
+    --border-bg: #fff4e6;   --border-line: #e8590c;
+    --padding-bg: #d3f9d8;  --padding-line: #2b8a3e;
+    --content-bg: #e3f2fd;  --content-line: #1971c2;
+
+    /* Teacher version */
+    --teacher-bg: #fff8db;  --teacher-line: #d4a106;  --teacher-head: #6b4f00;
+    --solution-bg: #e6f4ea; --solution-line: #16a34a; --solution-head: #14532d;
+    --tip-bg: #e0f2f7;      --tip-line: #0e7490;      --tip-head: #164e63;
+    --mistake-bg: #fde8ea;  --mistake-line: #dc2626;  --mistake-head: #7f1d1d;
+    --banner-bg: #facc15;   --banner-fg: #1a1a1a;
+
+    /* Footer */
+    --footer-bg: #1f2937;
+    --footer-fg: #f3f4f6;
+    --footer-link: #c7d2fe;
+}
+
+/* Dark theme. appearance.js sets data-theme="dark" when the reader picks
+   dark, or picks auto on a computer that is set to dark mode. */
+:root[data-theme="dark"] {
+    --bg: #12151c;
+    --fg: #e6e8eb;
+    --muted: #a3adb8;
+    --surface: #1a1f29;
+    --surface-2: #222835;
+    --border: #364052;
+    --shadow: rgba(0, 0, 0, 0.45);
+
+    --accent: #a5b4fc;
+    --accent-hover: #c7d2fe;
+    --accent-soft: #252b45;
+    --on-accent: #111827;
+    --header-from: #262a6b;
+    --header-to: #4a1d6e;
+
+    --code-fg: #f9a8d4;
+    --code-bg: #2a3040;
+    --pre-bg: #0d1117;
+    --pre-fg: #e6edf3;
+
+    --chip-bg: #1e2a4a;
+    --chip-fg: #bfdbfe;
+    --chip-border: #3b82f6;
+
+    --success: #86efac;
+    --error-fg: #fecaca;
+    --error-bg: #3b1d1d;
+
+    --html-bg: #2d2116;   --html-line: #f97316;   --html-head: #fdba74;
+    --css-bg: #16233a;    --css-line: #60a5fa;    --css-head: #93c5fd;
+    --sql-bg: #15291d;    --sql-line: #22c55e;    --sql-head: #86efac;
+    --all-bg: #271b35;    --all-line: #a855f7;    --all-head: #d8b4fe;
+
+    --margin-bg: #3b1f22;   --margin-line: #f87171;
+    --border-bg: #3a2a14;   --border-line: #fb923c;
+    --padding-bg: #173020;  --padding-line: #4ade80;
+    --content-bg: #172a44;  --content-line: #60a5fa;
+
+    --teacher-bg: #2b2610;  --teacher-line: #d4a106;  --teacher-head: #fde68a;
+    --solution-bg: #13261a; --solution-line: #22c55e; --solution-head: #86efac;
+    --tip-bg: #112a31;      --tip-line: #06b6d4;      --tip-head: #67e8f9;
+    --mistake-bg: #2e1519;  --mistake-line: #ef4444;  --mistake-head: #fca5a5;
+
+    --footer-bg: #0b0d12;
+}
+
+/* High contrast: pure black on white (or white on black in dark mode),
+   hard borders, and no tinted backgrounds to read text against. */
+:root[data-contrast="high"] {
+    --bg: #ffffff;
+    --fg: #000000;
+    --muted: #1a1a1a;
+    --surface: #ffffff;
+    --surface-2: #ffffff;
+    --border: #000000;
+    --accent: #1e1b8f;
+    --accent-hover: #000000;
+    --header-from: #1e1b4b;
+    --header-to: #1e1b4b;
+    --code-fg: #6b0f38;
+    --code-bg: #f0f0f0;
+    --chip-fg: #0b2a7a;
+    --html-bg: #ffffff; --html-head: #000000;
+    --css-bg: #ffffff;  --css-head: #000000;
+    --sql-bg: #ffffff;  --sql-head: #000000;
+    --all-bg: #ffffff;  --all-head: #000000;
+    --teacher-head: #000000; --solution-head: #000000;
+    --tip-head: #000000; --mistake-head: #000000;
+}
+:root[data-theme="dark"][data-contrast="high"] {
+    --bg: #000000;
+    --fg: #ffffff;
+    --muted: #f2f2f2;
+    --surface: #000000;
+    --surface-2: #000000;
+    --border: #ffffff;
+    --accent: #c7d2fe;
+    --accent-hover: #ffffff;
+    --header-from: #000000;
+    --header-to: #000000;
+    --code-fg: #ffc2e2;
+    --code-bg: #1a1a1a;
+    --chip-bg: #000000;
+    --chip-fg: #ffffff;
+    --html-bg: #000000; --html-head: #ffffff;
+    --css-bg: #000000;  --css-head: #ffffff;
+    --sql-bg: #000000;  --sql-head: #ffffff;
+    --all-bg: #000000;  --all-head: #ffffff;
+    --teacher-bg: #000000; --solution-bg: #000000;
+    --tip-bg: #000000;  --mistake-bg: #000000;
+    --teacher-head: #ffffff; --solution-head: #ffffff;
+    --tip-head: #ffffff; --mistake-head: #ffffff;
+}
+
+/* Font choices from the Appearance panel. Lexend and OpenDyslexic are
+   stored in the fonts/ folder, so they work even without the internet;
+   the browser only downloads one when a reader picks it. */
+@font-face {
+    font-family: 'Lexend';
+    src: url('fonts/lexend-latin-400-normal.woff2') format('woff2');
+    font-weight: 400;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'Lexend';
+    src: url('fonts/lexend-latin-700-normal.woff2') format('woff2');
+    font-weight: 600 700;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'OpenDyslexic';
+    src: url('fonts/opendyslexic-latin-400-normal.woff2') format('woff2');
+    font-weight: 400;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'OpenDyslexic';
+    src: url('fonts/opendyslexic-latin-700-normal.woff2') format('woff2');
+    font-weight: 600 700;
+    font-display: swap;
+}
+
+:root[data-font="serif"] {
+    --font-family: Georgia, 'Iowan Old Style', 'Times New Roman', serif;
+}
+:root[data-font="mono"] {
+    --font-family: var(--mono);
+}
+:root[data-font="lexend"] {
+    --font-family: 'Lexend', 'Helvetica Neue', Arial, sans-serif;
+}
+:root[data-font="opendyslexic"] {
+    --font-family: 'OpenDyslexic', 'Comic Sans MS', sans-serif;
+}
+
+/* Reduce motion: switches off hover lifts, the pulsing status light and
+   smooth scrolling. Also honoured automatically if the computer itself
+   asks for reduced motion. */
+:root[data-motion="reduced"] *,
+:root[data-motion="reduced"] *::before,
+:root[data-motion="reduced"] *::after {
+    transition-duration: 0.001ms !important;
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+}
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        transition-duration: 0.001ms !important;
+        animation-duration: 0.001ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+/* ============================================
    GLOBAL STYLES & RESET
 ============================================= */
 * {
@@ -7,34 +252,105 @@
     box-sizing: border-box;
 }
 
+html {
+    font-size: var(--font-size);
+    scroll-behavior: smooth;
+}
+
 body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    font-family: var(--font-family);
     line-height: 1.6;
-    color: #333;
-    background-color: #f5f7fa;
+    color: var(--fg);
+    background-color: var(--bg);
+}
+
+a {
+    color: var(--accent);
+}
+
+a:hover {
+    color: var(--accent-hover);
+}
+
+/* A clear ring around whatever the keyboard is on */
+:focus-visible {
+    outline: 3px solid var(--focus);
+    outline-offset: 2px;
+}
+
+/* Jumps past the header for keyboard and screen reader users. Hidden
+   until it receives focus. */
+.skip-link {
+    position: absolute;
+    left: 12px;
+    top: -100px;
+    z-index: 3000;
+    background: var(--surface);
+    color: var(--accent);
+    padding: 10px 16px;
+    border-radius: 6px;
+    font-weight: 600;
+    box-shadow: 0 2px 8px var(--shadow);
+}
+
+.skip-link:focus {
+    top: 12px;
 }
 
 /* ============================================
    HEADER & NAVIGATION
 ============================================= */
 header {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
+    background: linear-gradient(135deg, var(--header-from) 0%, var(--header-to) 100%);
+    color: #ffffff;
     padding: 40px 20px;
     text-align: center;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 6px var(--shadow);
 }
 
 header h1 {
     font-size: 2.5em;
     margin-bottom: 10px;
     font-weight: 700;
+    line-height: 1.2;
 }
 
 .subtitle {
     font-size: 1.2em;
-    opacity: 0.95;
     margin-bottom: 20px;
+}
+
+.teacher-subtitle {
+    font-size: 0.95em;
+}
+
+/* The "Choose Your Learning Path" box. It sits inside the white-text
+   header on a light card, so it sets its own text colour rather than
+   inheriting white (which is what made it unreadable before). */
+.learning-paths {
+    max-width: 760px;
+    margin: 24px auto;
+    padding: 20px 24px;
+    background: var(--surface);
+    color: var(--fg);
+    border-radius: 10px;
+    text-align: left;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18);
+}
+
+.learning-paths h3 {
+    margin-top: 0;
+    margin-bottom: 8px;
+    color: var(--accent);
+}
+
+.learning-paths p {
+    margin: 8px 0;
+}
+
+.learning-paths-note {
+    font-style: italic;
+    color: var(--muted);
 }
 
 nav {
@@ -46,45 +362,98 @@ nav {
 }
 
 nav a {
-    background: rgba(255, 255, 255, 0.2);
-    color: white;
+    background: rgba(255, 255, 255, 0.14);
+    color: #ffffff;
     padding: 12px 24px;
     text-decoration: none;
     border-radius: 25px;
     transition: all 0.3s ease;
-    font-weight: 500;
-    border: 2px solid rgba(255, 255, 255, 0.3);
+    font-weight: 600;
+    border: 2px solid rgba(255, 255, 255, 0.55);
 }
 
 nav a:hover {
-    background: rgba(255, 255, 255, 0.3);
+    color: #ffffff;
+    background: rgba(255, 255, 255, 0.26);
     transform: translateY(-2px);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+nav a:focus-visible {
+    outline-color: #ffffff;
 }
 
 /* ============================================
    MAIN CONTENT AREA
 ============================================= */
 main {
-    max-width: 1200px;
+    max-width: var(--line-width);
     margin: 40px auto;
     padding: 0 20px;
 }
 
 .tutorial-section {
-    background: white;
+    background: var(--surface);
+    border: 1px solid var(--border);
     border-radius: 12px;
     padding: 40px;
     margin-bottom: 30px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 2px 10px var(--shadow);
+    scroll-margin-top: 16px;
 }
 
 .tutorial-section h2 {
-    color: #667eea;
+    color: var(--accent);
     font-size: 2em;
+    line-height: 1.25;
     margin-bottom: 25px;
     padding-bottom: 15px;
-    border-bottom: 3px solid #667eea;
+    border-bottom: 3px solid var(--accent);
+}
+
+/* ============================================
+   CALLOUT BOXES ("How to approach this section")
+============================================= */
+.exploration-prompt {
+    background: var(--surface-2);
+    padding: 16px 20px;
+    margin: 20px 0;
+    border: 1px solid transparent;
+    border-left: 5px solid var(--border);
+    border-radius: 6px;
+}
+
+.exploration-prompt h4 {
+    margin-top: 0;
+    margin-bottom: 8px;
+}
+
+.exploration-prompt ul {
+    margin: 0 0 0 22px;
+}
+
+.exploration-prompt li {
+    margin-bottom: 4px;
+}
+
+.callout-html { background: var(--html-bg); border-left-color: var(--html-line); }
+.callout-html h4 { color: var(--html-head); }
+.callout-css { background: var(--css-bg); border-left-color: var(--css-line); }
+.callout-css h4 { color: var(--css-head); }
+.callout-sql { background: var(--sql-bg); border-left-color: var(--sql-line); }
+.callout-sql h4 { color: var(--sql-head); }
+.callout-together { background: var(--all-bg); border-left-color: var(--all-line); }
+.callout-together h4 { color: var(--all-head); }
+
+:root[data-contrast="high"] .exploration-prompt {
+    border-color: var(--border);
+}
+
+.callout-footnote {
+    margin: 12px 0 0 0;
+    padding-top: 10px;
+    border-top: 1px solid var(--border);
+    font-style: italic;
 }
 
 /* ============================================
@@ -95,14 +464,14 @@ main {
 }
 
 .lesson h3 {
-    color: #444;
+    color: var(--fg);
     font-size: 1.6em;
     margin-bottom: 15px;
     margin-top: 25px;
 }
 
 .lesson h4 {
-    color: #555;
+    color: var(--fg);
     font-size: 1.3em;
     margin-bottom: 12px;
     margin-top: 20px;
@@ -114,7 +483,8 @@ main {
 }
 
 .lesson ul,
-.lesson ol {
+.lesson ol,
+.tutorial-section > ul {
     margin-left: 25px;
     margin-bottom: 15px;
 }
@@ -128,41 +498,42 @@ main {
    CODE EXAMPLES
 ============================================= */
 code {
-    background: #f4f4f4;
+    background: var(--code-bg);
     padding: 2px 6px;
     border-radius: 3px;
-    font-family: 'Courier New', Courier, monospace;
+    font-family: var(--mono);
     font-size: 0.9em;
-    color: #e83e8c;
+    color: var(--code-fg);
 }
 
 .example-box {
-    background: #f8f9fa;
-    border-left: 4px solid #667eea;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--accent);
     padding: 20px;
     margin: 20px 0;
     border-radius: 6px;
 }
 
 .example-box h4 {
-    color: #667eea;
+    color: var(--accent);
     margin-top: 0;
     margin-bottom: 15px;
 }
 
 pre {
-    background: #2d3748;
-    color: #e2e8f0;
+    background: var(--pre-bg);
+    color: var(--pre-fg);
     padding: 20px;
     border-radius: 6px;
     overflow-x: auto;
     margin: 15px 0;
-    line-height: 1.5;
+    line-height: var(--code-line-height);
 }
 
 pre code {
     background: none;
-    color: #e2e8f0;
+    color: var(--pre-fg);
     padding: 0;
     font-size: 0.95em;
 }
@@ -171,11 +542,17 @@ pre code {
    INTERACTIVE DEMOS
 ============================================= */
 .interactive-demo {
-    background: #fff;
-    border: 2px solid #e0e0e0;
+    background: var(--surface);
+    border: 2px solid var(--border);
     border-radius: 8px;
     padding: 25px;
     margin: 20px 0;
+}
+
+.demo-caption {
+    margin-top: 10px;
+    font-size: 0.9em;
+    color: var(--muted);
 }
 
 /* Sample Form Styling */
@@ -187,7 +564,7 @@ form {
 
 label {
     font-weight: 600;
-    color: #555;
+    color: var(--fg);
     margin-bottom: 5px;
 }
 
@@ -195,9 +572,12 @@ input[type="text"],
 input[type="email"],
 input[type="number"] {
     padding: 10px;
-    border: 2px solid #ddd;
+    border: 2px solid var(--border);
     border-radius: 6px;
     font-size: 1em;
+    font-family: inherit;
+    color: var(--fg);
+    background: var(--surface);
     transition: border-color 0.3s ease;
 }
 
@@ -205,12 +585,17 @@ input[type="text"]:focus,
 input[type="email"]:focus,
 input[type="number"]:focus {
     outline: none;
-    border-color: #667eea;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-soft);
+}
+
+button {
+    font-family: inherit;
 }
 
 button[type="submit"] {
-    background: #667eea;
-    color: white;
+    background: var(--accent);
+    color: var(--on-accent);
     padding: 12px 24px;
     border: none;
     border-radius: 6px;
@@ -221,7 +606,7 @@ button[type="submit"] {
 }
 
 button[type="submit"]:hover {
-    background: #5568d3;
+    background: var(--accent-hover);
 }
 
 /* ============================================
@@ -234,30 +619,31 @@ button[type="submit"]:hover {
 }
 
 .box-layer {
-    border: 2px dashed #999;
-    padding: 20px;
+    border: 2px dashed var(--muted);
+    padding: 28px 20px 20px;
     text-align: center;
     position: relative;
+    color: var(--fg);
 }
 
 .margin-layer {
-    background: #ffe4e1;
-    border-color: #ff6b6b;
+    background: var(--margin-bg);
+    border-color: var(--margin-line);
 }
 
 .border-layer {
-    background: #fff4e6;
-    border-color: #ffa94d;
+    background: var(--border-bg);
+    border-color: var(--border-line);
 }
 
 .padding-layer {
-    background: #d3f9d8;
-    border-color: #51cf66;
+    background: var(--padding-bg);
+    border-color: var(--padding-line);
 }
 
 .content-layer {
-    background: #e3f2fd;
-    border: 2px solid #2196f3;
+    background: var(--content-bg);
+    border: 2px solid var(--content-line);
     padding: 20px;
     font-weight: bold;
     min-width: 120px;
@@ -266,10 +652,10 @@ button[type="submit"]:hover {
 .box-layer span {
     position: absolute;
     top: 5px;
-    left: 5px;
+    left: 8px;
     font-size: 0.85em;
     font-weight: 600;
-    color: #666;
+    color: var(--fg);
 }
 
 /* ============================================
@@ -278,8 +664,8 @@ button[type="submit"]:hover {
 
 /* Database Status Indicator */
 .db-status {
-    background: #f0f4ff;
-    border: 2px solid #667eea;
+    background: var(--accent-soft);
+    border: 2px solid var(--accent);
     border-radius: 8px;
     padding: 15px;
     margin: 20px 0;
@@ -291,58 +677,66 @@ button[type="submit"]:hover {
 
 .status-indicator {
     display: inline-block;
+    flex-shrink: 0;
     width: 12px;
     height: 12px;
     border-radius: 50%;
-    background: #ffc107;
+    background: #f59e0b;
     animation: pulse 1.5s ease-in-out infinite;
 }
 
 .db-status.ready .status-indicator {
-    background: #4caf50;
+    background: #22c55e;
     animation: none;
 }
 
 .db-status.error .status-indicator {
-    background: #f44336;
+    background: #ef4444;
     animation: none;
 }
 
 @keyframes pulse {
     0%, 100% { opacity: 1; }
-    50% { opacity: 0.5; }
+    50% { opacity: 0.4; }
 }
 
 /* SQL Command Cards */
 .sql-command-list {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 20px;
     margin: 25px 0;
 }
 
 .command-card {
-    background: #f8f9fa;
-    border: 1px solid #dee2e6;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
     border-radius: 8px;
     padding: 20px;
+    min-width: 0;   /* lets a grid card shrink below its code's width */
     transition: all 0.3s ease;
+}
+
+/* Short examples: wrap long lines instead of hiding them behind a scrollbar */
+.command-card pre {
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
 }
 
 .command-card:hover {
     transform: translateY(-3px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    border-color: #667eea;
+    box-shadow: 0 4px 12px var(--shadow);
+    border-color: var(--accent);
 }
 
 .command-card h4 {
-    color: #667eea;
+    color: var(--accent);
     margin-top: 0;
     margin-bottom: 10px;
 }
 
 .command-card p {
-    color: #666;
+    color: var(--muted);
     font-size: 0.95em;
     margin-bottom: 0;
 }
@@ -356,27 +750,27 @@ button[type="submit"]:hover {
 }
 
 .query-examples button {
-    background: #e3f2fd;
-    color: #1976d2;
-    border: 2px solid #2196f3;
+    background: var(--chip-bg);
+    color: var(--chip-fg);
+    border: 2px solid var(--chip-border);
     padding: 10px 18px;
     border-radius: 6px;
     font-size: 0.95em;
     cursor: pointer;
     transition: all 0.3s ease;
-    font-weight: 500;
+    font-weight: 600;
 }
 
 .query-examples button:hover {
-    background: #2196f3;
-    color: white;
+    background: var(--chip-fg);
+    color: var(--chip-bg);
     transform: translateY(-2px);
 }
 
 /* SQL Editor */
 .sql-editor {
-    background: #f8f9fa;
-    border: 2px solid #dee2e6;
+    background: var(--surface-2);
+    border: 2px solid var(--border);
     border-radius: 8px;
     padding: 25px;
     margin: 25px 0;
@@ -385,24 +779,45 @@ button[type="submit"]:hover {
 .sql-editor label {
     display: block;
     font-weight: 600;
-    color: #444;
+    color: var(--fg);
     margin-bottom: 10px;
+}
+
+.shortcut-hint {
+    font-weight: 400;
+    color: var(--muted);
+    font-size: 0.9em;
+}
+
+kbd {
+    font-family: var(--mono);
+    font-size: 0.85em;
+    padding: 1px 6px;
+    border: 1px solid var(--border);
+    border-bottom-width: 2px;
+    border-radius: 4px;
+    background: var(--surface);
+    color: var(--fg);
 }
 
 #sql-query {
     width: 100%;
     padding: 15px;
-    border: 2px solid #ddd;
+    border: 2px solid var(--border);
     border-radius: 6px;
-    font-family: 'Courier New', Courier, monospace;
+    font-family: var(--mono);
     font-size: 1em;
+    line-height: var(--code-line-height);
+    color: var(--fg);
+    background: var(--surface);
     resize: vertical;
     transition: border-color 0.3s ease;
 }
 
 #sql-query:focus {
     outline: none;
-    border-color: #667eea;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-soft);
 }
 
 .editor-buttons {
@@ -419,51 +834,58 @@ button[type="submit"]:hover {
     font-size: 1em;
     font-weight: 600;
     cursor: pointer;
+    color: #ffffff;
     transition: all 0.3s ease;
 }
 
 .run-button {
-    background: #4caf50;
-    color: white;
+    background: var(--run);
 }
 
 .run-button:hover {
-    background: #45a049;
+    background: var(--run-hover);
     transform: translateY(-2px);
 }
 
 .clear-button {
-    background: #ff9800;
-    color: white;
+    background: var(--clear);
 }
 
 .clear-button:hover {
-    background: #fb8c00;
+    background: var(--clear-hover);
 }
 
 .reset-button {
-    background: #f44336;
-    color: white;
+    background: var(--reset);
 }
 
 .reset-button:hover {
-    background: #e53935;
+    background: var(--reset-hover);
 }
 
 /* Query Results Display */
 .query-results {
-    background: white;
-    border: 2px solid #dee2e6;
+    background: var(--surface);
+    border: 2px solid var(--border);
     border-radius: 8px;
     padding: 25px;
     margin: 25px 0;
     min-height: 100px;
+    overflow-x: auto;
 }
 
 .query-results h4 {
-    color: #667eea;
+    color: var(--accent);
     margin-top: 0;
     margin-bottom: 15px;
+}
+
+.query-results h4 + table {
+    margin-top: 0;
+}
+
+.query-results table + h4 {
+    margin-top: 25px;
 }
 
 .query-results table {
@@ -473,8 +895,8 @@ button[type="submit"]:hover {
 }
 
 .query-results th {
-    background: #667eea;
-    color: white;
+    background: var(--accent);
+    color: var(--on-accent);
     padding: 12px;
     text-align: left;
     font-weight: 600;
@@ -482,24 +904,24 @@ button[type="submit"]:hover {
 
 .query-results td {
     padding: 10px 12px;
-    border-bottom: 1px solid #dee2e6;
+    border-bottom: 1px solid var(--border);
 }
 
-.query-results tr:hover {
-    background: #f8f9fa;
+.query-results tr:hover td {
+    background: var(--surface-2);
 }
 
 .query-results .success {
-    color: #4caf50;
+    color: var(--success);
     font-weight: 600;
 }
 
 .query-results .error {
-    color: #f44336;
+    color: var(--error-fg);
     padding: 15px;
-    background: #ffebee;
+    background: var(--error-bg);
     border-radius: 6px;
-    border-left: 4px solid #f44336;
+    border-left: 4px solid var(--reset);
 }
 
 /* ============================================
@@ -510,8 +932,8 @@ button[type="submit"]:hover {
 }
 
 .exercise {
-    background: #f8f9fa;
-    border: 2px solid #dee2e6;
+    background: var(--surface-2);
+    border: 2px solid var(--border);
     border-radius: 8px;
     padding: 20px;
     margin-bottom: 20px;
@@ -519,12 +941,12 @@ button[type="submit"]:hover {
 }
 
 .exercise:hover {
-    border-color: #667eea;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    border-color: var(--accent);
+    box-shadow: 0 2px 8px var(--shadow);
 }
 
 .exercise h4 {
-    color: #667eea;
+    color: var(--accent);
     margin-top: 0;
     margin-bottom: 12px;
 }
@@ -535,22 +957,22 @@ button[type="submit"]:hover {
 
 .exercise summary {
     cursor: pointer;
-    color: #1976d2;
+    color: var(--chip-fg);
     font-weight: 600;
-    padding: 8px;
-    background: #e3f2fd;
+    padding: 8px 12px;
+    background: var(--chip-bg);
     border-radius: 4px;
     transition: background 0.3s ease;
 }
 
 .exercise summary:hover {
-    background: #bbdefb;
+    text-decoration: underline;
 }
 
 .exercise details p {
     margin-top: 10px;
     padding: 10px;
-    background: white;
+    background: var(--surface);
     border-radius: 4px;
 }
 
@@ -567,13 +989,13 @@ button[type="submit"]:hover {
 }
 
 .tech-card {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
+    background: linear-gradient(135deg, var(--header-from) 0%, var(--header-to) 100%);
+    color: #ffffff;
     padding: 30px;
     border-radius: 12px;
     text-align: center;
     min-width: 200px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 4px 12px var(--shadow);
     transition: transform 0.3s ease;
 }
 
@@ -584,12 +1006,11 @@ button[type="submit"]:hover {
 .tech-card h4 {
     margin: 0 0 10px 0;
     font-size: 1.8em;
-    color: white;
+    color: #ffffff;
 }
 
 .tech-card p {
     margin: 5px 0;
-    opacity: 0.95;
 }
 
 .tech-description {
@@ -600,15 +1021,98 @@ button[type="submit"]:hover {
 .plus {
     font-size: 2em;
     font-weight: bold;
-    color: #667eea;
+    color: var(--accent);
+}
+
+/* ============================================
+   TEACHER VERSION
+============================================= */
+.teacher-banner {
+    background: var(--banner-bg);
+    color: var(--banner-fg);
+    text-align: center;
+    padding: 15px 20px;
+    font-weight: bold;
+    font-size: 1.2em;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.teacher-only {
+    background: var(--teacher-bg);
+    border: 3px solid var(--teacher-line);
+    border-radius: 8px;
+    padding: 20px;
+    margin: 20px 0;
+}
+
+.tutorial-section.teacher-only {
+    padding: 40px;
+}
+
+.teacher-only h3 {
+    color: var(--teacher-head);
+    margin-top: 0;
+}
+
+.solution,
+.teaching-tip,
+.common-error {
+    border-left: 4px solid;
+    padding: 15px;
+    margin: 15px 0;
+    border-radius: 4px;
+}
+
+.solution h5,
+.teaching-tip h5,
+.common-error h5 {
+    font-size: 1.05em;
+    margin-top: 0;
+    margin-bottom: 6px;
+}
+
+.solution ul, .teaching-tip ul, .common-error ul,
+.solution ol, .teaching-tip ol, .common-error ol,
+.teacher-only > ul, .teacher-only > ol {
+    margin-left: 22px;
+}
+
+.solution { background: var(--solution-bg); border-left-color: var(--solution-line); }
+.solution h5 { color: var(--solution-head); }
+.teaching-tip { background: var(--tip-bg); border-left-color: var(--tip-line); }
+.teaching-tip h5 { color: var(--tip-head); }
+.common-error { background: var(--mistake-bg); border-left-color: var(--mistake-line); }
+.common-error h5 { color: var(--mistake-head); }
+
+/* Assessment rubric table */
+.rubric {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+}
+
+.rubric th,
+.rubric td {
+    padding: 10px;
+    border: 1px solid var(--border);
+    vertical-align: top;
+    text-align: left;
+}
+
+.rubric th {
+    background: var(--accent);
+    color: var(--on-accent);
 }
 
 /* ============================================
    FOOTER
 ============================================= */
 footer {
-    background: #2d3748;
-    color: white;
+    background: var(--footer-bg);
+    color: var(--footer-fg);
     text-align: center;
     padding: 30px 20px;
     margin-top: 50px;
@@ -619,14 +1123,213 @@ footer p {
 }
 
 footer a {
-    color: #667eea;
-    text-decoration: none;
+    color: var(--footer-link);
     font-weight: 600;
 }
 
 footer a:hover {
-    color: #764ba2;
-    text-decoration: underline;
+    color: #ffffff;
+}
+
+/* ============================================
+   APPEARANCE PANEL (built by appearance.js)
+============================================= */
+.appearance-toggle {
+    position: fixed;
+    top: 12px;
+    right: 12px;
+    z-index: 1100;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 9px 16px;
+    font-size: 0.95em;
+    font-weight: 600;
+    color: var(--fg);
+    background: var(--surface);
+    border: 2px solid var(--accent);
+    border-radius: 999px;
+    box-shadow: 0 2px 10px var(--shadow);
+    cursor: pointer;
+}
+
+.appearance-toggle:hover,
+.appearance-toggle[aria-expanded="true"] {
+    background: var(--accent);
+    color: var(--on-accent);
+}
+
+.appearance-toggle-glyph {
+    font-family: Georgia, serif;
+    font-weight: 700;
+}
+
+.appearance-panel {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 2000;
+    width: min(22rem, 100vw);
+    overflow-y: auto;
+    background: var(--surface);
+    color: var(--fg);
+    border-left: 2px solid var(--border);
+    box-shadow: -6px 0 24px var(--shadow);
+    padding: 20px 22px 28px;
+}
+
+.appearance-panel[hidden] {
+    display: none;
+}
+
+.appearance-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 6px;
+}
+
+.appearance-head h2 {
+    font-size: 1.35em;
+    color: var(--accent);
+}
+
+.appearance-close {
+    border: 2px solid var(--border);
+    background: var(--surface-2);
+    color: var(--fg);
+    border-radius: 6px;
+    padding: 4px 12px;
+    font-size: 0.95em;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.appearance-close:hover {
+    border-color: var(--accent);
+}
+
+.appearance-intro {
+    font-size: 0.9em;
+    color: var(--muted);
+    margin-bottom: 8px;
+}
+
+.appearance-panel h3 {
+    font-size: 0.8em;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    margin: 22px 0 8px;
+    padding-bottom: 4px;
+    border-bottom: 1px solid var(--border);
+}
+
+.setting {
+    border: none;
+    margin: 12px 0;
+}
+
+.setting legend,
+.setting-label {
+    display: block;
+    font-weight: 600;
+    font-size: 0.95em;
+    margin-bottom: 6px;
+    padding: 0;
+}
+
+/* Segmented control: a row of radio buttons drawn as joined pills. The
+   real <input type="radio"> stays in the page (so the keyboard and screen
+   readers treat it as a normal radio group), just visually hidden. */
+.seg {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.seg input {
+    position: absolute;
+    opacity: 0;
+    width: 1px;
+    height: 1px;
+}
+
+.seg label {
+    flex: 1 1 auto;
+    text-align: center;
+    margin: 0;
+    padding: 7px 10px;
+    font-weight: 500;
+    font-size: 0.9em;
+    border: 2px solid var(--border);
+    border-radius: 6px;
+    background: var(--surface-2);
+    color: var(--fg);
+    cursor: pointer;
+}
+
+.seg label:hover {
+    border-color: var(--accent);
+}
+
+.seg input:checked + label {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: var(--on-accent);
+    font-weight: 700;
+}
+
+.seg input:focus-visible + label {
+    outline: 3px solid var(--focus);
+    outline-offset: 2px;
+}
+
+.seg-font-lexend { font-family: 'Lexend', sans-serif; }
+.seg-font-opendyslexic { font-family: 'OpenDyslexic', sans-serif; }
+
+.range-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.range-row input[type="range"] {
+    flex: 1;
+    accent-color: var(--accent);
+}
+
+.range-row output {
+    min-width: 3.2em;
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+    color: var(--muted);
+    font-size: 0.9em;
+}
+
+.appearance-reset {
+    margin-top: 18px;
+    width: 100%;
+    padding: 10px;
+    border: 2px solid var(--border);
+    border-radius: 6px;
+    background: var(--surface-2);
+    color: var(--fg);
+    font-weight: 600;
+    font-size: 0.95em;
+    cursor: pointer;
+}
+
+.appearance-reset:hover {
+    border-color: var(--accent);
+}
+
+.appearance-saved {
+    margin-top: 10px;
+    font-size: 0.85em;
+    color: var(--muted);
 }
 
 /* ============================================
@@ -636,34 +1339,43 @@ footer a:hover {
     header h1 {
         font-size: 2em;
     }
-    
+
     .subtitle {
         font-size: 1em;
     }
-    
-    .tutorial-section {
+
+    .tutorial-section,
+    .tutorial-section.teacher-only {
         padding: 25px 20px;
     }
-    
+
     .sql-command-list {
         grid-template-columns: 1fr;
     }
-    
+
     .tech-stack-diagram {
         flex-direction: column;
     }
-    
+
     .plus {
         transform: rotate(90deg);
     }
-    
+
     nav {
         flex-direction: column;
         align-items: stretch;
     }
-    
+
     nav a {
         text-align: center;
+    }
+
+    /* On a phone the toggle moves to the bottom corner, clear of the
+       teacher banner and the page title */
+    .appearance-toggle {
+        top: auto;
+        bottom: 14px;
+        right: 14px;
     }
 }
 
@@ -671,16 +1383,33 @@ footer a:hover {
     main {
         padding: 0 10px;
     }
-    
-    .tutorial-section {
+
+    .tutorial-section,
+    .tutorial-section.teacher-only {
         padding: 20px 15px;
     }
-    
+
     .editor-buttons {
         flex-direction: column;
     }
-    
+
     .editor-buttons button {
         width: 100%;
+    }
+
+    .rubric {
+        display: block;
+        overflow-x: auto;
+    }
+}
+
+/* ============================================
+   PRINT
+============================================= */
+@media print {
+    .appearance-toggle,
+    .appearance-panel,
+    .skip-link {
+        display: none !important;
     }
 }

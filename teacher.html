@@ -5,69 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HTML, CSS & SQL Tutorial - TEACHER VERSION</title>
     <link rel="stylesheet" href="styles.css">
+    <!-- Applies saved Appearance settings before the page is drawn -->
+    <script src="appearance.js"></script>
     <!-- SQL.js - SQLite compiled to JavaScript, runs entirely in browser -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.8.0/sql-wasm.js"></script>
-    <style>
-        /* Teacher-specific styles */
-        .teacher-only {
-            background: #fff3cd;
-            border: 3px solid #ffc107;
-            border-radius: 8px;
-            padding: 20px;
-            margin: 20px 0;
-        }
-        .teacher-only h3 {
-            color: #856404;
-            margin-top: 0;
-        }
-        .solution {
-            background: #d4edda;
-            border-left: 4px solid #28a745;
-            padding: 15px;
-            margin: 15px 0;
-            border-radius: 4px;
-        }
-        .solution h5 {
-            color: #155724;
-            margin-top: 0;
-        }
-        .teaching-tip {
-            background: #d1ecf1;
-            border-left: 4px solid #17a2b8;
-            padding: 15px;
-            margin: 15px 0;
-            border-radius: 4px;
-        }
-        .teaching-tip h5 {
-            color: #0c5460;
-            margin-top: 0;
-        }
-        .common-error {
-            background: #f8d7da;
-            border-left: 4px solid #dc3545;
-            padding: 15px;
-            margin: 15px 0;
-            border-radius: 4px;
-        }
-        .common-error h5 {
-            color: #721c24;
-            margin-top: 0;
-        }
-        .teacher-banner {
-            background: #ffc107;
-            color: #000;
-            text-align: center;
-            padding: 15px;
-            font-weight: bold;
-            font-size: 1.2em;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-        }
-    </style>
 </head>
 <body>
+    <a class="skip-link" href="#main">Skip to the tutorial</a>
+
     <!-- TEACHER BANNER -->
     <div class="teacher-banner">
         🍎 TEACHER VERSION - Solutions & Teaching Notes Included
@@ -77,14 +22,14 @@
     <header>
         <h1>Interactive Web Development & SQL Tutorial</h1>
         <p class="subtitle">Learn HTML, CSS, and SQL with hands-on examples that run in your browser</p>
-        <p style="font-size: 0.9em; opacity: 0.9;">Teacher Version - Complete with solutions and pedagogical notes</p>
+        <p class="teacher-subtitle">Teacher Version - Complete with solutions and pedagogical notes</p>
         
-        <div class="learning-paths" style="margin: 20px 0; padding: 15px; background: #f0f4ff; border-radius: 8px;">
-            <h3 style="margin-top: 0; color: #667eea;">Choose Your Learning Path:</h3>
-            <p style="margin: 10px 0;"><strong>Structured Approach:</strong> Follow the sections in order, complete each exercise before moving on</p>
-            <p style="margin: 10px 0;"><strong>Exploratory Approach:</strong> Jump to topics that interest you, experiment freely with the SQL playground</p>
-            <p style="margin: 10px 0;"><strong>Project-Based:</strong> Start with the SQL section, build something, then learn the theory behind it</p>
-            <p style="margin: 5px 0; font-style: italic; color: #666;">There's no single "right" way to learn. Choose what works best for you.</p>
+        <div class="learning-paths">
+            <h3>Choose Your Learning Path:</h3>
+            <p><strong>Structured Approach:</strong> Follow the sections in order, complete each exercise before moving on</p>
+            <p><strong>Exploratory Approach:</strong> Jump to topics that interest you, experiment freely with the SQL playground</p>
+            <p><strong>Project-Based:</strong> Start with the SQL section, build something, then learn the theory behind it</p>
+            <p class="learning-paths-note">There's no single "right" way to learn. Choose what works best for you.</p>
         </div>
         
         <nav>
@@ -96,7 +41,7 @@
         </nav>
     </header>
 
-    <main>
+    <main id="main">
         <!-- TEACHER INTRODUCTION -->
         <section class="tutorial-section teacher-only">
             <h2>👨‍🏫 Welcome, Teacher!</h2>
@@ -117,9 +62,9 @@
         <section id="html-section" class="tutorial-section">
             <h2>Part 1: HTML Basics</h2>
             
-            <div class="exploration-prompt" style="background: #fff3e0; padding: 15px; margin: 20px 0; border-left: 4px solid #ff9800; border-radius: 5px;">
-                <h4 style="margin-top: 0; color: #e65100;">How to Approach This Section:</h4>
-                <ul style="margin-bottom: 0;">
+            <div class="exploration-prompt callout-html">
+                <h4>How to Approach This Section:</h4>
+                <ul>
                     <li><strong>Read First:</strong> Understand the concepts before trying examples</li>
                     <li><strong>Try the Examples:</strong> Use the sample form to see HTML in action</li>
                     <li><strong>Experiment:</strong> Try changing the example code in your own text editor</li>
@@ -221,9 +166,9 @@
         <section id="css-section" class="tutorial-section">
             <h2>Part 2: CSS Styling</h2>
             
-            <div class="exploration-prompt" style="background: #e3f2fd; padding: 15px; margin: 20px 0; border-left: 4px solid #2196f3; border-radius: 5px;">
-                <h4 style="margin-top: 0; color: #1565c0;">Ways to Learn CSS:</h4>
-                <ul style="margin-bottom: 0;">
+            <div class="exploration-prompt callout-css">
+                <h4>Ways to Learn CSS:</h4>
+                <ul>
                     <li><strong>Visual Learners:</strong> Focus on the interactive demos and see how CSS changes appearance</li>
                     <li><strong>Hands-On:</strong> Open the styles.css file and try modifying colors and sizes</li>
                     <li><strong>Systematic:</strong> Read each selector type, then practice writing your own</li>
@@ -297,7 +242,7 @@ p {
                     <div class="css-demo-box" style="background-color: #e3f2fd; padding: 15px; border: 2px solid #2196f3; border-radius: 5px;">
                         <p style="margin: 0; color: #1565c0;">This box is styled with CSS!</p>
                     </div>
-                    <p style="margin-top: 10px; font-size: 14px; color: #666;">
+                    <p class="demo-caption">
                         CSS used: background-color, padding, border, border-radius, color
                     </p>
                 </div>
@@ -321,6 +266,32 @@ p {
                     </div>
                 </div>
             </div>
+
+            <div class="lesson">
+                <h3>Try It: Restyle This Page</h3>
+                <p>The <strong>Appearance</strong> button (top right, or bottom right on a phone) changes how this page looks. Open it, switch to the dark theme, then try a different font or a bigger text size.</p>
+                <p>The HTML stays exactly the same when you do this. The page keeps its colours and sizes in <strong>CSS variables</strong>: values with a name, such as <code>--bg</code> for the background colour. The Appearance panel swaps in a different set of values. Here is a small piece of this page's own <code>styles.css</code>:</p>
+                <pre><code>:root {
+    --bg: #f5f7fa;
+    --fg: #1f2933;
+}
+
+:root[data-theme="dark"] {
+    --bg: #12151c;
+    --fg: #e6e8eb;
+}
+
+body {
+    background-color: var(--bg);
+    color: var(--fg);
+}</code></pre>
+                <p><strong>Something to notice:</strong> the <code>body</code> rule never mentions dark mode. It only asks for <code>var(--bg)</code>. Which rule decides what <code>--bg</code> is, and when?</p>
+            </div>
+
+            <div class="teaching-tip">
+                <h5>💡 On the projector</h5>
+                <p>Open <strong>Appearance</strong> and raise the text size before class so the back row can read the page. The same panel is a ready-made demonstration for this section: switch the theme live and ask what changed in the HTML (nothing) and what changed in the CSS (only the variables).</p>
+            </div>
         </section>
 
         <!-- ============================================
@@ -329,14 +300,14 @@ p {
         <section id="sql-section" class="tutorial-section">
             <h2>Part 3: SQL Database Queries</h2>
             
-            <div class="exploration-prompt" style="background: #e8f5e9; padding: 15px; margin: 20px 0; border-left: 4px solid #4caf50; border-radius: 5px;">
-                <h4 style="margin-top: 0; color: #2e7d32;">Three Ways to Learn SQL:</h4>
-                <ul style="margin-bottom: 0;">
+            <div class="exploration-prompt callout-sql">
+                <h4>Three Ways to Learn SQL:</h4>
+                <ul>
                     <li><strong>Guided Path:</strong> Read the SQL commands section, then try example queries one by one</li>
                     <li><strong>Dive In:</strong> Jump straight to the playground, click example queries, see what happens</li>
                     <li><strong>Problem-Solving:</strong> Skip to the practice exercises and work backwards to learn what you need</li>
                 </ul>
-                <p style="margin: 10px 0 0 0; padding-top: 10px; border-top: 1px solid #ddd; font-style: italic;">
+                <p class="callout-footnote">
                     <strong>Remember:</strong> This database resets when you refresh the page, so feel free to experiment. 
                     You cannot break anything permanently. Mistakes are learning opportunities!
                 </p>
@@ -381,7 +352,7 @@ p {
                 </ul>
 
                 <div class="db-status" id="db-status">
-                    <span class="status-indicator">...</span> Initializing database...
+                    <span class="status-indicator"></span> Initializing database...
                 </div>
             </div>
 
@@ -442,8 +413,8 @@ WHERE name = 'John';</code></pre>
                 </div>
 
                 <div class="sql-editor">
-                    <label for="sql-query">Write your SQL query:</label>
-                    <textarea id="sql-query" rows="6" placeholder="SELECT * FROM students;">SELECT * FROM students;</textarea>
+                    <label for="sql-query">Write your SQL query: <span class="shortcut-hint">(press <kbd>Ctrl</kbd> + <kbd>Enter</kbd> to run, or <kbd>⌘</kbd> + <kbd>Enter</kbd> on a Mac)</span></label>
+                    <textarea id="sql-query" rows="6" spellcheck="false" autocapitalize="off" autocomplete="off" placeholder="SELECT * FROM students;">SELECT * FROM students;</textarea>
                     
                     <div class="editor-buttons">
                         <button onclick="executeQuery()" class="run-button">▶ Run Query</button>
@@ -610,9 +581,9 @@ ORDER BY grade DESC;</code></pre>
         <section class="tutorial-section">
             <h2>Putting It All Together</h2>
             
-            <div class="exploration-prompt" style="background: #f3e5f5; padding: 15px; margin: 20px 0; border-left: 4px solid #9c27b0; border-radius: 5px;">
-                <h4 style="margin-top: 0; color: #6a1b9a;">Reflection Questions:</h4>
-                <ul style="margin-bottom: 0;">
+            <div class="exploration-prompt callout-together">
+                <h4>Reflection Questions:</h4>
+                <ul>
                     <li>How does changing the HTML structure affect what you see?</li>
                     <li>What happens when CSS rules conflict?</li>
                     <li>Why might you use SQL instead of storing data in JavaScript variables?</li>
@@ -760,44 +731,44 @@ ORDER BY grade DESC;</code></pre>
             
             <div class="solution">
                 <h5>✅ Summative Assessment Rubric</h5>
-                <table style="width: 100%; border-collapse: collapse; margin: 20px 0;">
+                <table class="rubric">
                     <thead>
-                        <tr style="background: #667eea; color: white;">
-                            <th style="padding: 10px; border: 1px solid #ddd;">Criteria</th>
-                            <th style="padding: 10px; border: 1px solid #ddd;">Beginning (1)</th>
-                            <th style="padding: 10px; border: 1px solid #ddd;">Developing (2)</th>
-                            <th style="padding: 10px; border: 1px solid #ddd;">Proficient (3)</th>
-                            <th style="padding: 10px; border: 1px solid #ddd;">Advanced (4)</th>
+                        <tr>
+                            <th>Criteria</th>
+                            <th>Beginning (1)</th>
+                            <th>Developing (2)</th>
+                            <th>Proficient (3)</th>
+                            <th>Advanced (4)</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <td style="padding: 10px; border: 1px solid #ddd;"><strong>HTML Structure</strong></td>
-                            <td style="padding: 10px; border: 1px solid #ddd;">Missing tags, improper nesting</td>
-                            <td style="padding: 10px; border: 1px solid #ddd;">Valid HTML but inconsistent structure</td>
-                            <td style="padding: 10px; border: 1px solid #ddd;">Well-structured, semantic HTML</td>
-                            <td style="padding: 10px; border: 1px solid #ddd;">Exemplary structure with accessibility features</td>
+                            <td><strong>HTML Structure</strong></td>
+                            <td>Missing tags, improper nesting</td>
+                            <td>Valid HTML but inconsistent structure</td>
+                            <td>Well-structured, semantic HTML</td>
+                            <td>Exemplary structure with accessibility features</td>
                         </tr>
                         <tr>
-                            <td style="padding: 10px; border: 1px solid #ddd;"><strong>CSS Styling</strong></td>
-                            <td style="padding: 10px; border: 1px solid #ddd;">Inline styles only, no organization</td>
-                            <td style="padding: 10px; border: 1px solid #ddd;">External CSS but inefficient selectors</td>
-                            <td style="padding: 10px; border: 1px solid #ddd;">Organized CSS with appropriate selectors</td>
-                            <td style="padding: 10px; border: 1px solid #ddd;">DRY principles, reusable classes, responsive</td>
+                            <td><strong>CSS Styling</strong></td>
+                            <td>Inline styles only, no organization</td>
+                            <td>External CSS but inefficient selectors</td>
+                            <td>Organized CSS with appropriate selectors</td>
+                            <td>DRY principles, reusable classes, responsive</td>
                         </tr>
                         <tr>
-                            <td style="padding: 10px; border: 1px solid #ddd;"><strong>SQL Queries</strong></td>
-                            <td style="padding: 10px; border: 1px solid #ddd;">Syntax errors, incomplete queries</td>
-                            <td style="padding: 10px; border: 1px solid #ddd;">Basic queries work, some errors</td>
-                            <td style="padding: 10px; border: 1px solid #ddd;">All exercises complete and correct</td>
-                            <td style="padding: 10px; border: 1px solid #ddd;">Complex queries, bonus exercises, optimization</td>
+                            <td><strong>SQL Queries</strong></td>
+                            <td>Syntax errors, incomplete queries</td>
+                            <td>Basic queries work, some errors</td>
+                            <td>All exercises complete and correct</td>
+                            <td>Complex queries, bonus exercises, optimization</td>
                         </tr>
                         <tr>
-                            <td style="padding: 10px; border: 1px solid #ddd;"><strong>Problem Solving</strong></td>
-                            <td style="padding: 10px; border: 1px solid #ddd;">Needs constant guidance</td>
-                            <td style="padding: 10px; border: 1px solid #ddd;">Solves with hints</td>
-                            <td style="padding: 10px; border: 1px solid #ddd;">Independent problem solving</td>
-                            <td style="padding: 10px; border: 1px solid #ddd;">Debugs others' code, helps peers</td>
+                            <td><strong>Problem Solving</strong></td>
+                            <td>Needs constant guidance</td>
+                            <td>Solves with hints</td>
+                            <td>Independent problem solving</td>
+                            <td>Debugs others' code, helps peers</td>
                         </tr>
                     </tbody>
                 </table>

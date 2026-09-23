@@ -261,14 +261,22 @@ function executeQuery() {
         // Returns an array of result objects
         const results = db.exec(query);
         
+        // ROWS MODIFIED:
+        // How many rows the last INSERT, UPDATE or DELETE changed
+        const rowsChanged = db.getRowsModified();
+        
         // CONDITIONAL EXECUTION:
         // Different display based on query type
         if (results.length === 0) {
             // Query succeeded but returned no data (INSERT, UPDATE, DELETE)
-            displaySuccess('Query executed successfully! (No data to display)');
+            const detail = rowsChanged > 0
+                ? `${rowsChanged} row${rowsChanged === 1 ? '' : 's'} changed.`
+                : '(No data to display)';
+            displaySuccess(`Query executed successfully! ${detail}`);
         } else {
             // Query returned data (SELECT)
-            displayResults(results[0]);
+            // One result per SELECT, so several SELECTs show several tables
+            displayResults(results);
         }
         
     } catch (error) {
@@ -279,15 +287,25 @@ function executeQuery() {
 }
 
 /**
- * Display query results as an HTML table
+ * Display query results as HTML tables, one per result
  * 
- * @param {QueryResult} result - Query result object
+ * @param {QueryResult[]} results - Query result objects
  * @returns {void}
  */
-function displayResults(result) {
+function displayResults(results) {
     const resultsDiv = document.getElementById('query-results');
     if (!resultsDiv) return;
     
+    resultsDiv.innerHTML = results.map(resultToHtml).join('');
+}
+
+/**
+ * Build the HTML table for one query result
+ * 
+ * @param {QueryResult} result - Query result object
+ * @returns {string} - HTML for a heading and a table
+ */
+function resultToHtml(result) {
     // DESTRUCTURING EXPLAINED:
     // Extracts properties from an object into variables
     // const {columns, values} = result;
@@ -315,7 +333,7 @@ function displayResults(result) {
     
     // TEMPLATE LITERAL WITH HTML:
     // Creates multi-line HTML string
-    resultsDiv.innerHTML = `
+    return `
         <h4>Query Results (${values.length} row${values.length === 1 ? '' : 's'})</h4>
         <table>
             <thead>

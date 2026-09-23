@@ -8,6 +8,7 @@ An interactive, browser-based tutorial for teaching web development fundamentals
 - **Comprehensive Coverage**: HTML basics, CSS styling, and SQL fundamentals
 - **Hands-on Learning**: Students can experiment and see results immediately
 - **Teacher Version**: Includes complete solutions and teaching notes
+- **Appearance Panel**: Each reader can pick light or dark, a font (including Lexend and OpenDyslexic), text size, page width, high contrast and reduced motion; choices are remembered in their browser
 - **Mobile Responsive**: Works on all devices
 - **No Installation Required**: Runs entirely in the browser
 
@@ -17,8 +18,10 @@ An interactive, browser-based tutorial for teaching web development fundamentals
 sql-tutorial-site/
 ├── index.html          # Main student tutorial page
 ├── teacher.html        # Teacher version with solutions
-├── styles.css          # Stylesheet for both pages
+├── styles.css          # Stylesheet for both pages (colours live in CSS variables at the top)
 ├── tutorial.js         # JavaScript for SQL functionality
+├── appearance.js       # The Appearance panel (theme, font, size, contrast)
+├── fonts/              # Lexend and OpenDyslexic, self-hosted (SIL Open Font Licence)
 └── README.md          # This file
 ```
 
@@ -61,6 +64,8 @@ Follow these steps to host the tutorial online so students can access it via a l
    - `index.html`
    - `styles.css`
    - `tutorial.js`
+   - `appearance.js`
+   - the `fonts` folder
    - `README.md` (optional - there's already one)
 3. Scroll down and click **"Commit changes"**
 
@@ -72,7 +77,7 @@ git clone https://github.com/YOUR-USERNAME/sql-tutorial.git
 cd sql-tutorial
 
 # Copy the tutorial files into this directory
-# (copy index.html, styles.css, tutorial.js here)
+# (copy index.html, styles.css, tutorial.js, appearance.js and fonts/ here)
 
 # Add and commit
 git add .
@@ -106,7 +111,7 @@ For example: `https://johndoe.github.io/sql-tutorial/`
 
 ### File Names Matter!
 - Keep the file named `index.html` (this is the default page GitHub Pages serves)
-- All other files (`styles.css`, `tutorial.js`, `teacher.html`) must be in the same directory
+- All other files (`styles.css`, `tutorial.js`, `appearance.js`, `teacher.html`) and the `fonts` folder must be in the same directory
 - File names are case-sensitive!
 
 ### HTTPS is Automatic
