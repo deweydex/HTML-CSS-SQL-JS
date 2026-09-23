@@ -170,42 +170,45 @@ function createTables() {
  * @returns {void}
  */
 function populateSampleData() {
+    // The names come from many backgrounds on purpose: a class should be
+    // able to see itself in its examples.
+    
     // ARRAY OF OBJECTS EXPLAINED:
     // Each object represents one row in the database
     // Keys are column names, values are the data
     
     /** @type {Array<{name: string, age: number, grade: number}>} */
     const students = [
-        { name: 'Alice Johnson', age: 20, grade: 88 },
-        { name: 'Bob Smith', age: 19, grade: 92 },
-        { name: 'Carol Williams', age: 21, grade: 76 },
-        { name: 'David Brown', age: 20, grade: 85 },
-        { name: 'Eve Davis', age: 22, grade: 91 },
-        { name: 'Frank Miller', age: 19, grade: 73 },
-        { name: 'Grace Wilson', age: 21, grade: 89 },
-        { name: 'Henry Moore', age: 20, grade: 94 }
+        { name: 'Aoife Murphy', age: 20, grade: 88 },
+        { name: 'Kwame Mensah', age: 19, grade: 92 },
+        { name: 'Priya Sharma', age: 21, grade: 76 },
+        { name: 'Mateus Oliveira', age: 20, grade: 85 },
+        { name: 'Zofia Nowak', age: 22, grade: 91 },
+        { name: 'Wei Chen', age: 19, grade: 73 },
+        { name: 'Amina Yusuf', age: 21, grade: 89 },
+        { name: 'Dmytro Kovalenko', age: 20, grade: 94 }
     ];
     
     /** @type {Array<{name: string, instructor: string, credits: number}>} */
     const courses = [
-        { name: 'Introduction to Programming', instructor: 'Dr. Smith', credits: 4 },
-        { name: 'Data Structures', instructor: 'Prof. Johnson', credits: 3 },
-        { name: 'Web Development', instructor: 'Dr. Lee', credits: 3 },
-        { name: 'Database Systems', instructor: 'Prof. Garcia', credits: 4 },
-        { name: 'Computer Networks', instructor: 'Dr. Martinez', credits: 3 }
+        { name: 'Introduction to Programming', instructor: 'Dr. Siobhán Walsh', credits: 4 },
+        { name: 'Data Structures', instructor: 'Prof. Nnamdi Okafor', credits: 3 },
+        { name: 'Web Development', instructor: 'Dr. Lucía Fernández', credits: 3 },
+        { name: 'Database Systems', instructor: 'Prof. Hiroshi Tanaka', credits: 4 },
+        { name: 'Computer Networks', instructor: 'Dr. Fatima Malik', credits: 3 }
     ];
     
     // [student_id, course_id] pairs: who takes what.
-    // Frank Miller (id 6) takes nothing, which Exercise 13 goes looking for.
+    // Wei Chen (id 6) takes nothing, which Exercise 13 goes looking for.
     /** @type {Array<[number, number]>} */
     const enrolments = [
-        [1, 1], [1, 3],   // Alice: Intro to Programming, Web Development
-        [2, 1], [2, 2],   // Bob: Intro to Programming, Data Structures
-        [3, 3],           // Carol: Web Development
-        [4, 2], [4, 4],   // David: Data Structures, Database Systems
-        [5, 4], [5, 5],   // Eve: Database Systems, Computer Networks
-        [7, 1], [7, 5],   // Grace: Intro to Programming, Computer Networks
-        [8, 3], [8, 4]    // Henry: Web Development, Database Systems
+        [1, 1], [1, 3],   // Aoife: Intro to Programming, Web Development
+        [2, 1], [2, 2],   // Kwame: Intro to Programming, Data Structures
+        [3, 3],           // Priya: Web Development
+        [4, 2], [4, 4],   // Mateus: Data Structures, Database Systems
+        [5, 4], [5, 5],   // Zofia: Database Systems, Computer Networks
+        [7, 1], [7, 5],   // Amina: Intro to Programming, Computer Networks
+        [8, 3], [8, 4]    // Dmytro: Web Development, Database Systems
     ];
     
     // PREPARED STATEMENTS EXPLAINED:
@@ -587,7 +590,9 @@ document.addEventListener('DOMContentLoaded', function() {
         setQuery(button.dataset.query);
         const queryInput = document.getElementById('sql-query');
         if (queryInput) {
-            queryInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            // 'nearest' does nothing when the playground is already on screen
+            // (it stays pinned beside the exercises on a wide screen)
+            queryInput.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
             queryInput.focus({ preventScroll: true });
         }
     });

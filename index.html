@@ -13,35 +13,79 @@
 <body>
     <a class="skip-link" href="#main">Skip to the tutorial</a>
 
-    <!-- HEADER SECTION -->
     <header>
-        <h1>Interactive Web Development & SQL Tutorial</h1>
-        <p class="subtitle">Learn HTML, CSS, and SQL with hands-on examples that run in your browser</p>
-        
-        <div class="learning-paths">
-            <h3>Choose Your Learning Path:</h3>
-            <p><strong>Structured Approach:</strong> Follow the sections in order, complete each exercise before moving on</p>
-            <p><strong>Exploratory Approach:</strong> Jump to topics that interest you, experiment freely with the SQL playground</p>
-            <p><strong>Project-Based:</strong> Start with the SQL section, build something, then learn the theory behind it</p>
-            <p class="learning-paths-note">There's no single "right" way to learn. Choose what works best for you.</p>
-        </div>
-        
-        <nav>
-            <a href="#html-section">HTML Basics</a>
-            <a href="#css-section">CSS Styling</a>
-            <a href="#sql-section">SQL Queries</a>
-        </nav>
+        <h1>Interactive Web Development &amp; SQL Tutorial</h1>
+        <p class="subtitle">Learn HTML, CSS and SQL with hands-on examples that run in your browser</p>
     </header>
 
+    <!-- Stays at the top of the screen while you scroll. page-nav.js
+         highlights the part you're reading; appearance.js adds its
+         button to the end of this bar. -->
+    <nav class="page-nav" aria-label="Parts of this page">
+        <div class="page-nav-links">
+            <a href="#start">Start here</a>
+            <a href="#html-section">1. HTML</a>
+            <a href="#css-section">2. CSS</a>
+            <a href="#sql-section">3. SQL</a>
+            <a href="#join-lesson">JOIN</a>
+            <a href="#wrap-up">Wrapping up</a>
+        </div>
+    </nav>
+
     <main id="main">
+        <!-- ============================================
+             START HERE
+        ============================================= -->
+        <section id="start" class="tutorial-section">
+            <h2>Start here</h2>
+            <p>Nearly every website is built from the same three languages. This page teaches you a little of each. Everything runs in your browser: there's nothing to install, and nothing you do here can break anything.</p>
+
+                <div class="tech-stack-diagram">
+                    <div class="tech-card">
+                        <h3>HTML</h3>
+                        <p>Structure and content</p>
+                        <p class="tech-description">What goes on the page</p>
+                    </div>
+                    <div class="plus" aria-hidden="true">+</div>
+                    <div class="tech-card">
+                        <h3>CSS</h3>
+                        <p>Style and layout</p>
+                        <p class="tech-description">How it looks</p>
+                    </div>
+                    <div class="plus" aria-hidden="true">+</div>
+                    <div class="tech-card">
+                        <h3>SQL</h3>
+                        <p>Data and storage</p>
+                        <p class="tech-description">Stores and finds information</p>
+                    </div>
+                </div>
+
+            <h3>How they work together</h3>
+            <p>Think of a login page:</p>
+            <ul>
+                <li><strong>HTML</strong> creates the form: a box for your username, a box for your password, and a button</li>
+                <li><strong>CSS</strong> decides how the form looks: its colours, fonts and spacing</li>
+                <li><strong>SQL</strong> looks up your username in a database, and checks your password against a <em>hashed</em> (scrambled, one-way) copy of it. Well-built sites never store your actual password.</li>
+            </ul>
+
+            <h3>What's on this page</h3>
+            <ol class="page-map">
+                <li><a href="#html-section">Part 1: HTML</a>, the structure of a page. About 20 minutes.</li>
+                <li><a href="#css-section">Part 2: CSS</a>, how a page looks. About 25 minutes.</li>
+                <li><a href="#sql-section">Part 3: SQL</a>, asking a database questions. About 40 minutes, with challenge exercises for anyone who wants more.</li>
+            </ol>
+            <p class="page-map-note"><strong>Short on time?</strong> Do the two <em>Try it</em> editors and SQL exercises 1 to 5. Everything else will still be here next time.</p>
+            <p>Each part has an editor that stays beside its exercises on a wide screen, so you can read, type and see the result without scrolling back and forth. Work in the HTML and CSS editors is saved in this browser. The SQL database starts fresh every time you load the page.</p>
+        </section>
+
         <!-- ============================================
              SECTION 1: HTML BASICS
         ============================================= -->
         <section id="html-section" class="tutorial-section">
-            <h2>Part 1: HTML Basics</h2>
+            <h2>Part 1: HTML basics</h2>
             
             <div class="exploration-prompt callout-html">
-                <h4>Getting started</h4>
+                <h3>Getting started</h3>
                 <p>Read an example, then try it. Whenever you wonder "what would happen if I changed this?", change it and see. That question is most of how programmers learn.</p>
             </div>
             
@@ -50,7 +94,7 @@
                 <p><strong>HTML (HyperText Markup Language)</strong> is the standard language for creating web pages. It uses <strong>tags</strong> to structure content.</p>
                 
                 <div class="example-box">
-                    <h4>HTML Structure Example:</h4>
+                    <h4>An HTML page</h4>
                     <pre><code>&lt;!DOCTYPE html&gt;
 &lt;html&gt;
 &lt;head&gt;
@@ -63,22 +107,22 @@
 &lt;/html&gt;</code></pre>
                 </div>
 
-                <h4>Common HTML Tags:</h4>
+                <h4>Common HTML tags</h4>
                 <ul>
-                    <li><code>&lt;h1&gt;</code> to <code>&lt;h6&gt;</code> - Headings (h1 largest, h6 smallest)</li>
-                    <li><code>&lt;p&gt;</code> - Paragraph</li>
-                    <li><code>&lt;a href="url"&gt;</code> - Link</li>
-                    <li><code>&lt;img src="image.jpg" alt="description"&gt;</code> - Image</li>
-                    <li><code>&lt;div&gt;</code> - Container/division</li>
-                    <li><code>&lt;span&gt;</code> - Inline container</li>
-                    <li><code>&lt;ul&gt;</code> and <code>&lt;li&gt;</code> - Unordered list</li>
-                    <li><code>&lt;table&gt;</code>, <code>&lt;tr&gt;</code>, <code>&lt;td&gt;</code> - Table elements</li>
+                    <li><code>&lt;h1&gt;</code> to <code>&lt;h6&gt;</code>: headings (h1 is the largest, h6 the smallest)</li>
+                    <li><code>&lt;p&gt;</code>: a paragraph</li>
+                    <li><code>&lt;a href="url"&gt;</code>: a link</li>
+                    <li><code>&lt;img src="image.jpg" alt="description"&gt;</code>: an image</li>
+                    <li><code>&lt;div&gt;</code>: a container (division) that groups things</li>
+                    <li><code>&lt;span&gt;</code>: a container inside a line of text</li>
+                    <li><code>&lt;ul&gt;</code> and <code>&lt;li&gt;</code>: a bulleted (unordered) list</li>
+                    <li><code>&lt;table&gt;</code>, <code>&lt;tr&gt;</code>, <code>&lt;td&gt;</code>: a table, its rows and its cells</li>
                 </ul>
             </div>
 
             <div class="lesson">
-                <h3>HTML Forms</h3>
-                <p>Forms collect user input. Try this example form:</p>
+                <h3>HTML forms</h3>
+                <p>Forms collect information from the person using the page. Try this one:</p>
                 
                 <div class="interactive-demo">
                     <form id="sample-form" onsubmit="event.preventDefault(); alert('Form submitted!');">
@@ -96,7 +140,7 @@
                 </div>
 
                 <div class="example-box">
-                    <h4>HTML Code for this form:</h4>
+                    <h4>The HTML for this form</h4>
                     <pre><code>&lt;form&gt;
     &lt;label for="name"&gt;Name:&lt;/label&gt;
     &lt;input type="text" id="name" name="name" required&gt;
@@ -113,14 +157,16 @@
             </div>
 
             <div class="lesson">
-                <h3>Try It: Write Some HTML</h3>
-                <p>Type HTML in the box on the left and the preview on the right shows what a browser makes of it. It updates as you type, and your work is saved in this browser, so refreshing the page won't lose it.</p>
+                <h3>Try it: write some HTML</h3>
+                <p>Type HTML in the editor and the preview shows what a browser makes of it. It updates as you type, and your work is saved in this browser, so refreshing the page won't lose it.</p>
 
+                <div class="workspace">
+                <div class="workspace-side">
                 <div class="code-lab" data-lab="html-lab">
                     <div class="code-lab-editors">
                         <div class="code-lab-pane">
                             <label for="html-lab-html">Your HTML</label>
-                            <textarea id="html-lab-html" data-lang="html" rows="12" spellcheck="false" autocapitalize="off" autocomplete="off">&lt;h1&gt;My first page&lt;/h1&gt;
+                            <textarea id="html-lab-html" data-lang="html" rows="10" spellcheck="false" autocapitalize="off" autocomplete="off">&lt;h1&gt;My first page&lt;/h1&gt;
 &lt;p&gt;Hello! This is a paragraph.&lt;/p&gt;</textarea>
                         </div>
                     </div>
@@ -134,9 +180,11 @@
                     </div>
                 </div>
 
+                </div>
+                <div class="workspace-main">
                 <div class="exercise-list">
                     <div class="exercise">
-                        <h4>HTML Exercise 1: Headings</h4>
+                        <h4>HTML exercise 1: Headings</h4>
                         <p>Under the paragraph, add a smaller heading and a paragraph about a hobby of yours.</p>
                         <details class="hint">
                             <summary>Show hint</summary>
@@ -159,7 +207,7 @@
                     </div>
 
                     <div class="exercise">
-                        <h4>HTML Exercise 2: A List</h4>
+                        <h4>HTML exercise 2: A list</h4>
                         <p>Add a list of three things you'd like to learn this year.</p>
                         <details class="hint">
                             <summary>Show hint</summary>
@@ -188,7 +236,7 @@
                     </div>
 
                     <div class="exercise">
-                        <h4>HTML Exercise 3: A Link</h4>
+                        <h4>HTML exercise 3: A link</h4>
                         <p>Add a link to a website you like.</p>
                         <details class="hint">
                             <summary>Show hint</summary>
@@ -209,6 +257,8 @@
                     </div>
 
                 </div>
+                </div>
+                </div>
             </div>
         </section>
 
@@ -216,10 +266,10 @@
              SECTION 2: CSS BASICS
         ============================================= -->
         <section id="css-section" class="tutorial-section">
-            <h2>Part 2: CSS Styling</h2>
+            <h2>Part 2: CSS styling</h2>
             
             <div class="exploration-prompt callout-css">
-                <h4>Getting started</h4>
+                <h3>Getting started</h3>
                 <p>You can change the CSS of any web page, including this one. Right-click something on the page and choose <strong>Inspect</strong>. The panel that opens is the browser's <strong>DevTools</strong> (developer tools), and it shows the CSS for whatever you clicked. Click a value, such as a colour, and type a new one. Nothing you change there is saved, so experiment freely: refreshing the page puts everything back.</p>
             </div>
             
@@ -228,15 +278,15 @@
                 <p><strong>CSS (Cascading Style Sheets)</strong> controls how HTML elements look on the page: colours, fonts, layouts, and more.</p>
                 <p><strong>A spelling note:</strong> CSS uses American spelling, so the property is <code>color</code>, never <code>colour</code>. If you write <code>colour: red;</code> the browser quietly ignores it. No error, just nothing happens.</p>
                 
-                <h4>Three Ways to Add CSS:</h4>
+                <h4>Three ways to add CSS</h4>
                 <ol>
                     <li><strong>Inline:</strong> <code>&lt;p style="color: blue;"&gt;Text&lt;/p&gt;</code></li>
                     <li><strong>Internal:</strong> In <code>&lt;style&gt;</code> tags within <code>&lt;head&gt;</code></li>
-                    <li><strong>External:</strong> Separate .css file (Best practice!)</li>
+                    <li><strong>External:</strong> a separate .css file. This is the usual choice, and the one this page uses.</li>
                 </ol>
 
                 <div class="example-box">
-                    <h4>CSS Syntax:</h4>
+                    <h4>CSS syntax</h4>
                     <pre><code>selector {
     property: value;
     another-property: value;
@@ -252,28 +302,18 @@ p {
             </div>
 
             <div class="lesson">
-                <h3>CSS Selectors</h3>
+                <h3>CSS selectors</h3>
                 <ul>
-                    <li><code>element</code> - Selects all elements of that type (e.g., <code>p</code>)</li>
-                    <li><code>.class</code> - Selects elements with that class (e.g., <code>.highlight</code>)</li>
-                    <li><code>#id</code> - Selects element with that ID (e.g., <code>#header</code>)</li>
-                    <li><code>element.class</code> - Combines selectors (e.g., <code>p.intro</code>)</li>
+                    <li><code>element</code>: every element of that type, for example <code>p</code></li>
+                    <li><code>.class</code>: every element with that class, for example <code>.highlight</code></li>
+                    <li><code>#id</code>: the one element with that id, for example <code>#header</code></li>
+                    <li><code>element.class</code>: both at once, for example <code>p.intro</code></li>
                 </ul>
-
-                <h4>Interactive Demo:</h4>
-                <div class="interactive-demo">
-                    <div class="css-demo-box" style="background-color: #e3f2fd; padding: 15px; border: 2px solid #2196f3; border-radius: 5px;">
-                        <p style="margin: 0; color: #1565c0;">This box is styled with CSS!</p>
-                    </div>
-                    <p class="demo-caption">
-                        CSS used: background-color, padding, border, border-radius, color
-                    </p>
-                </div>
             </div>
 
             <div class="lesson">
-                <h3>The Box Model</h3>
-                <p>Every HTML element is a rectangular box with these properties:</p>
+                <h3>The box model</h3>
+                <p>Every HTML element is a rectangular box, built in layers from the inside out:</p>
                 <div class="box-model-demo">
                     <div class="box-layer margin-layer">
                         <span>Margin</span>
@@ -291,21 +331,24 @@ p {
             </div>
 
             <div class="lesson">
-                <h3>Try It: Style a Box</h3>
+                <h3>Try it: style a box</h3>
                 <p>This editor has two boxes: the HTML stays the same, and the CSS decides how it looks. Change a value in the CSS box, such as <code>lightyellow</code>, and watch the preview.</p>
+                <p>The CSS uses a selector from the list above: <code>.card</code> is a class selector, so it styles the element with <code>class="card"</code> in the HTML.</p>
 
+                <div class="workspace">
+                <div class="workspace-side">
                 <div class="code-lab" data-lab="css-lab">
                     <div class="code-lab-editors">
                         <div class="code-lab-pane">
                             <label for="css-lab-html">HTML</label>
-                            <textarea id="css-lab-html" data-lang="html" rows="6" spellcheck="false" autocapitalize="off" autocomplete="off">&lt;div class="card"&gt;
+                            <textarea id="css-lab-html" data-lang="html" rows="4" spellcheck="false" autocapitalize="off" autocomplete="off">&lt;div class="card"&gt;
   &lt;h2&gt;Hello, CSS&lt;/h2&gt;
   &lt;p&gt;Change the CSS and watch this box change.&lt;/p&gt;
 &lt;/div&gt;</textarea>
                         </div>
                         <div class="code-lab-pane">
                             <label for="css-lab-css">CSS</label>
-                            <textarea id="css-lab-css" data-lang="css" rows="9" spellcheck="false" autocapitalize="off" autocomplete="off">.card {
+                            <textarea id="css-lab-css" data-lang="css" rows="7" spellcheck="false" autocapitalize="off" autocomplete="off">.card {
   background-color: lightyellow;
   padding: 10px;
   border: 2px solid gray;
@@ -322,9 +365,11 @@ p {
                     </div>
                 </div>
 
+                </div>
+                <div class="workspace-main">
                 <div class="exercise-list">
                     <div class="exercise">
-                        <h4>CSS Exercise 1: Colour and Corners</h4>
+                        <h4>CSS exercise 1: Colour and corners</h4>
                         <p>Make the card green, with rounded corners.</p>
                         <details class="hint">
                             <summary>Show hint</summary>
@@ -352,7 +397,7 @@ p {
                     </div>
 
                     <div class="exercise">
-                        <h4>CSS Exercise 2: Room to Breathe</h4>
+                        <h4>CSS exercise 2: Room to breathe</h4>
                         <p>Give the card more space inside its border, and more space around the outside of it.</p>
                         <details class="hint">
                             <summary>Show hint</summary>
@@ -380,7 +425,7 @@ p {
                     </div>
 
                     <div class="exercise">
-                        <h4>CSS Exercise 3: A Second Rule</h4>
+                        <h4>CSS exercise 3: A second rule</h4>
                         <p>Change the heading's colour and font, and centre all the text in the card.</p>
                         <details class="hint">
                             <summary>Show hint</summary>
@@ -418,11 +463,13 @@ h2 {
                     </div>
 
                 </div>
+                </div>
+                </div>
             </div>
 
             <div class="lesson">
-                <h3>Try It: Restyle This Page</h3>
-                <p>The <strong>Appearance</strong> button (top right, or bottom right on a phone) changes how this page looks. Open it, switch to the dark theme, then try a different font or a bigger text size.</p>
+                <h3>Try it: restyle this page</h3>
+                <p>The <strong>Appearance</strong> button, at the right-hand end of the bar at the top of the screen, changes how this page looks. Open it, switch to the dark theme, then try a different font or a bigger text size.</p>
                 <p>The HTML stays exactly the same when you do this. The page keeps its colours and sizes in <strong>CSS variables</strong>: values with a name, such as <code>--bg</code> for the background colour. The Appearance panel swaps in a different set of values. Here is a small piece of this page's own <code>styles.css</code>:</p>
                 <pre><code>:root {
     --bg: #f5f7fa;
@@ -446,29 +493,25 @@ body {
              SECTION 3: SQL INTERACTIVE PLAYGROUND
         ============================================= -->
         <section id="sql-section" class="tutorial-section">
-            <h2>Part 3: SQL Database Queries</h2>
+            <h2>Part 3: SQL database queries</h2>
             
             <div class="exploration-prompt callout-sql">
-                <h4>Getting started</h4>
-                <p>Read the commands first, or jump straight to the playground and click an example query. Both work.</p>
-                <p class="callout-footnote">
-                    <strong>Remember:</strong> This database resets when you refresh the page, so feel free to experiment. 
-                    You cannot break anything permanently. Mistakes are learning opportunities!
-                </p>
+                <h3>Getting started</h3>
+                <p>Read the commands first, or jump straight to the playground and click an example query. Both work. The database starts fresh every time you refresh the page, so you can't break anything permanently.</p>
             </div>
             
             <div class="lesson">
                 <h3>What is SQL?</h3>
                 <p><strong>SQL (Structured Query Language)</strong> is used to manage and query databases. It lets you store, retrieve, update, and delete data.</p>
                 
-                <h4>Our Sample Database: Students & Courses</h4>
+                <h4>The sample database</h4>
                 <p>We've created three tables for you to practise with:</p>
                 <ul>
-                    <li><strong>students</strong> - Contains student information (id, name, age, grade)</li>
-                    <li><strong>courses</strong> - Contains course information (id, name, instructor, credits)</li>
-                    <li><strong>enrolments</strong> - Which student takes which course (id, student_id, course_id). You'll use this one at the end, in <em>Connecting Tables with JOIN</em></li>
+                    <li><strong>students</strong>: one row per student (id, name, age, grade)</li>
+                    <li><strong>courses</strong>: one row per course (id, name, instructor, credits)</li>
+                    <li><strong>enrolments</strong>: which student takes which course (id, student_id, course_id). You'll use this one at the end, in <em>Connecting tables with JOIN</em></li>
                 </ul>
-                <p>Forgotten a column name? The <strong>Show Tables</strong> button under the playground lists every table and its columns.</p>
+                <p>Forgotten a column name? The <strong>Show Tables</strong> button in the playground lists every table and its columns.</p>
 
                 <div class="db-status" id="db-status">
                     <span class="status-indicator"></span> Starting the database...
@@ -476,52 +519,54 @@ body {
             </div>
 
             <div class="lesson">
-                <h3>Basic SQL Commands</h3>
+                <h3>Basic SQL commands</h3>
                 
                 <div class="sql-command-list">
                     <div class="command-card">
-                        <h4>SELECT - Retrieve Data</h4>
+                        <h4>SELECT: get data</h4>
                         <pre><code>SELECT column1, column2 FROM table_name;</code></pre>
-                        <p>Gets data from a table. Use * to select all columns.</p>
+                        <p>Gets data from a table. Use * to get every column.</p>
                     </div>
 
                     <div class="command-card">
-                        <h4>WHERE - Filter Results</h4>
+                        <h4>WHERE: keep only some rows</h4>
                         <pre><code>SELECT * FROM students WHERE age > 20;</code></pre>
                         <p>Keeps only the rows that match a condition. Try it: only three of the eight students are over 20.</p>
                     </div>
 
                     <div class="command-card">
-                        <h4>ORDER BY - Sort Results</h4>
+                        <h4>ORDER BY: sort the results</h4>
                         <pre><code>SELECT * FROM students ORDER BY name ASC;</code></pre>
-                        <p>Sorts results. Use ASC (ascending) or DESC (descending).</p>
+                        <p>Sorts the results: ASC for ascending (A to Z, small to big), DESC for descending.</p>
                     </div>
 
                     <div class="command-card">
-                        <h4>INSERT - Add New Data</h4>
+                        <h4>INSERT: add rows</h4>
                         <pre><code>INSERT INTO students (name, age, grade) 
-VALUES ('John', 20, 85);</code></pre>
-                        <p>Adds new rows to a table.</p>
+VALUES ('Sam', 20, 85);</code></pre>
+                        <p>Adds a new row to a table.</p>
                     </div>
 
                     <div class="command-card">
-                        <h4>UPDATE - Modify Data</h4>
+                        <h4>UPDATE: change rows</h4>
                         <pre><code>UPDATE students SET grade = 90 
-WHERE name = 'John';</code></pre>
-                        <p>Changes existing data. Always use WHERE!</p>
+WHERE name = 'Sam';</code></pre>
+                        <p>Changes existing rows. Without a WHERE, it changes every row.</p>
                     </div>
 
                     <div class="command-card">
-                        <h4>DELETE - Remove Data</h4>
+                        <h4>DELETE: remove rows</h4>
                         <pre><code>DELETE FROM students WHERE id = 5;</code></pre>
-                        <p>Removes rows from a table. Use carefully!</p>
+                        <p>Removes rows. Without a WHERE, it removes every row.</p>
                     </div>
                 </div>
             </div>
 
-            <div class="lesson">
-                <h3>Interactive SQL Playground</h3>
-                <p>Try running SQL queries below! Start with these examples or write your own:</p>
+            <div class="workspace workspace-sql">
+            <div class="workspace-side">
+            <div class="lesson" id="playground">
+                <h3>The SQL playground</h3>
+                <p>Click an example to load it, or write your own query, then press <strong>Run Query</strong>.</p>
 
                 <div class="query-examples">
                     <button onclick="setQuery('SELECT * FROM students;')">Show All Students</button>
@@ -548,20 +593,15 @@ WHERE name = 'John';</code></pre>
                 </div>
             </div>
 
+            </div>
+            <div class="workspace-main">
             <div class="lesson">
-                <h3>Practice Exercises</h3>
-                <p>These exercises progress from simple to complex. You can:</p>
-                <ul>
-                    <li>Work through them in order to build skills progressively</li>
-                    <li>Choose exercises that match your current comfort level</li>
-                    <li>Open the hint first. If you're still stuck, open the answer, then close it and try writing the query yourself</li>
-                    <li>Come back to challenging exercises after completing easier ones</li>
-                </ul>
-                <p><strong>Learning Tip:</strong> If you get an error, read it carefully. SQL error messages often tell you exactly what's wrong.</p>
+                <h3>Practice exercises</h3>
+                <p>Open the hint first. If you're still stuck, open the answer, then close it and try writing the query yourself. If you get an error, read it: SQL error messages usually say exactly what's wrong.</p>
 
                 <div class="exercise-list">
                     <div class="exercise">
-                        <h4>Exercise 1: Basic SELECT</h4>
+                        <h4>SQL exercise 1: Basic SELECT</h4>
                         <p>Select only the name and age columns from the students table.</p>
                         <details class="hint">
                             <summary>Show hint</summary>
@@ -576,7 +616,7 @@ WHERE name = 'John';</code></pre>
                     </div>
 
                     <div class="exercise">
-                        <h4>Exercise 2: WHERE Clause</h4>
+                        <h4>SQL exercise 2: WHERE clause</h4>
                         <p>Find all students whose grade is less than 75.</p>
                         <details class="hint">
                             <summary>Show hint</summary>
@@ -585,13 +625,13 @@ WHERE name = 'John';</code></pre>
                         <details class="answer">
                             <summary>Show answer</summary>
                             <pre><code>SELECT * FROM students WHERE grade &lt; 75;</code></pre>
-                            <p>You should see one student: Frank Miller, with 73. Carol Williams has 76, so she just misses out.</p>
+                            <p>You should see one student: Wei Chen, with 73. Priya Sharma has 76, so just misses out.</p>
                             <button type="button" class="try-answer" data-query="SELECT * FROM students WHERE grade &lt; 75;">Load it into the playground</button>
                         </details>
                     </div>
 
                     <div class="exercise">
-                        <h4>Exercise 3: INSERT</h4>
+                        <h4>SQL exercise 3: INSERT</h4>
                         <p>Add yourself as a new student to the database!</p>
                         <details class="hint">
                             <summary>Show hint</summary>
@@ -606,7 +646,7 @@ WHERE name = 'John';</code></pre>
                     </div>
 
                     <div class="exercise">
-                        <h4>Exercise 4: Sorting</h4>
+                        <h4>SQL exercise 4: Sorting</h4>
                         <p>Show all students sorted by name in alphabetical order.</p>
                         <details class="hint">
                             <summary>Show hint</summary>
@@ -621,7 +661,7 @@ WHERE name = 'John';</code></pre>
                     </div>
 
                     <div class="exercise">
-                        <h4>Exercise 5: COUNT Function</h4>
+                        <h4>SQL exercise 5: COUNT function</h4>
                         <p>How many courses are in the database?</p>
                         <details class="hint">
                             <summary>Show hint</summary>
@@ -636,12 +676,12 @@ WHERE name = 'John';</code></pre>
                     </div>
                 </div>
 
-                <h3>Challenge Exercises</h3>
+                <h3>Challenge exercises</h3>
                 <p>Ready for more? These combine what you've learned in new ways. Some of them change the data: the <strong>Reset Database</strong> button puts everything back.</p>
 
                 <div class="exercise-list">
                     <div class="exercise">
-                        <h4>Exercise 6: UPDATE</h4>
+                        <h4>SQL exercise 6: UPDATE</h4>
                         <p>Give every student with a grade below 75 a 5-point bonus.</p>
                         <details class="hint">
                             <summary>Show hint</summary>
@@ -650,13 +690,13 @@ WHERE name = 'John';</code></pre>
                         <details class="answer">
                             <summary>Show answer</summary>
                             <pre><code>UPDATE students SET grade = grade + 5 WHERE grade &lt; 75;</code></pre>
-                            <p>The playground should say 1 row changed: Frank Miller goes from 73 to 78.</p>
+                            <p>The playground should say 1 row changed: Wei Chen goes from 73 to 78.</p>
                             <button type="button" class="try-answer" data-query="UPDATE students SET grade = grade + 5 WHERE grade &lt; 75;">Load it into the playground</button>
                         </details>
                     </div>
 
                     <div class="exercise">
-                        <h4>Exercise 7: DELETE</h4>
+                        <h4>SQL exercise 7: DELETE</h4>
                         <p>Remove every student under the age of 20.</p>
                         <details class="hint">
                             <summary>Show hint</summary>
@@ -665,13 +705,13 @@ WHERE name = 'John';</code></pre>
                         <details class="answer">
                             <summary>Show answer</summary>
                             <pre><code>DELETE FROM students WHERE age &lt; 20;</code></pre>
-                            <p>2 rows changed: Bob Smith and Frank Miller, who are both 19. Press <strong>Reset Database</strong> to bring them back.</p>
+                            <p>2 rows changed: Kwame Mensah and Wei Chen, who are both 19. Press <strong>Reset Database</strong> to bring them back.</p>
                             <button type="button" class="try-answer" data-query="DELETE FROM students WHERE age &lt; 20;">Load it into the playground</button>
                         </details>
                     </div>
 
                     <div class="exercise">
-                        <h4>Exercise 8: Combining Conditions</h4>
+                        <h4>SQL exercise 8: Combining conditions</h4>
                         <p>Find the students aged 20 or 21 with a grade above 85, highest grade first.</p>
                         <details class="hint">
                             <summary>Show hint</summary>
@@ -682,7 +722,7 @@ WHERE name = 'John';</code></pre>
                             <pre><code>SELECT * FROM students
 WHERE (age = 20 OR age = 21) AND grade &gt; 85
 ORDER BY grade DESC;</code></pre>
-                            <p>Henry Moore (94), Grace Wilson (89) and Alice Johnson (88). David Brown is 20, but his grade is exactly 85, and <em>above</em> 85 means more than 85.</p>
+                            <p>Dmytro Kovalenko (94), Amina Yusuf (89) and Aoife Murphy (88). Mateus Oliveira is 20, but has exactly 85, and <em>above</em> 85 means more than 85.</p>
                             <button type="button" class="try-answer" data-query="SELECT * FROM students
 WHERE (age = 20 OR age = 21) AND grade &gt; 85
 ORDER BY grade DESC;">Load it into the playground</button>
@@ -690,7 +730,7 @@ ORDER BY grade DESC;">Load it into the playground</button>
                     </div>
 
                     <div class="exercise">
-                        <h4>Exercise 9: Average</h4>
+                        <h4>SQL exercise 9: Average</h4>
                         <p>What is the average grade of the students aged 20?</p>
                         <details class="hint">
                             <summary>Show hint</summary>
@@ -699,13 +739,13 @@ ORDER BY grade DESC;">Load it into the playground</button>
                         <details class="answer">
                             <summary>Show answer</summary>
                             <pre><code>SELECT AVG(grade) AS average_grade FROM students WHERE age = 20;</code></pre>
-                            <p>89, the average of Alice (88), David (85) and Henry (94). If you added yourself aged 20 in Exercise 3, you're included too, so your number will be different.</p>
+                            <p>89, the average of Aoife (88), Mateus (85) and Dmytro (94). If you added yourself aged 20 in Exercise 3, you're included too, so your number will be different.</p>
                             <button type="button" class="try-answer" data-query="SELECT AVG(grade) AS average_grade FROM students WHERE age = 20;">Load it into the playground</button>
                         </details>
                     </div>
 
                     <div class="exercise">
-                        <h4>Exercise 10: The Other Table</h4>
+                        <h4>SQL exercise 10: The other table</h4>
                         <p>Find all the courses worth 4 credits.</p>
                         <details class="hint">
                             <summary>Show hint</summary>
@@ -721,8 +761,8 @@ ORDER BY grade DESC;">Load it into the playground</button>
                 </div>
             </div>
 
-            <div class="lesson">
-                <h3>Connecting Tables with JOIN</h3>
+            <div class="lesson" id="join-lesson">
+                <h3>Connecting tables with JOIN</h3>
                 <p>So far each query has used one table. The third table, <code>enrolments</code>, connects the other two: each row says that one student takes one course. It doesn't store any names, only numbers that point at rows in the other tables.</p>
                 <ul>
                     <li><code>student_id</code> matches an <code>id</code> in <code>students</code></li>
@@ -743,7 +783,7 @@ JOIN students ON students.id = enrolments.student_id;">Load it into the playgrou
 
                 <div class="exercise-list">
                     <div class="exercise">
-                        <h4>Exercise 11: Who Takes What</h4>
+                        <h4>SQL exercise 11: Who takes what</h4>
                         <p>List every student next to the name of each course they take.</p>
                         <details class="hint">
                             <summary>Show hint</summary>
@@ -755,7 +795,7 @@ JOIN students ON students.id = enrolments.student_id;">Load it into the playgrou
 FROM enrolments
 JOIN students ON students.id = enrolments.student_id
 JOIN courses ON courses.id = enrolments.course_id;</code></pre>
-                            <p>You should see 13 rows. Some students appear more than once, because they take more than one course. If you see fewer, you probably deleted Bob and Frank in Exercise 7: press <strong>Reset Database</strong> and run it again.</p>
+                            <p>You should see 13 rows. Some students appear more than once, because they take more than one course. If you see fewer, you probably deleted Kwame and Wei in Exercise 7: press <strong>Reset Database</strong> and run it again.</p>
                             <button type="button" class="try-answer" data-query="SELECT students.name AS student, courses.name AS course
 FROM enrolments
 JOIN students ON students.id = enrolments.student_id
@@ -764,7 +804,7 @@ JOIN courses ON courses.id = enrolments.course_id;">Load it into the playground<
                     </div>
 
                     <div class="exercise">
-                        <h4>Exercise 12: One Course</h4>
+                        <h4>SQL exercise 12: One course</h4>
                         <p>Who takes Web Development?</p>
                         <details class="hint">
                             <summary>Show hint</summary>
@@ -777,7 +817,7 @@ FROM enrolments
 JOIN students ON students.id = enrolments.student_id
 JOIN courses ON courses.id = enrolments.course_id
 WHERE courses.name = 'Web Development';</code></pre>
-                            <p>Alice Johnson, Carol Williams and Henry Moore.</p>
+                            <p>Aoife Murphy, Priya Sharma and Dmytro Kovalenko.</p>
                             <button type="button" class="try-answer" data-query="SELECT students.name AS student
 FROM enrolments
 JOIN students ON students.id = enrolments.student_id
@@ -787,7 +827,7 @@ WHERE courses.name = &#x27;Web Development&#x27;;">Load it into the playground</
                     </div>
 
                     <div class="exercise">
-                        <h4>Exercise 13: Nobody Home (hardest)</h4>
+                        <h4>SQL exercise 13: Nobody home (hardest)</h4>
                         <p>Which student isn't enrolled in any course?</p>
                         <details class="hint">
                             <summary>Show hint</summary>
@@ -799,7 +839,7 @@ WHERE courses.name = &#x27;Web Development&#x27;;">Load it into the playground</
 FROM students
 LEFT JOIN enrolments ON enrolments.student_id = students.id
 WHERE enrolments.id IS NULL;</code></pre>
-                            <p>Frank Miller. If you added yourself in Exercise 3, you'll appear too, since you haven't enrolled in anything. If you deleted Frank in Exercise 7, press <strong>Reset Database</strong> first.</p>
+                            <p>Wei Chen. If you added yourself in Exercise 3, you'll appear too, since you haven't enrolled in anything. If you deleted Wei in Exercise 7, press <strong>Reset Database</strong> first.</p>
                             <button type="button" class="try-answer" data-query="SELECT students.name
 FROM students
 LEFT JOIN enrolments ON enrolments.student_id = students.id
@@ -809,56 +849,28 @@ WHERE enrolments.id IS NULL;">Load it into the playground</button>
 
                 </div>
             </div>
+            </div>
+            </div>
         </section>
 
         <!-- ============================================
              PUTTING IT ALL TOGETHER
         ============================================= -->
-        <section class="tutorial-section">
-            <h2>Putting It All Together</h2>
-            
+        <section id="wrap-up" class="tutorial-section">
+            <h2>Wrapping up</h2>
+
             <div class="exploration-prompt callout-together">
-                <h4>Reflection Questions:</h4>
+                <h3>Reflection questions</h3>
                 <ul>
                     <li>How does changing the HTML structure affect what you see?</li>
-                    <li>What happens when CSS rules conflict?</li>
-                    <li>Why might you use SQL instead of storing data in JavaScript variables?</li>
-                    <li>Can you think of a website you use daily? What data might it store in a database?</li>
-                </ul>
-            </div>
-            
-            <div class="lesson">
-                <h3>How These Technologies Work Together</h3>
-                <div class="tech-stack-diagram">
-                    <div class="tech-card">
-                        <h4>HTML</h4>
-                        <p>Structure & Content</p>
-                        <p class="tech-description">Defines what goes on the page</p>
-                    </div>
-                    <div class="plus">+</div>
-                    <div class="tech-card">
-                        <h4>CSS</h4>
-                        <p>Style & Layout</p>
-                        <p class="tech-description">Makes it look beautiful</p>
-                    </div>
-                    <div class="plus">+</div>
-                    <div class="tech-card">
-                        <h4>SQL</h4>
-                        <p>Data & Storage</p>
-                        <p class="tech-description">Manages information</p>
-                    </div>
-                </div>
-
-                <h4>Real-World Example:</h4>
-                <ul>
-                    <li><strong>HTML</strong> creates a login form</li>
-                    <li><strong>CSS</strong> makes the form look professional</li>
-                    <li><strong>SQL</strong> looks up the username in the database and checks the password against a <em>hashed</em> (scrambled, one-way) copy of it. Well-built sites never store your actual password.</li>
+                    <li>What happens when two CSS rules disagree about the same element?</li>
+                    <li>Why might a website keep its data in a database instead of writing it into the page itself?</li>
+                    <li>Think of a website you use every day. What data might it keep in a database?</li>
                 </ul>
             </div>
 
             <div class="lesson">
-                <h3>Next Steps</h3>
+                <h3>Next steps</h3>
                 <ol>
                     <li>Practise HTML by creating more complex page structures</li>
                     <li>Experiment with CSS to style your pages uniquely</li>
@@ -871,12 +883,14 @@ WHERE enrolments.id IS NULL;">Load it into the playground</button>
     </main>
 
     <footer>
-        <p>Created for educational purposes | Built with HTML, CSS, and SQL.js</p>
+        <p>Created by Joshua Aaron (<a href="https://jsaaron.com">jsaaron.com</a>) for teaching. Built with HTML, CSS and SQL.js.</p>
     </footer>
 
     <!-- JavaScript for SQL functionality -->
     <script src="tutorial.js"></script>
     <!-- JavaScript for the live HTML/CSS editors -->
     <script src="code-lab.js"></script>
+    <!-- Highlights the part you're reading in the bar at the top -->
+    <script src="page-nav.js"></script>
 </body>
 </html>

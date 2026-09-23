@@ -154,7 +154,8 @@
         toggle.className = 'appearance-toggle';
         toggle.setAttribute('aria-expanded', 'false');
         toggle.setAttribute('aria-controls', 'appearance-panel');
-        toggle.innerHTML = '<span class="appearance-toggle-glyph" aria-hidden="true">Aa</span> Appearance';
+        toggle.innerHTML = '<span class="appearance-toggle-glyph" aria-hidden="true">Aa</span> ' +
+            '<span class="appearance-toggle-text">Appearance</span>';
 
         const panel = document.createElement('aside');
         panel.className = 'appearance-panel';
@@ -183,7 +184,8 @@
                 '<button type="button" class="appearance-reset">Reset to defaults</button>' +
             '</form>';
 
-        document.body.appendChild(toggle);
+        // The button goes at the end of the bar at the top of the page
+        (document.querySelector('.page-nav') || document.body).appendChild(toggle);
         document.body.appendChild(panel);
 
         const form = panel.querySelector('form');
