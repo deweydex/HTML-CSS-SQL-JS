@@ -72,13 +72,6 @@
     --padding-bg: #d3f9d8;  --padding-line: #2b8a3e;
     --content-bg: #e3f2fd;  --content-line: #1971c2;
 
-    /* Teacher version */
-    --teacher-bg: #fff8db;  --teacher-line: #d4a106;  --teacher-head: #6b4f00;
-    --solution-bg: #e6f4ea; --solution-line: #16a34a; --solution-head: #14532d;
-    --tip-bg: #e0f2f7;      --tip-line: #0e7490;      --tip-head: #164e63;
-    --mistake-bg: #fde8ea;  --mistake-line: #dc2626;  --mistake-head: #7f1d1d;
-    --banner-bg: #facc15;   --banner-fg: #1a1a1a;
-
     /* Footer */
     --footer-bg: #1f2937;
     --footer-fg: #f3f4f6;
@@ -126,10 +119,6 @@
     --padding-bg: #173020;  --padding-line: #4ade80;
     --content-bg: #172a44;  --content-line: #60a5fa;
 
-    --teacher-bg: #2b2610;  --teacher-line: #d4a106;  --teacher-head: #fde68a;
-    --solution-bg: #13261a; --solution-line: #22c55e; --solution-head: #86efac;
-    --tip-bg: #112a31;      --tip-line: #06b6d4;      --tip-head: #67e8f9;
-    --mistake-bg: #2e1519;  --mistake-line: #ef4444;  --mistake-head: #fca5a5;
 
     --footer-bg: #0b0d12;
 }
@@ -154,8 +143,6 @@
     --css-bg: #ffffff;  --css-head: #000000;
     --sql-bg: #ffffff;  --sql-head: #000000;
     --all-bg: #ffffff;  --all-head: #000000;
-    --teacher-head: #000000; --solution-head: #000000;
-    --tip-head: #000000; --mistake-head: #000000;
 }
 :root[data-theme="dark"][data-contrast="high"] {
     --bg: #000000;
@@ -176,10 +163,6 @@
     --css-bg: #000000;  --css-head: #ffffff;
     --sql-bg: #000000;  --sql-head: #ffffff;
     --all-bg: #000000;  --all-head: #ffffff;
-    --teacher-bg: #000000; --solution-bg: #000000;
-    --tip-bg: #000000;  --mistake-bg: #000000;
-    --teacher-head: #ffffff; --solution-head: #ffffff;
-    --tip-head: #ffffff; --mistake-head: #ffffff;
 }
 
 /* Font choices from the Appearance panel. Lexend and OpenDyslexic are
@@ -320,9 +303,6 @@ header h1 {
     margin-bottom: 20px;
 }
 
-.teacher-subtitle {
-    font-size: 0.95em;
-}
 
 /* The "Choose Your Learning Path" box. It sits inside the white-text
    header on a light card, so it sets its own text colour rather than
@@ -610,6 +590,117 @@ button[type="submit"]:hover {
 }
 
 /* ============================================
+   LIVE HTML & CSS EDITOR (code-lab.js)
+============================================= */
+.code-lab {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 16px;
+    background: var(--surface-2);
+    border: 2px solid var(--border);
+    border-radius: 8px;
+    padding: 20px;
+    margin: 20px 0 25px;
+    scroll-margin-top: 16px;
+}
+
+.code-lab-editors {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.code-lab-pane label,
+.code-lab-label {
+    display: block;
+    font-weight: 600;
+    font-size: 0.9em;
+    color: var(--fg);
+    margin-bottom: 6px;
+}
+
+.code-lab textarea {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid var(--border);
+    border-radius: 6px;
+    font-family: var(--mono);
+    font-size: 0.95em;
+    line-height: var(--code-line-height);
+    color: var(--fg);
+    background: var(--surface);
+    resize: vertical;
+    tab-size: 2;
+}
+
+.code-lab textarea:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-soft);
+}
+
+.code-lab-preview-wrap {
+    display: flex;
+    flex-direction: column;
+}
+
+/* The preview is the student's own page, so it stays white whatever
+   theme this tutorial is in */
+.code-lab-preview {
+    flex: 1;
+    width: 100%;
+    min-height: 240px;
+    border: 2px solid var(--border);
+    border-radius: 6px;
+    background: #ffffff;
+}
+
+.code-lab-buttons {
+    grid-column: 1 / -1;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.code-lab-reset {
+    padding: 8px 16px;
+    font-size: 0.9em;
+    font-weight: 600;
+    color: var(--fg);
+    background: var(--surface);
+    border: 2px solid var(--border);
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.code-lab-reset:hover {
+    border-color: var(--accent);
+}
+
+.code-lab-status {
+    font-size: 0.85em;
+    color: var(--muted);
+}
+
+.load-into-lab {
+    margin-top: 4px;
+    padding: 8px 14px;
+    font-size: 0.9em;
+    font-weight: 600;
+    color: var(--chip-fg);
+    background: var(--chip-bg);
+    border: 2px solid var(--chip-border);
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.load-into-lab:hover {
+    background: var(--chip-fg);
+    color: var(--chip-bg);
+}
+
+/* ============================================
    BOX MODEL DEMO
 ============================================= */
 .box-model-demo {
@@ -863,6 +954,14 @@ kbd {
     background: var(--reset-hover);
 }
 
+.tables-button {
+    background: #1d4ed8;
+}
+
+.tables-button:hover {
+    background: #1e3a8a;
+}
+
 /* Query Results Display */
 .query-results {
     background: var(--surface);
@@ -1050,89 +1149,6 @@ kbd {
     font-size: 2em;
     font-weight: bold;
     color: var(--accent);
-}
-
-/* ============================================
-   TEACHER VERSION
-============================================= */
-.teacher-banner {
-    background: var(--banner-bg);
-    color: var(--banner-fg);
-    text-align: center;
-    padding: 15px 20px;
-    font-weight: bold;
-    font-size: 1.2em;
-    position: sticky;
-    top: 0;
-    z-index: 1000;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-}
-
-.teacher-only {
-    background: var(--teacher-bg);
-    border: 3px solid var(--teacher-line);
-    border-radius: 8px;
-    padding: 20px;
-    margin: 20px 0;
-}
-
-.tutorial-section.teacher-only {
-    padding: 40px;
-}
-
-.teacher-only h3 {
-    color: var(--teacher-head);
-    margin-top: 0;
-}
-
-.solution,
-.teaching-tip,
-.common-error {
-    border-left: 4px solid;
-    padding: 15px;
-    margin: 15px 0;
-    border-radius: 4px;
-}
-
-.solution h5,
-.teaching-tip h5,
-.common-error h5 {
-    font-size: 1.05em;
-    margin-top: 0;
-    margin-bottom: 6px;
-}
-
-.solution ul, .teaching-tip ul, .common-error ul,
-.solution ol, .teaching-tip ol, .common-error ol,
-.teacher-only > ul, .teacher-only > ol {
-    margin-left: 22px;
-}
-
-.solution { background: var(--solution-bg); border-left-color: var(--solution-line); }
-.solution h5 { color: var(--solution-head); }
-.teaching-tip { background: var(--tip-bg); border-left-color: var(--tip-line); }
-.teaching-tip h5 { color: var(--tip-head); }
-.common-error { background: var(--mistake-bg); border-left-color: var(--mistake-line); }
-.common-error h5 { color: var(--mistake-head); }
-
-/* Assessment rubric table */
-.rubric {
-    width: 100%;
-    border-collapse: collapse;
-    margin: 20px 0;
-}
-
-.rubric th,
-.rubric td {
-    padding: 10px;
-    border: 1px solid var(--border);
-    vertical-align: top;
-    text-align: left;
-}
-
-.rubric th {
-    background: var(--accent);
-    color: var(--on-accent);
 }
 
 /* ============================================
@@ -1372,12 +1388,15 @@ footer a:hover {
         font-size: 1em;
     }
 
-    .tutorial-section,
-    .tutorial-section.teacher-only {
+    .tutorial-section {
         padding: 25px 20px;
     }
 
     .sql-command-list {
+        grid-template-columns: 1fr;
+    }
+
+    .code-lab {
         grid-template-columns: 1fr;
     }
 
@@ -1399,7 +1418,7 @@ footer a:hover {
     }
 
     /* On a phone the toggle moves to the bottom corner, clear of the
-       teacher banner and the page title */
+       page title */
     .appearance-toggle {
         top: auto;
         bottom: 14px;
@@ -1412,8 +1431,7 @@ footer a:hover {
         padding: 0 10px;
     }
 
-    .tutorial-section,
-    .tutorial-section.teacher-only {
+    .tutorial-section {
         padding: 20px 15px;
     }
 
@@ -1423,11 +1441,6 @@ footer a:hover {
 
     .editor-buttons button {
         width: 100%;
-    }
-
-    .rubric {
-        display: block;
-        overflow-x: auto;
     }
 }
 
