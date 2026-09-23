@@ -976,6 +976,34 @@ kbd {
     border-radius: 4px;
 }
 
+/* The answer sits under the hint, in green so the two are easy to tell apart */
+.exercise details.answer summary {
+    color: var(--success);
+    background: var(--sql-bg);
+    border: 1px solid var(--sql-line);
+}
+
+.exercise details.answer pre {
+    margin: 10px 0 0;
+}
+
+.try-answer {
+    margin-top: 4px;
+    padding: 8px 14px;
+    font-size: 0.9em;
+    font-weight: 600;
+    color: var(--chip-fg);
+    background: var(--chip-bg);
+    border: 2px solid var(--chip-border);
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.try-answer:hover {
+    background: var(--chip-fg);
+    color: var(--chip-bg);
+}
+
 /* ============================================
    TECH STACK DIAGRAM
 ============================================= */

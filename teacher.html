@@ -63,13 +63,8 @@
             <h2>Part 1: HTML Basics</h2>
             
             <div class="exploration-prompt callout-html">
-                <h4>How to Approach This Section:</h4>
-                <ul>
-                    <li><strong>Read First:</strong> Understand the concepts before trying examples</li>
-                    <li><strong>Try the Examples:</strong> Use the sample form to see HTML in action</li>
-                    <li><strong>Experiment:</strong> Try changing the example code in your own text editor</li>
-                    <li><strong>Ask Questions:</strong> What would happen if you changed X to Y? Test your hypotheses</li>
-                </ul>
+                <h4>Getting started</h4>
+                <p>Read an example, then try it. Whenever you wonder "what would happen if I changed this?", change it and see. That question is most of how programmers learn.</p>
             </div>
 
             <div class="teacher-only">
@@ -78,7 +73,7 @@
                     <h5>💡 Recommended Approach</h5>
                     <ul>
                         <li><strong>Start with viewing source:</strong> Have students right-click this page and "View Page Source" to see HTML in action</li>
-                        <li><strong>Semantic HTML:</strong> Emphasize that tags have meaning, not just appearance</li>
+                        <li><strong>Semantic HTML:</strong> Emphasise that tags have meaning, not just appearance</li>
                         <li><strong>Nesting analogy:</strong> Use Russian dolls or boxes-within-boxes as an analogy</li>
                         <li><strong>Live demo:</strong> Open DevTools (F12) and modify HTML in real-time</li>
                     </ul>
@@ -154,6 +149,9 @@
     &lt;label for="email"&gt;Email:&lt;/label&gt;
     &lt;input type="email" id="email" name="email" required&gt;
     
+    &lt;label for="age"&gt;Age:&lt;/label&gt;
+    &lt;input type="number" id="age" name="age" min="1" max="120"&gt;
+    
     &lt;button type="submit"&gt;Submit&lt;/button&gt;
 &lt;/form&gt;</code></pre>
                 </div>
@@ -167,13 +165,8 @@
             <h2>Part 2: CSS Styling</h2>
             
             <div class="exploration-prompt callout-css">
-                <h4>Ways to Learn CSS:</h4>
-                <ul>
-                    <li><strong>Visual Learners:</strong> Focus on the interactive demos and see how CSS changes appearance</li>
-                    <li><strong>Hands-On:</strong> Open the styles.css file and try modifying colors and sizes</li>
-                    <li><strong>Systematic:</strong> Read each selector type, then practice writing your own</li>
-                    <li><strong>Creative:</strong> Skip to the box model, then design your own styled components</li>
-                </ul>
+                <h4>Getting started</h4>
+                <p>You can change the CSS of any web page, including this one. Right-click something on the page and choose <strong>Inspect</strong>. The panel that opens is the browser's <strong>DevTools</strong> (developer tools), and it shows the CSS for whatever you clicked. Click a value, such as a colour, and type a new one. Nothing you change there is saved, so experiment freely: refreshing the page puts everything back.</p>
             </div>
 
             <div class="teacher-only">
@@ -184,7 +177,7 @@
                         <li><strong>Use browser DevTools:</strong> Show students how to modify CSS live in the Elements panel</li>
                         <li><strong>Specificity confusion:</strong> Explain with concrete examples (inline > ID > class > element)</li>
                         <li><strong>Box model first:</strong> This is the foundation - spend extra time here</li>
-                        <li><strong>Color theory:</strong> Discuss hex codes, RGB, and named colors</li>
+                        <li><strong>Colour theory:</strong> Discuss hex codes, RGB, and named colours</li>
                         <li><strong>Responsive design:</strong> Open DevTools device mode to show mobile vs desktop</li>
                     </ul>
                 </div>
@@ -196,14 +189,15 @@
                         <li><strong>Wrong selector syntax:</strong> <code>.class</code> needs the dot, <code>#id</code> needs the hash</li>
                         <li><strong>Margin vs padding confusion:</strong> Use the box model visual repeatedly!</li>
                         <li><strong>Forgetting units:</strong> <code>width: 100</code> doesn't work, need <code>width: 100px</code></li>
-                        <li><strong>Color typos:</strong> <code>#fff</code> is white, <code>#000</code> is black (backwards from intuition!)</li>
+                        <li><strong>Colour typos:</strong> <code>#fff</code> is white, <code>#000</code> is black (backwards from intuition!)</li>
                     </ul>
                 </div>
             </div>
             
             <div class="lesson">
                 <h3>What is CSS?</h3>
-                <p><strong>CSS (Cascading Style Sheets)</strong> controls how HTML elements look on the page - colors, fonts, layouts, and more.</p>
+                <p><strong>CSS (Cascading Style Sheets)</strong> controls how HTML elements look on the page: colours, fonts, layouts, and more.</p>
+                <p><strong>A spelling note:</strong> CSS uses American spelling, so the property is <code>color</code>, never <code>colour</code>. If you write <code>colour: red;</code> the browser quietly ignores it. No error, just nothing happens.</p>
                 
                 <h4>Three Ways to Add CSS:</h4>
                 <ol>
@@ -301,12 +295,8 @@ body {
             <h2>Part 3: SQL Database Queries</h2>
             
             <div class="exploration-prompt callout-sql">
-                <h4>Three Ways to Learn SQL:</h4>
-                <ul>
-                    <li><strong>Guided Path:</strong> Read the SQL commands section, then try example queries one by one</li>
-                    <li><strong>Dive In:</strong> Jump straight to the playground, click example queries, see what happens</li>
-                    <li><strong>Problem-Solving:</strong> Skip to the practice exercises and work backwards to learn what you need</li>
-                </ul>
+                <h4>Getting started</h4>
+                <p>Read the commands first, or jump straight to the playground and click an example query. Both work.</p>
                 <p class="callout-footnote">
                     <strong>Remember:</strong> This database resets when you refresh the page, so feel free to experiment. 
                     You cannot break anything permanently. Mistakes are learning opportunities!
@@ -345,7 +335,7 @@ body {
                 <p><strong>SQL (Structured Query Language)</strong> is used to manage and query databases. It lets you store, retrieve, update, and delete data.</p>
                 
                 <h4>Our Sample Database: Students & Courses</h4>
-                <p>We've created two tables for you to practice with:</p>
+                <p>We've created two tables for you to practise with:</p>
                 <ul>
                     <li><strong>students</strong> - Contains student information (id, name, age, grade)</li>
                     <li><strong>courses</strong> - Contains course information (id, name, instructor, credits)</li>
@@ -368,8 +358,8 @@ body {
 
                     <div class="command-card">
                         <h4>WHERE - Filter Results</h4>
-                        <pre><code>SELECT * FROM students WHERE age > 18;</code></pre>
-                        <p>Filters results based on conditions.</p>
+                        <pre><code>SELECT * FROM students WHERE age > 20;</code></pre>
+                        <p>Keeps only the rows that match a condition. Try it: only three of the eight students are over 20.</p>
                     </div>
 
                     <div class="command-card">
@@ -453,7 +443,7 @@ WHERE name = 'John';</code></pre>
                             <h5>✅ Solution:</h5>
                             <pre><code>SELECT name, age FROM students;</code></pre>
                             <p><strong>Expected Result:</strong> A table showing all students' names and ages (8 rows)</p>
-                            <p><strong>Teaching Note:</strong> Emphasize that * selects all columns, but naming specific columns is more efficient and clearer.</p>
+                            <p><strong>Teaching Note:</strong> Emphasise that * selects all columns, but naming specific columns is more efficient and clearer.</p>
                         </div>
                     </div>
 
@@ -481,7 +471,7 @@ WHERE name = 'John';</code></pre>
                         <p>Add yourself as a new student to the database!</p>
                         <details>
                             <summary>Show Hint</summary>
-                            <p>Use: <code>INSERT INTO students (name, age, grade) VALUES ('Your Name', 20, 85);</code></p>
+                            <p>Start with <code>INSERT INTO students (name, age, grade) VALUES (...);</code> Text goes inside quotes, numbers don't. You don't need to give an id.</p>
                         </details>
                         
                         <div class="teacher-only solution">
@@ -545,7 +535,7 @@ WHERE name = 'John';</code></pre>
                         <h5>Exercise 7: DELETE</h5>
                         <p><strong>Challenge:</strong> Remove all students under age 20.</p>
                         <pre><code>DELETE FROM students WHERE age < 20;</code></pre>
-                        <p><strong>Warning:</strong> This permanently removes data! Emphasize the importance of WHERE clause.</p>
+                        <p><strong>Warning:</strong> This permanently removes data! Emphasise the importance of WHERE clause.</p>
                     </div>
                     
                     <div class="solution">
@@ -554,7 +544,7 @@ WHERE name = 'John';</code></pre>
                         <pre><code>SELECT * FROM students 
 WHERE (age = 20 OR age = 21) AND grade > 85 
 ORDER BY grade DESC;</code></pre>
-                        <p><strong>Expected Result:</strong> Henry Moore (94), Eve Davis (91), Grace Wilson (89)</p>
+                        <p><strong>Expected Result:</strong> Henry Moore (94), Grace Wilson (89), Alice Johnson (88). Eve Davis is 22, and David Brown has exactly 85, so neither qualifies.</p>
                     </div>
                     
                     <div class="solution">
@@ -617,14 +607,14 @@ ORDER BY grade DESC;</code></pre>
                 <ul>
                     <li><strong>HTML</strong> creates a login form</li>
                     <li><strong>CSS</strong> makes the form look professional</li>
-                    <li><strong>SQL</strong> checks if the username/password exist in the database</li>
+                    <li><strong>SQL</strong> looks up the username in the database and checks the password against a <em>hashed</em> (scrambled, one-way) copy of it. Well-built sites never store your actual password.</li>
                 </ul>
             </div>
 
             <div class="lesson">
                 <h3>Next Steps</h3>
                 <ol>
-                    <li>Practice HTML by creating more complex page structures</li>
+                    <li>Practise HTML by creating more complex page structures</li>
                     <li>Experiment with CSS to style your pages uniquely</li>
                     <li>Try more advanced SQL queries (JOIN, GROUP BY, etc.)</li>
                     <li>Learn JavaScript to make your pages interactive</li>
@@ -675,7 +665,7 @@ ORDER BY grade DESC;</code></pre>
                 <ul>
                     <li>Weeks 1-3: HTML (semantic HTML, accessibility, forms)</li>
                     <li>Weeks 4-6: CSS (layouts, flexbox, grid, animations)</li>
-                    <li>Weeks 7-10: SQL (JOINs, normalization, indexes, transactions)</li>
+                    <li>Weeks 7-10: SQL (JOINs, normalisation, indexes, transactions)</li>
                     <li>Weeks 11-12: Integration (connecting frontend to database)</li>
                     <li>Weeks 13-14: Student projects</li>
                 </ul>
@@ -707,7 +697,7 @@ ORDER BY grade DESC;</code></pre>
                 <ul>
                     <li><strong>Struggling students:</strong> Pair with peers, focus on exercises 1-3, provide filled-in templates</li>
                     <li><strong>Advanced students:</strong> Bonus exercises, ask them to build their own tables, introduce JOINs, teach responsive design</li>
-                    <li><strong>Visual learners:</strong> Emphasize DevTools, box model diagrams, color pickers</li>
+                    <li><strong>Students who like to see it first:</strong> Lead with DevTools, the box model diagram, and colour pickers</li>
                     <li><strong>Kinesthetic learners:</strong> Have them physically draw tables on paper, use manipulatives for box model</li>
                 </ul>
             </div>
@@ -751,9 +741,9 @@ ORDER BY grade DESC;</code></pre>
                         </tr>
                         <tr>
                             <td><strong>CSS Styling</strong></td>
-                            <td>Inline styles only, no organization</td>
+                            <td>Inline styles only, no organisation</td>
                             <td>External CSS but inefficient selectors</td>
-                            <td>Organized CSS with appropriate selectors</td>
+                            <td>Organised CSS with appropriate selectors</td>
                             <td>DRY principles, reusable classes, responsive</td>
                         </tr>
                         <tr>
@@ -761,7 +751,7 @@ ORDER BY grade DESC;</code></pre>
                             <td>Syntax errors, incomplete queries</td>
                             <td>Basic queries work, some errors</td>
                             <td>All exercises complete and correct</td>
-                            <td>Complex queries, bonus exercises, optimization</td>
+                            <td>Complex queries, bonus exercises, optimisation</td>
                         </tr>
                         <tr>
                             <td><strong>Problem Solving</strong></td>

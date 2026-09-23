@@ -485,6 +485,21 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log('Page loaded. Initializing database...');
     initializeDatabase();
     
+    // "LOAD IT INTO THE PLAYGROUND" BUTTONS:
+    // Each answer's button keeps its query in a data-query attribute.
+    // One listener on the whole page handles all of them (event delegation)
+    document.addEventListener('click', function(event) {
+        const button = event.target.closest('.try-answer');
+        if (!button) return;
+        
+        setQuery(button.dataset.query);
+        const queryInput = document.getElementById('sql-query');
+        if (queryInput) {
+            queryInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            queryInput.focus({ preventScroll: true });
+        }
+    });
+    
     // KEYBOARD SHORTCUTS:
     // Add Enter key support for running queries (Ctrl/Cmd + Enter)
     const queryInput = document.getElementById('sql-query');

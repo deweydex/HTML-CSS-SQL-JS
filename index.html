@@ -41,13 +41,8 @@
             <h2>Part 1: HTML Basics</h2>
             
             <div class="exploration-prompt callout-html">
-                <h4>How to Approach This Section:</h4>
-                <ul>
-                    <li><strong>Read First:</strong> Understand the concepts before trying examples</li>
-                    <li><strong>Try the Examples:</strong> Use the sample form to see HTML in action</li>
-                    <li><strong>Experiment:</strong> Try changing the example code in your own text editor</li>
-                    <li><strong>Ask Questions:</strong> What would happen if you changed X to Y? Test your hypotheses</li>
-                </ul>
+                <h4>Getting started</h4>
+                <p>Read an example, then try it. Whenever you wonder "what would happen if I changed this?", change it and see. That question is most of how programmers learn.</p>
             </div>
             
             <div class="lesson">
@@ -109,6 +104,9 @@
     &lt;label for="email"&gt;Email:&lt;/label&gt;
     &lt;input type="email" id="email" name="email" required&gt;
     
+    &lt;label for="age"&gt;Age:&lt;/label&gt;
+    &lt;input type="number" id="age" name="age" min="1" max="120"&gt;
+    
     &lt;button type="submit"&gt;Submit&lt;/button&gt;
 &lt;/form&gt;</code></pre>
                 </div>
@@ -122,18 +120,14 @@
             <h2>Part 2: CSS Styling</h2>
             
             <div class="exploration-prompt callout-css">
-                <h4>Ways to Learn CSS:</h4>
-                <ul>
-                    <li><strong>Visual Learners:</strong> Focus on the interactive demos and see how CSS changes appearance</li>
-                    <li><strong>Hands-On:</strong> Open the styles.css file and try modifying colors and sizes</li>
-                    <li><strong>Systematic:</strong> Read each selector type, then practice writing your own</li>
-                    <li><strong>Creative:</strong> Skip to the box model, then design your own styled components</li>
-                </ul>
+                <h4>Getting started</h4>
+                <p>You can change the CSS of any web page, including this one. Right-click something on the page and choose <strong>Inspect</strong>. The panel that opens is the browser's <strong>DevTools</strong> (developer tools), and it shows the CSS for whatever you clicked. Click a value, such as a colour, and type a new one. Nothing you change there is saved, so experiment freely: refreshing the page puts everything back.</p>
             </div>
             
             <div class="lesson">
                 <h3>What is CSS?</h3>
-                <p><strong>CSS (Cascading Style Sheets)</strong> controls how HTML elements look on the page - colors, fonts, layouts, and more.</p>
+                <p><strong>CSS (Cascading Style Sheets)</strong> controls how HTML elements look on the page: colours, fonts, layouts, and more.</p>
+                <p><strong>A spelling note:</strong> CSS uses American spelling, so the property is <code>color</code>, never <code>colour</code>. If you write <code>colour: red;</code> the browser quietly ignores it. No error, just nothing happens.</p>
                 
                 <h4>Three Ways to Add CSS:</h4>
                 <ol>
@@ -226,12 +220,8 @@ body {
             <h2>Part 3: SQL Database Queries</h2>
             
             <div class="exploration-prompt callout-sql">
-                <h4>Three Ways to Learn SQL:</h4>
-                <ul>
-                    <li><strong>Guided Path:</strong> Read the SQL commands section, then try example queries one by one</li>
-                    <li><strong>Dive In:</strong> Jump straight to the playground, click example queries, see what happens</li>
-                    <li><strong>Problem-Solving:</strong> Skip to the practice exercises and work backwards to learn what you need</li>
-                </ul>
+                <h4>Getting started</h4>
+                <p>Read the commands first, or jump straight to the playground and click an example query. Both work.</p>
                 <p class="callout-footnote">
                     <strong>Remember:</strong> This database resets when you refresh the page, so feel free to experiment. 
                     You cannot break anything permanently. Mistakes are learning opportunities!
@@ -243,7 +233,7 @@ body {
                 <p><strong>SQL (Structured Query Language)</strong> is used to manage and query databases. It lets you store, retrieve, update, and delete data.</p>
                 
                 <h4>Our Sample Database: Students & Courses</h4>
-                <p>We've created two tables for you to practice with:</p>
+                <p>We've created two tables for you to practise with:</p>
                 <ul>
                     <li><strong>students</strong> - Contains student information (id, name, age, grade)</li>
                     <li><strong>courses</strong> - Contains course information (id, name, instructor, credits)</li>
@@ -266,8 +256,8 @@ body {
 
                     <div class="command-card">
                         <h4>WHERE - Filter Results</h4>
-                        <pre><code>SELECT * FROM students WHERE age > 18;</code></pre>
-                        <p>Filters results based on conditions.</p>
+                        <pre><code>SELECT * FROM students WHERE age > 20;</code></pre>
+                        <p>Keeps only the rows that match a condition. Try it: only three of the eight students are over 20.</p>
                     </div>
 
                     <div class="command-card">
@@ -332,7 +322,7 @@ WHERE name = 'John';</code></pre>
                 <ul>
                     <li>Work through them in order to build skills progressively</li>
                     <li>Choose exercises that match your current comfort level</li>
-                    <li>Use hints when stuck, but try on your own first</li>
+                    <li>Open the hint first. If you're still stuck, open the answer, then close it and try writing the query yourself</li>
                     <li>Come back to challenging exercises after completing easier ones</li>
                 </ul>
                 <p><strong>Learning Tip:</strong> If you get an error, read it carefully. SQL error messages often tell you exactly what's wrong.</p>
@@ -341,45 +331,159 @@ WHERE name = 'John';</code></pre>
                     <div class="exercise">
                         <h4>Exercise 1: Basic SELECT</h4>
                         <p>Select only the name and age columns from the students table.</p>
-                        <details>
-                            <summary>Show Hint</summary>
+                        <details class="hint">
+                            <summary>Show hint</summary>
                             <p>Use: <code>SELECT column1, column2 FROM table_name;</code></p>
+                        </details>
+                        <details class="answer">
+                            <summary>Show answer</summary>
+                            <pre><code>SELECT name, age FROM students;</code></pre>
+                            <p>You should see 8 rows with just two columns, name and age.</p>
+                            <button type="button" class="try-answer" data-query="SELECT name, age FROM students;">Load it into the playground</button>
                         </details>
                     </div>
 
                     <div class="exercise">
                         <h4>Exercise 2: WHERE Clause</h4>
                         <p>Find all students whose grade is less than 75.</p>
-                        <details>
-                            <summary>Show Hint</summary>
-                            <p>Use the WHERE clause with the &lt; operator.</p>
+                        <details class="hint">
+                            <summary>Show hint</summary>
+                            <p>Use the WHERE clause with the <code>&lt;</code> (less than) operator.</p>
+                        </details>
+                        <details class="answer">
+                            <summary>Show answer</summary>
+                            <pre><code>SELECT * FROM students WHERE grade &lt; 75;</code></pre>
+                            <p>You should see one student: Frank Miller, with 73. Carol Williams has 76, so she just misses out.</p>
+                            <button type="button" class="try-answer" data-query="SELECT * FROM students WHERE grade &lt; 75;">Load it into the playground</button>
                         </details>
                     </div>
 
                     <div class="exercise">
                         <h4>Exercise 3: INSERT</h4>
                         <p>Add yourself as a new student to the database!</p>
-                        <details>
-                            <summary>Show Hint</summary>
-                            <p>Use: <code>INSERT INTO students (name, age, grade) VALUES ('Your Name', 20, 85);</code></p>
+                        <details class="hint">
+                            <summary>Show hint</summary>
+                            <p>Start with <code>INSERT INTO students (name, age, grade) VALUES (...);</code> Text goes inside quotes, numbers don't. You don't need to give an id.</p>
+                        </details>
+                        <details class="answer">
+                            <summary>Show answer</summary>
+                            <pre><code>INSERT INTO students (name, age, grade) VALUES ('Your Name', 20, 85);</code></pre>
+                            <p>Put your own name inside the quotes. The playground should say 1 row changed. To see yourself, run <code>SELECT * FROM students;</code> and look at the last row. You never gave an id: the database numbered you itself.</p>
+                            <button type="button" class="try-answer" data-query="INSERT INTO students (name, age, grade) VALUES (&#x27;Your Name&#x27;, 20, 85);">Load it into the playground</button>
                         </details>
                     </div>
 
                     <div class="exercise">
                         <h4>Exercise 4: Sorting</h4>
                         <p>Show all students sorted by name in alphabetical order.</p>
-                        <details>
-                            <summary>Show Hint</summary>
+                        <details class="hint">
+                            <summary>Show hint</summary>
                             <p>Use ORDER BY with ASC for ascending order.</p>
+                        </details>
+                        <details class="answer">
+                            <summary>Show answer</summary>
+                            <pre><code>SELECT * FROM students ORDER BY name ASC;</code></pre>
+                            <p>ASC is the default, so <code>ORDER BY name</code> gives the same result. Swap ASC for DESC to reverse the order.</p>
+                            <button type="button" class="try-answer" data-query="SELECT * FROM students ORDER BY name ASC;">Load it into the playground</button>
                         </details>
                     </div>
 
                     <div class="exercise">
                         <h4>Exercise 5: COUNT Function</h4>
                         <p>How many courses are in the database?</p>
-                        <details>
-                            <summary>Show Hint</summary>
+                        <details class="hint">
+                            <summary>Show hint</summary>
                             <p>Use: <code>SELECT COUNT(*) FROM table_name;</code></p>
+                        </details>
+                        <details class="answer">
+                            <summary>Show answer</summary>
+                            <pre><code>SELECT COUNT(*) AS total_courses FROM courses;</code></pre>
+                            <p>You should see 5. The <code>AS total_courses</code> part is optional: it gives the result column a readable name.</p>
+                            <button type="button" class="try-answer" data-query="SELECT COUNT(*) AS total_courses FROM courses;">Load it into the playground</button>
+                        </details>
+                    </div>
+                </div>
+
+                <h3>Challenge Exercises</h3>
+                <p>Ready for more? These combine what you've learned in new ways. Some of them change the data: the <strong>Reset Database</strong> button puts everything back.</p>
+
+                <div class="exercise-list">
+                    <div class="exercise">
+                        <h4>Exercise 6: UPDATE</h4>
+                        <p>Give every student with a grade below 75 a 5-point bonus.</p>
+                        <details class="hint">
+                            <summary>Show hint</summary>
+                            <p><code>UPDATE students SET grade = ... WHERE ...;</code> A column can use its own value, as in <code>grade + 5</code>.</p>
+                        </details>
+                        <details class="answer">
+                            <summary>Show answer</summary>
+                            <pre><code>UPDATE students SET grade = grade + 5 WHERE grade &lt; 75;</code></pre>
+                            <p>The playground should say 1 row changed: Frank Miller goes from 73 to 78.</p>
+                            <button type="button" class="try-answer" data-query="UPDATE students SET grade = grade + 5 WHERE grade &lt; 75;">Load it into the playground</button>
+                        </details>
+                    </div>
+
+                    <div class="exercise">
+                        <h4>Exercise 7: DELETE</h4>
+                        <p>Remove every student under the age of 20.</p>
+                        <details class="hint">
+                            <summary>Show hint</summary>
+                            <p><code>DELETE FROM students WHERE ...;</code> Before you delete, run <code>SELECT *</code> with the same WHERE to see exactly which rows you are about to remove.</p>
+                        </details>
+                        <details class="answer">
+                            <summary>Show answer</summary>
+                            <pre><code>DELETE FROM students WHERE age &lt; 20;</code></pre>
+                            <p>2 rows changed: Bob Smith and Frank Miller, who are both 19. Press <strong>Reset Database</strong> to bring them back.</p>
+                            <button type="button" class="try-answer" data-query="DELETE FROM students WHERE age &lt; 20;">Load it into the playground</button>
+                        </details>
+                    </div>
+
+                    <div class="exercise">
+                        <h4>Exercise 8: Combining Conditions</h4>
+                        <p>Find the students aged 20 or 21 with a grade above 85, highest grade first.</p>
+                        <details class="hint">
+                            <summary>Show hint</summary>
+                            <p>Join conditions with AND and OR. Brackets decide which part is worked out first, just as in maths.</p>
+                        </details>
+                        <details class="answer">
+                            <summary>Show answer</summary>
+                            <pre><code>SELECT * FROM students
+WHERE (age = 20 OR age = 21) AND grade &gt; 85
+ORDER BY grade DESC;</code></pre>
+                            <p>Henry Moore (94), Grace Wilson (89) and Alice Johnson (88). David Brown is 20, but his grade is exactly 85, and <em>above</em> 85 means more than 85.</p>
+                            <button type="button" class="try-answer" data-query="SELECT * FROM students
+WHERE (age = 20 OR age = 21) AND grade &gt; 85
+ORDER BY grade DESC;">Load it into the playground</button>
+                        </details>
+                    </div>
+
+                    <div class="exercise">
+                        <h4>Exercise 9: Average</h4>
+                        <p>What is the average grade of the students aged 20?</p>
+                        <details class="hint">
+                            <summary>Show hint</summary>
+                            <p><code>AVG(column)</code> works like <code>COUNT(*)</code>, but gives the average of the values instead of counting them.</p>
+                        </details>
+                        <details class="answer">
+                            <summary>Show answer</summary>
+                            <pre><code>SELECT AVG(grade) AS average_grade FROM students WHERE age = 20;</code></pre>
+                            <p>89, the average of Alice (88), David (85) and Henry (94). If you added yourself aged 20 in Exercise 3, you're included too, so your number will be different.</p>
+                            <button type="button" class="try-answer" data-query="SELECT AVG(grade) AS average_grade FROM students WHERE age = 20;">Load it into the playground</button>
+                        </details>
+                    </div>
+
+                    <div class="exercise">
+                        <h4>Exercise 10: The Other Table</h4>
+                        <p>Find all the courses worth 4 credits.</p>
+                        <details class="hint">
+                            <summary>Show hint</summary>
+                            <p>The same pattern as Exercise 2, on the <code>courses</code> table.</p>
+                        </details>
+                        <details class="answer">
+                            <summary>Show answer</summary>
+                            <pre><code>SELECT * FROM courses WHERE credits = 4;</code></pre>
+                            <p>Introduction to Programming and Database Systems.</p>
+                            <button type="button" class="try-answer" data-query="SELECT * FROM courses WHERE credits = 4;">Load it into the playground</button>
                         </details>
                     </div>
                 </div>
@@ -428,14 +532,14 @@ WHERE name = 'John';</code></pre>
                 <ul>
                     <li><strong>HTML</strong> creates a login form</li>
                     <li><strong>CSS</strong> makes the form look professional</li>
-                    <li><strong>SQL</strong> checks if the username/password exist in the database</li>
+                    <li><strong>SQL</strong> looks up the username in the database and checks the password against a <em>hashed</em> (scrambled, one-way) copy of it. Well-built sites never store your actual password.</li>
                 </ul>
             </div>
 
             <div class="lesson">
                 <h3>Next Steps</h3>
                 <ol>
-                    <li>Practice HTML by creating more complex page structures</li>
+                    <li>Practise HTML by creating more complex page structures</li>
                     <li>Experiment with CSS to style your pages uniquely</li>
                     <li>Try more advanced SQL queries (JOIN, GROUP BY, etc.)</li>
                     <li>Learn JavaScript to make your pages interactive</li>
@@ -447,7 +551,7 @@ WHERE name = 'John';</code></pre>
 
     <footer>
         <p>Created for educational purposes | Built with HTML, CSS, and SQL.js</p>
-        <p><a href="teacher.html">Teacher Version (Solutions)</a></p>
+        <p><a href="teacher.html">Teacher version (teaching notes and marking rubric)</a></p>
     </footer>
 
     <!-- JavaScript for SQL functionality -->
