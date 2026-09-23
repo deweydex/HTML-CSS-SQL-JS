@@ -10,26 +10,29 @@
 // JSDoc provides type hints for better code understanding and IDE support
 
 /**
- * @typedef {Object} Student
- * @property {number} id - Unique student identifier
- * @property {string} name - Student's full name
- * @property {number} age - Student's age
- * @property {number} grade - Student's grade (0-100)
+ * @typedef {Object} Customer
+ * @property {number} customer_id - Unique customer identifier
+ * @property {string} customer_name - Customer's full name
+ * @property {string} county - County the customer lives in
  */
 
 /**
- * @typedef {Object} Course
- * @property {number} id - Unique course identifier
- * @property {string} name - Course name
- * @property {string} instructor - Instructor's name
- * @property {number} credits - Number of credits
+ * @typedef {Object} Product
+ * @property {number} product_id - Unique product identifier
+ * @property {string} product_name - What the shop calls it
+ * @property {string} category - Stationery, Tech, Clothing...
+ * @property {number} price - Price in euro
+ * @property {number} stock - How many are left on the shelf
  */
 
 /**
- * @typedef {Object} Enrolment
- * @property {number} id - Unique enrolment identifier
- * @property {number} student_id - Points at a row in students
- * @property {number} course_id - Points at a row in courses
+ * @typedef {Object} Order
+ * One line on a receipt: who bought what, and how many
+ * @property {number} order_id - Unique order identifier
+ * @property {string} order_date - Date as text, YYYY-MM-DD
+ * @property {number} quantity - How many were bought
+ * @property {number} customer_id - Points at a row in customer_tbl
+ * @property {number} product_id - Points at a row in product_tbl
  */
 
 /**
@@ -113,7 +116,7 @@ async function initializeDatabase() {
 }
 
 /**
- * Create the students, courses and enrolments tables
+ * Create the customer_tbl, product_tbl and order_tbl tables
  * 
  * @returns {void}
  */
@@ -123,34 +126,44 @@ function createTables() {
     // - Defines column names and data types
     // - PRIMARY KEY: Unique identifier for each row
     // - NOT NULL: Column cannot be empty
+    //
+    // NAMING CONVENTIONS USED HERE:
+    // - Every table name ends in _tbl
+    // - Every table's id is named after it: product_tbl has product_id
+    // - Foreign keys go at the bottom of the table, with the same name
+    //   as the id they point at
     
-    const createStudentsTable = `
-        CREATE TABLE IF NOT EXISTS students (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            name TEXT NOT NULL,
-            age INTEGER NOT NULL,
-            grade INTEGER NOT NULL
+    const createCustomerTable = `
+        CREATE TABLE IF NOT EXISTS customer_tbl (
+            customer_id INTEGER PRIMARY KEY AUTOINCREMENT,
+            customer_name TEXT NOT NULL,
+            county TEXT NOT NULL
         );
     `;
     
-    const createCoursesTable = `
-        CREATE TABLE IF NOT EXISTS courses (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            name TEXT NOT NULL,
-            instructor TEXT NOT NULL,
-            credits INTEGER NOT NULL
+    const createProductTable = `
+        CREATE TABLE IF NOT EXISTS product_tbl (
+            product_id INTEGER PRIMARY KEY AUTOINCREMENT,
+            product_name TEXT NOT NULL,
+            category TEXT NOT NULL,
+            price REAL NOT NULL,
+            stock INTEGER NOT NULL
         );
     `;
     
     // FOREIGN KEYS EXPLAINED:
-    // student_id and course_id hold the id of a row in another table.
+    // customer_id and product_id hold the id of a row in another table.
     // REFERENCES records which table and column they point at. That link
     // is what a JOIN follows to put a name back next to each number.
-    const createEnrolmentsTable = `
-        CREATE TABLE IF NOT EXISTS enrolments (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            student_id INTEGER NOT NULL REFERENCES students(id),
-            course_id INTEGER NOT NULL REFERENCES courses(id)
+    const createOrderTable = `
+        CREATE TABLE IF NOT EXISTS order_tbl (
+            order_id INTEGER PRIMARY KEY AUTOINCREMENT,
+            order_date TEXT NOT NULL,
+            quantity INTEGER NOT NULL,
+            customer_id INTEGER NOT NULL,
+            product_id INTEGER NOT NULL,
+            FOREIGN KEY (customer_id) REFERENCES customer_tbl (customer_id),
+            FOREIGN KEY (product_id) REFERENCES product_tbl (product_id)
         );
     `;
     
@@ -159,9 +172,9 @@ function createTables() {
     // Example: `Hello ${name}` - embeds variables in strings
     
     // Execute the CREATE TABLE statements
-    db.run(createStudentsTable);
-    db.run(createCoursesTable);
-    db.run(createEnrolmentsTable);
+    db.run(createCustomerTable);
+    db.run(createProductTable);
+    db.run(createOrderTable);
 }
 
 /**
@@ -177,68 +190,76 @@ function populateSampleData() {
     // Each object represents one row in the database
     // Keys are column names, values are the data
     
-    /** @type {Array<{name: string, age: number, grade: number}>} */
-    const students = [
-        { name: 'Aoife Murphy', age: 20, grade: 88 },
-        { name: 'Kwame Mensah', age: 19, grade: 92 },
-        { name: 'Priya Sharma', age: 21, grade: 76 },
-        { name: 'Mateus Oliveira', age: 20, grade: 85 },
-        { name: 'Zofia Nowak', age: 22, grade: 91 },
-        { name: 'Wei Chen', age: 19, grade: 73 },
-        { name: 'Amina Yusuf', age: 21, grade: 89 },
-        { name: 'Dmytro Kovalenko', age: 20, grade: 94 }
+    /** @type {Array<{customer_name: string, county: string}>} */
+    const customers = [
+        { customer_name: 'Aoife Murphy', county: 'Galway' },
+        { customer_name: 'Kwame Mensah', county: 'Dublin' },
+        { customer_name: 'Priya Sharma', county: 'Cork' },
+        { customer_name: 'Mateus Oliveira', county: 'Dublin' },
+        { customer_name: 'Zofia Nowak', county: 'Limerick' },
+        { customer_name: 'Wei Chen', county: 'Cork' },
+        { customer_name: 'Amina Yusuf', county: 'Dublin' },
+        { customer_name: 'Dmytro Kovalenko', county: 'Waterford' }
     ];
     
-    /** @type {Array<{name: string, instructor: string, credits: number}>} */
-    const courses = [
-        { name: 'Introduction to Programming', instructor: 'Dr. Siobhán Walsh', credits: 4 },
-        { name: 'Data Structures', instructor: 'Prof. Nnamdi Okafor', credits: 3 },
-        { name: 'Web Development', instructor: 'Dr. Lucía Fernández', credits: 3 },
-        { name: 'Database Systems', instructor: 'Prof. Hiroshi Tanaka', credits: 4 },
-        { name: 'Computer Networks', instructor: 'Dr. Fatima Malik', credits: 3 }
+    // The headphones are out of stock and nobody has ordered them,
+    // which Exercises 7 and 13 go looking for.
+    /** @type {Array<{product_name: string, category: string, price: number, stock: number}>} */
+    const products = [
+        { product_name: 'Notebook', category: 'Stationery', price: 3.50, stock: 40 },
+        { product_name: 'Gel pens (pack of 3)', category: 'Stationery', price: 4.25, stock: 25 },
+        { product_name: 'Water bottle', category: 'Accessories', price: 12.00, stock: 8 },
+        { product_name: 'Hoodie', category: 'Clothing', price: 35.00, stock: 6 },
+        { product_name: 'USB stick', category: 'Tech', price: 9.99, stock: 15 },
+        { product_name: 'Headphones', category: 'Tech', price: 24.50, stock: 0 }
     ];
     
-    // [student_id, course_id] pairs: who takes what.
-    // Wei Chen (id 6) takes nothing, which Exercise 13 goes looking for.
-    /** @type {Array<[number, number]>} */
-    const enrolments = [
-        [1, 1], [1, 3],   // Aoife: Intro to Programming, Web Development
-        [2, 1], [2, 2],   // Kwame: Intro to Programming, Data Structures
-        [3, 3],           // Priya: Web Development
-        [4, 2], [4, 4],   // Mateus: Data Structures, Database Systems
-        [5, 4], [5, 5],   // Zofia: Database Systems, Computer Networks
-        [7, 1], [7, 5],   // Amina: Intro to Programming, Computer Networks
-        [8, 3], [8, 4]    // Dmytro: Web Development, Database Systems
+    // [order_date, quantity, customer_id, product_id]: one line on a receipt each.
+    // Wei Chen (customer 6) hasn't bought anything yet.
+    /** @type {Array<[string, number, number, number]>} */
+    const orders = [
+        ['2026-09-01', 2, 1, 1],   // Aoife: 2 notebooks
+        ['2026-09-01', 1, 1, 3],   // Aoife: a water bottle
+        ['2026-09-02', 3, 2, 2],   // Kwame: 3 packs of gel pens
+        ['2026-09-02', 1, 3, 4],   // Priya: a hoodie
+        ['2026-09-03', 5, 4, 1],   // Mateus: 5 notebooks
+        ['2026-09-03', 2, 4, 5],   // Mateus: 2 USB sticks
+        ['2026-09-04', 1, 5, 3],   // Zofia: a water bottle
+        ['2026-09-05', 4, 7, 2],   // Amina: 4 packs of gel pens
+        ['2026-09-05', 1, 7, 4],   // Amina: a hoodie
+        ['2026-09-06', 2, 8, 5],   // Dmytro: 2 USB sticks
+        ['2026-09-06', 1, 8, 1],   // Dmytro: a notebook
+        ['2026-09-07', 1, 2, 5]    // Kwame: a USB stick
     ];
     
     // PREPARED STATEMENTS EXPLAINED:
     // The ? placeholders prevent SQL injection attacks
     // Values are safely inserted by the database engine
-    const studentStmt = db.prepare('INSERT INTO students (name, age, grade) VALUES (?, ?, ?)');
-    const courseStmt = db.prepare('INSERT INTO courses (name, instructor, credits) VALUES (?, ?, ?)');
-    const enrolmentStmt = db.prepare('INSERT INTO enrolments (student_id, course_id) VALUES (?, ?)');
+    const customerStmt = db.prepare('INSERT INTO customer_tbl (customer_name, county) VALUES (?, ?)');
+    const productStmt = db.prepare('INSERT INTO product_tbl (product_name, category, price, stock) VALUES (?, ?, ?, ?)');
+    const orderStmt = db.prepare('INSERT INTO order_tbl (order_date, quantity, customer_id, product_id) VALUES (?, ?, ?, ?)');
     
     // FOREACH EXPLAINED:
     // Loops through each item in the array
-    // student => {...} is an arrow function
-    // Arrow functions are shorthand for function(student) {...}
-    students.forEach(student => {
-        studentStmt.run([student.name, student.age, student.grade]);
+    // customer => {...} is an arrow function
+    // Arrow functions are shorthand for function(customer) {...}
+    customers.forEach(customer => {
+        customerStmt.run([customer.customer_name, customer.county]);
     });
     
-    courses.forEach(course => {
-        courseStmt.run([course.name, course.instructor, course.credits]);
+    products.forEach(product => {
+        productStmt.run([product.product_name, product.category, product.price, product.stock]);
     });
     
-    enrolments.forEach(pair => {
-        enrolmentStmt.run(pair);
+    orders.forEach(order => {
+        orderStmt.run(order);
     });
     
     // CLEANUP:
     // Free memory used by prepared statements
-    studentStmt.free();
-    courseStmt.free();
-    enrolmentStmt.free();
+    customerStmt.free();
+    productStmt.free();
+    orderStmt.free();
 }
 
 /**
@@ -298,23 +319,29 @@ function executeQuery() {
     }
     
     try {
+        // ROWS CHANGED:
+        // total_changes() counts every row the database has ever inserted,
+        // updated or deleted. Reading it before and after this query tells
+        // us how many rows this query changed. (Asking only for "the last
+        // change" would repeat an old number after a SELECT.)
+        const changesBefore = totalChanges();
+        
         // EXEC EXPLAINED:
         // Executes the SQL query and returns results
         // Returns an array of result objects
         const results = db.exec(query);
         
-        // ROWS MODIFIED:
-        // How many rows the last INSERT, UPDATE or DELETE changed
-        const rowsChanged = db.getRowsModified();
+        const rowsChanged = totalChanges() - changesBefore;
         
         // CONDITIONAL EXECUTION:
         // Different display based on query type
         if (results.length === 0) {
-            // Query succeeded but returned no data (INSERT, UPDATE, DELETE)
+            // No table to show: either the query changed rows (INSERT,
+            // UPDATE, DELETE) or it was a SELECT that matched nothing
             const detail = rowsChanged > 0
                 ? `${rowsChanged} row${rowsChanged === 1 ? '' : 's'} changed.`
-                : '(No data to display)';
-            displaySuccess(`Query executed successfully! ${detail}`);
+                : 'No rows to show: nothing matched, or the command doesn\'t return rows.';
+            displaySuccess(`Query ran. ${detail}`);
         } else {
             // Query returned data (SELECT)
             // One result per SELECT, so several SELECTs show several tables
@@ -326,6 +353,15 @@ function executeQuery() {
         // Display user-friendly error message
         displayError(error.message);
     }
+}
+
+/**
+ * How many rows the database has changed since it was opened
+ * 
+ * @returns {number}
+ */
+function totalChanges() {
+    return db.exec('SELECT total_changes()')[0].values[0][0];
 }
 
 /**
@@ -399,7 +435,7 @@ function displaySuccess(message) {
     if (!resultsDiv) return;
     
     resultsDiv.innerHTML = `
-        <h4>Success!</h4>
+        <h4>Done</h4>
         <p class="success">${escapeHtml(message)}</p>
     `;
 }
@@ -536,9 +572,9 @@ function resetDatabase() {
         // DROP TABLE EXPLAINED:
         // Completely removes a table from the database
         // IF EXISTS prevents errors if table doesn't exist
-        db.run('DROP TABLE IF EXISTS students');
-        db.run('DROP TABLE IF EXISTS courses');
-        db.run('DROP TABLE IF EXISTS enrolments');
+        db.run('DROP TABLE IF EXISTS order_tbl');
+        db.run('DROP TABLE IF EXISTS customer_tbl');
+        db.run('DROP TABLE IF EXISTS product_tbl');
         
         // Recreate tables and populate with sample data
         createTables();
@@ -653,7 +689,7 @@ window.showTables = showTables;
 // ✅ SELECT with WHERE
 // ✅ JOIN and LEFT JOIN (foreign keys)
 // ✅ ORDER BY
-// ✅ COUNT and aggregate functions
+// ✅ COUNT, SUM and arithmetic (price * quantity)
 // ✅ UPDATE and DELETE
 // ✅ Prepared statements
 // 

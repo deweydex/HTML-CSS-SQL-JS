@@ -888,6 +888,80 @@ button[type="submit"]:hover {
     50% { opacity: 0.4; }
 }
 
+/* Database diagram (an inline SVG in index.html). Its colours come
+   from the same variables as everything else, so it follows the theme. */
+.erd-figure {
+    margin: 20px 0;
+}
+
+.erd {
+    display: block;
+    width: 100%;
+    max-width: 780px;
+    height: auto;
+    margin: 0 auto;
+}
+
+.erd-box {
+    fill: var(--surface);
+    stroke: var(--fg);
+    stroke-width: 1.4;
+}
+
+.erd-head {
+    fill: var(--accent-soft);
+}
+
+.erd-rule {
+    stroke: var(--fg);
+    stroke-width: 1.2;
+}
+
+.erd-title {
+    fill: var(--fg);
+    font-family: var(--mono);
+    font-weight: 700;
+    font-size: 14px;
+}
+
+.erd-col {
+    fill: var(--fg);
+    font-family: var(--mono);
+    font-size: 13px;
+}
+
+.erd-key {
+    fill: var(--accent);
+    font-family: var(--font-family);
+    font-weight: 700;
+    font-size: 11px;
+}
+
+.erd-link {
+    fill: none;
+    stroke: var(--accent);
+    stroke-width: 2;
+    stroke-linejoin: round;
+    stroke-linecap: round;
+}
+
+.erd-figure figcaption {
+    margin-top: 10px;
+    font-size: 0.9em;
+    color: var(--muted);
+    text-align: center;
+}
+
+.create-tables {
+    margin: 10px 0 20px;
+}
+
+.create-tables summary {
+    cursor: pointer;
+    font-weight: 600;
+    color: var(--chip-fg);
+}
+
 /* SQL Command Cards */
 .sql-command-list {
     display: grid;

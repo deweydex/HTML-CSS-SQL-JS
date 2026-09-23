@@ -505,12 +505,51 @@ body {
                 <p><strong>SQL (Structured Query Language)</strong> is used to manage and query databases. It lets you store, retrieve, update, and delete data.</p>
                 
                 <h4>The sample database</h4>
-                <p>We've created three tables for you to practise with:</p>
+                <p>The database belongs to a small shop. It has three tables:</p>
                 <ul>
-                    <li><strong>students</strong>: one row per student (id, name, age, grade)</li>
-                    <li><strong>courses</strong>: one row per course (id, name, instructor, credits)</li>
-                    <li><strong>enrolments</strong>: which student takes which course (id, student_id, course_id). You'll use this one at the end, in <em>Connecting tables with JOIN</em></li>
+                    <li><strong>customer_tbl</strong>: one row per customer (customer_id, customer_name, county)</li>
+                    <li><strong>product_tbl</strong>: one row per thing the shop sells (product_id, product_name, category, price, stock)</li>
+                    <li><strong>order_tbl</strong>: one row per line on a receipt, saying who bought what, and how many (order_id, order_date, quantity, customer_id, product_id). You'll use this one most at the end, in <em>Connecting tables with JOIN</em></li>
                 </ul>
+                <p>Three habits make the database easier to read:</p>
+                <ul>
+                    <li>Every table's name ends in <code>_tbl</code>, so you can tell a table from a column at a glance.</li>
+                    <li>Every table's id is named after the table: the id in <code>product_tbl</code> is <code>product_id</code>.</li>
+                    <li>A column that points at another table's id is called a <strong>foreign key</strong>. Foreign keys always go at the bottom of a table, and they have the same name as the id they point at.</li>
+                </ul>
+
+                <figure class="erd-figure" id="db-diagram">
+                    <svg class="erd" viewBox="-2 -2 784 164" role="img" aria-labelledby="db-diagram-title db-diagram-caption"><title id="db-diagram-title">The three tables and how they link</title><rect class="erd-box" x="0" y="0" width="210" height="108" rx="5"/><rect class="erd-head" x="0" y="0" width="210" height="30" rx="5"/><rect class="erd-head" x="0" y="24" width="210" height="6"/><line class="erd-rule" x1="0" y1="30" x2="210" y2="30"/><text class="erd-title" x="105.0" y="20" text-anchor="middle">customer_tbl</text><text class="erd-col" x="12" y="47.0">customer_id</text><text class="erd-key" x="198" y="47.0" text-anchor="end">PK</text><text class="erd-col" x="12" y="73.0">customer_name</text><text class="erd-col" x="12" y="99.0">county</text><rect class="erd-box" x="285" y="0" width="210" height="160" rx="5"/><rect class="erd-head" x="285" y="0" width="210" height="30" rx="5"/><rect class="erd-head" x="285" y="24" width="210" height="6"/><line class="erd-rule" x1="285" y1="30" x2="495" y2="30"/><text class="erd-title" x="390.0" y="20" text-anchor="middle">order_tbl</text><text class="erd-col" x="297" y="47.0">order_id</text><text class="erd-key" x="483" y="47.0" text-anchor="end">PK</text><text class="erd-col" x="297" y="73.0">order_date</text><text class="erd-col" x="297" y="99.0">quantity</text><text class="erd-col" x="297" y="125.0">customer_id</text><text class="erd-key" x="483" y="125.0" text-anchor="end">FK</text><text class="erd-col" x="297" y="151.0">product_id</text><text class="erd-key" x="483" y="151.0" text-anchor="end">FK</text><rect class="erd-box" x="570" y="0" width="210" height="160" rx="5"/><rect class="erd-head" x="570" y="0" width="210" height="30" rx="5"/><rect class="erd-head" x="570" y="24" width="210" height="6"/><line class="erd-rule" x1="570" y1="30" x2="780" y2="30"/><text class="erd-title" x="675.0" y="20" text-anchor="middle">product_tbl</text><text class="erd-col" x="582" y="47.0">product_id</text><text class="erd-key" x="768" y="47.0" text-anchor="end">PK</text><text class="erd-col" x="582" y="73.0">product_name</text><text class="erd-col" x="582" y="99.0">category</text><text class="erd-col" x="582" y="125.0">price</text><text class="erd-col" x="582" y="151.0">stock</text><polyline class="erd-link" points="210,43.0 247,43.0 247,121.0 285,121.0"/><line class="erd-link" x1="220" y1="35.0" x2="220" y2="51.0"/><line class="erd-link" x1="269" y1="121.0" x2="285" y2="113.0"/><line class="erd-link" x1="269" y1="121.0" x2="285" y2="121.0"/><line class="erd-link" x1="269" y1="121.0" x2="285" y2="129.0"/><polyline class="erd-link" points="570,43.0 532,43.0 532,147.0 495,147.0"/><line class="erd-link" x1="560" y1="35.0" x2="560" y2="51.0"/><line class="erd-link" x1="511" y1="147.0" x2="495" y2="139.0"/><line class="erd-link" x1="511" y1="147.0" x2="495" y2="147.0"/><line class="erd-link" x1="511" y1="147.0" x2="495" y2="155.0"/></svg>
+                    <figcaption id="db-diagram-caption">Each line starts at an id and ends at the foreign key that points at it. PK marks a table's own id (its <strong>primary key</strong>), FK a foreign key. The single bar means "one" and the three-pronged foot means "many": one customer can have many orders, and one product can be in many orders.</figcaption>
+                </figure>
+
+                <details class="create-tables">
+                    <summary>See the SQL that built these tables</summary>
+                    <pre><code>CREATE TABLE customer_tbl (
+    customer_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    customer_name TEXT NOT NULL,
+    county TEXT NOT NULL
+);
+
+CREATE TABLE product_tbl (
+    product_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    product_name TEXT NOT NULL,
+    category TEXT NOT NULL,
+    price REAL NOT NULL,
+    stock INTEGER NOT NULL
+);
+
+CREATE TABLE order_tbl (
+    order_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    order_date TEXT NOT NULL,
+    quantity INTEGER NOT NULL,
+    customer_id INTEGER NOT NULL,
+    product_id INTEGER NOT NULL,
+    FOREIGN KEY (customer_id) REFERENCES customer_tbl (customer_id),
+    FOREIGN KEY (product_id) REFERENCES product_tbl (product_id)
+);</code></pre>
+                </details>
+
                 <p>Forgotten a column name? The <strong>Show Tables</strong> button in the playground lists every table and its columns.</p>
 
                 <div class="db-status" id="db-status">
@@ -530,33 +569,33 @@ body {
 
                     <div class="command-card">
                         <h4>WHERE: keep only some rows</h4>
-                        <pre><code>SELECT * FROM students WHERE age > 20;</code></pre>
-                        <p>Keeps only the rows that match a condition. Try it: only three of the eight students are over 20.</p>
+                        <pre><code>SELECT * FROM product_tbl WHERE price &lt; 10;</code></pre>
+                        <p>Keeps only the rows that match a condition. Try it: three of the six products cost less than €10.</p>
                     </div>
 
                     <div class="command-card">
                         <h4>ORDER BY: sort the results</h4>
-                        <pre><code>SELECT * FROM students ORDER BY name ASC;</code></pre>
+                        <pre><code>SELECT * FROM product_tbl ORDER BY price DESC;</code></pre>
                         <p>Sorts the results: ASC for ascending (A to Z, small to big), DESC for descending.</p>
                     </div>
 
                     <div class="command-card">
                         <h4>INSERT: add rows</h4>
-                        <pre><code>INSERT INTO students (name, age, grade) 
-VALUES ('Sam', 20, 85);</code></pre>
+                        <pre><code>INSERT INTO customer_tbl (customer_name, county)
+VALUES ('Sam', 'Cork');</code></pre>
                         <p>Adds a new row to a table.</p>
                     </div>
 
                     <div class="command-card">
                         <h4>UPDATE: change rows</h4>
-                        <pre><code>UPDATE students SET grade = 90 
-WHERE name = 'Sam';</code></pre>
+                        <pre><code>UPDATE product_tbl SET stock = 50
+WHERE product_name = 'Notebook';</code></pre>
                         <p>Changes existing rows. Without a WHERE, it changes every row.</p>
                     </div>
 
                     <div class="command-card">
                         <h4>DELETE: remove rows</h4>
-                        <pre><code>DELETE FROM students WHERE id = 5;</code></pre>
+                        <pre><code>DELETE FROM order_tbl WHERE order_id = 5;</code></pre>
                         <p>Removes rows. Without a WHERE, it removes every row.</p>
                     </div>
                 </div>
@@ -569,16 +608,17 @@ WHERE name = 'Sam';</code></pre>
                 <p>Click an example to load it, or write your own query, then press <strong>Run Query</strong>.</p>
 
                 <div class="query-examples">
-                    <button onclick="setQuery('SELECT * FROM students;')">Show All Students</button>
-                    <button onclick="setQuery('SELECT * FROM courses;')">Show All Courses</button>
-                    <button onclick="setQuery('SELECT name, grade FROM students WHERE grade > 80;')">High Grades</button>
-                    <button onclick="setQuery('SELECT * FROM students ORDER BY grade DESC;')">Sort by Grade</button>
-                    <button onclick="setQuery(`SELECT COUNT(*) as total_students FROM students;`)">Count Students</button>
+                    <button onclick="setQuery('SELECT * FROM product_tbl;')">Show All Products</button>
+                    <button onclick="setQuery('SELECT * FROM customer_tbl;')">Show All Customers</button>
+                    <button onclick="setQuery('SELECT * FROM order_tbl;')">Show All Orders</button>
+                    <button onclick="setQuery('SELECT product_name, price FROM product_tbl WHERE price &lt; 10;')">Under €10</button>
+                    <button onclick="setQuery('SELECT * FROM product_tbl ORDER BY price DESC;')">Dearest First</button>
+                    <button onclick="setQuery('SELECT COUNT(*) AS total_customers FROM customer_tbl;')">Count Customers</button>
                 </div>
 
                 <div class="sql-editor">
                     <label for="sql-query">Write your SQL query: <span class="shortcut-hint">(press <kbd>Ctrl</kbd> + <kbd>Enter</kbd> to run, or <kbd>⌘</kbd> + <kbd>Enter</kbd> on a Mac)</span></label>
-                    <textarea id="sql-query" rows="6" spellcheck="false" autocapitalize="off" autocomplete="off" placeholder="SELECT * FROM students;">SELECT * FROM students;</textarea>
+                    <textarea id="sql-query" rows="6" spellcheck="false" autocapitalize="off" autocomplete="off" placeholder="SELECT * FROM product_tbl;">SELECT * FROM product_tbl;</textarea>
                     
                     <div class="editor-buttons">
                         <button onclick="executeQuery()" class="run-button">▶ Run Query</button>
@@ -602,76 +642,76 @@ WHERE name = 'Sam';</code></pre>
                 <div class="exercise-list">
                     <div class="exercise">
                         <h4>SQL exercise 1: Basic SELECT</h4>
-                        <p>Select only the name and age columns from the students table.</p>
+                        <p>Show only the name and price of every product.</p>
                         <details class="hint">
                             <summary>Show hint</summary>
                             <p>Use: <code>SELECT column1, column2 FROM table_name;</code></p>
                         </details>
                         <details class="answer">
                             <summary>Show answer</summary>
-                            <pre><code>SELECT name, age FROM students;</code></pre>
-                            <p>You should see 8 rows with just two columns, name and age.</p>
-                            <button type="button" class="try-answer" data-query="SELECT name, age FROM students;">Load it into the playground</button>
+                            <pre><code>SELECT product_name, price FROM product_tbl;</code></pre>
+                            <p>You should see 6 rows with just two columns.</p>
+                            <button type="button" class="try-answer" data-query="SELECT product_name, price FROM product_tbl;">Load it into the playground</button>
                         </details>
                     </div>
 
                     <div class="exercise">
                         <h4>SQL exercise 2: WHERE clause</h4>
-                        <p>Find all students whose grade is less than 75.</p>
+                        <p>Find every product that costs less than €10.</p>
                         <details class="hint">
                             <summary>Show hint</summary>
-                            <p>Use the WHERE clause with the <code>&lt;</code> (less than) operator.</p>
+                            <p>Use WHERE with the <code>&lt;</code> (less than) operator. Write prices as plain numbers: <code>10</code>, not <code>€10</code>.</p>
                         </details>
                         <details class="answer">
                             <summary>Show answer</summary>
-                            <pre><code>SELECT * FROM students WHERE grade &lt; 75;</code></pre>
-                            <p>You should see one student: Wei Chen, with 73. Priya Sharma has 76, so just misses out.</p>
-                            <button type="button" class="try-answer" data-query="SELECT * FROM students WHERE grade &lt; 75;">Load it into the playground</button>
+                            <pre><code>SELECT * FROM product_tbl WHERE price &lt; 10;</code></pre>
+                            <p>Three products: the notebook (3.5), the gel pens (4.25) and the USB stick (9.99).</p>
+                            <button type="button" class="try-answer" data-query="SELECT * FROM product_tbl WHERE price &lt; 10;">Load it into the playground</button>
                         </details>
                     </div>
 
                     <div class="exercise">
                         <h4>SQL exercise 3: INSERT</h4>
-                        <p>Add yourself as a new student to the database!</p>
+                        <p>Add yourself as a new customer.</p>
                         <details class="hint">
                             <summary>Show hint</summary>
-                            <p>Start with <code>INSERT INTO students (name, age, grade) VALUES (...);</code> Text goes inside quotes, numbers don't. You don't need to give an id.</p>
+                            <p>Start with <code>INSERT INTO customer_tbl (customer_name, county) VALUES (...);</code> Text goes inside single quotes. You don't need to give a customer_id.</p>
                         </details>
                         <details class="answer">
                             <summary>Show answer</summary>
-                            <pre><code>INSERT INTO students (name, age, grade) VALUES ('Your Name', 20, 85);</code></pre>
-                            <p>Put your own name inside the quotes. The playground should say 1 row changed. To see yourself, run <code>SELECT * FROM students;</code> and look at the last row. You never gave an id: the database numbered you itself.</p>
-                            <button type="button" class="try-answer" data-query="INSERT INTO students (name, age, grade) VALUES (&#x27;Your Name&#x27;, 20, 85);">Load it into the playground</button>
+                            <pre><code>INSERT INTO customer_tbl (customer_name, county) VALUES ('Your Name', 'Dublin');</code></pre>
+                            <p>Put your own name and county inside the quotes. The playground should say 1 row changed. To see yourself, run <code>SELECT * FROM customer_tbl;</code> and look at the last row. You never gave a customer_id: the database numbered you itself.</p>
+                            <button type="button" class="try-answer" data-query="INSERT INTO customer_tbl (customer_name, county) VALUES (&#x27;Your Name&#x27;, &#x27;Dublin&#x27;);">Load it into the playground</button>
                         </details>
                     </div>
 
                     <div class="exercise">
                         <h4>SQL exercise 4: Sorting</h4>
-                        <p>Show all students sorted by name in alphabetical order.</p>
+                        <p>List the products from dearest to cheapest.</p>
                         <details class="hint">
                             <summary>Show hint</summary>
-                            <p>Use ORDER BY with ASC for ascending order.</p>
+                            <p>Use ORDER BY with DESC (descending).</p>
                         </details>
                         <details class="answer">
                             <summary>Show answer</summary>
-                            <pre><code>SELECT * FROM students ORDER BY name ASC;</code></pre>
-                            <p>ASC is the default, so <code>ORDER BY name</code> gives the same result. Swap ASC for DESC to reverse the order.</p>
-                            <button type="button" class="try-answer" data-query="SELECT * FROM students ORDER BY name ASC;">Load it into the playground</button>
+                            <pre><code>SELECT * FROM product_tbl ORDER BY price DESC;</code></pre>
+                            <p>The hoodie (35) comes first and the notebook (3.5) last. Swap DESC for ASC to turn it around.</p>
+                            <button type="button" class="try-answer" data-query="SELECT * FROM product_tbl ORDER BY price DESC;">Load it into the playground</button>
                         </details>
                     </div>
 
                     <div class="exercise">
                         <h4>SQL exercise 5: COUNT function</h4>
-                        <p>How many courses are in the database?</p>
+                        <p>How many customers live in Dublin?</p>
                         <details class="hint">
                             <summary>Show hint</summary>
-                            <p>Use: <code>SELECT COUNT(*) FROM table_name;</code></p>
+                            <p><code>COUNT(*)</code> counts rows. Add a WHERE to count only some of them. Text goes in single quotes: <code>county = 'Dublin'</code>.</p>
                         </details>
                         <details class="answer">
                             <summary>Show answer</summary>
-                            <pre><code>SELECT COUNT(*) AS total_courses FROM courses;</code></pre>
-                            <p>You should see 5. The <code>AS total_courses</code> part is optional: it gives the result column a readable name.</p>
-                            <button type="button" class="try-answer" data-query="SELECT COUNT(*) AS total_courses FROM courses;">Load it into the playground</button>
+                            <pre><code>SELECT COUNT(*) AS dublin_customers FROM customer_tbl WHERE county = 'Dublin';</code></pre>
+                            <p>3: Kwame, Mateus and Amina. If you added yourself in Dublin in Exercise 3, you'll get 4. The <code>AS dublin_customers</code> part is optional: it gives the result column a readable name.</p>
+                            <button type="button" class="try-answer" data-query="SELECT COUNT(*) AS dublin_customers FROM customer_tbl WHERE county = &#x27;Dublin&#x27;;">Load it into the playground</button>
                         </details>
                     </div>
                 </div>
@@ -682,80 +722,80 @@ WHERE name = 'Sam';</code></pre>
                 <div class="exercise-list">
                     <div class="exercise">
                         <h4>SQL exercise 6: UPDATE</h4>
-                        <p>Give every student with a grade below 75 a 5-point bonus.</p>
+                        <p>It's sale week: take €2 off the price of every Tech product.</p>
                         <details class="hint">
                             <summary>Show hint</summary>
-                            <p><code>UPDATE students SET grade = ... WHERE ...;</code> A column can use its own value, as in <code>grade + 5</code>.</p>
+                            <p><code>UPDATE product_tbl SET price = ... WHERE ...;</code> A column can use its own value, as in <code>price - 2</code>.</p>
                         </details>
                         <details class="answer">
                             <summary>Show answer</summary>
-                            <pre><code>UPDATE students SET grade = grade + 5 WHERE grade &lt; 75;</code></pre>
-                            <p>The playground should say 1 row changed: Wei Chen goes from 73 to 78.</p>
-                            <button type="button" class="try-answer" data-query="UPDATE students SET grade = grade + 5 WHERE grade &lt; 75;">Load it into the playground</button>
+                            <pre><code>UPDATE product_tbl SET price = price - 2 WHERE category = 'Tech';</code></pre>
+                            <p>2 rows changed: the USB stick goes from 9.99 to 7.99, and the headphones from 24.5 to 22.5.</p>
+                            <button type="button" class="try-answer" data-query="UPDATE product_tbl SET price = price - 2 WHERE category = &#x27;Tech&#x27;;">Load it into the playground</button>
                         </details>
                     </div>
 
                     <div class="exercise">
                         <h4>SQL exercise 7: DELETE</h4>
-                        <p>Remove every student under the age of 20.</p>
+                        <p>Remove every product that is out of stock.</p>
                         <details class="hint">
                             <summary>Show hint</summary>
-                            <p><code>DELETE FROM students WHERE ...;</code> Before you delete, run <code>SELECT *</code> with the same WHERE to see exactly which rows you are about to remove.</p>
+                            <p>Out of stock means <code>stock = 0</code>. Before you delete, run <code>SELECT *</code> with the same WHERE to see exactly which rows you're about to remove.</p>
                         </details>
                         <details class="answer">
                             <summary>Show answer</summary>
-                            <pre><code>DELETE FROM students WHERE age &lt; 20;</code></pre>
-                            <p>2 rows changed: Kwame Mensah and Wei Chen, who are both 19. Press <strong>Reset Database</strong> to bring them back.</p>
-                            <button type="button" class="try-answer" data-query="DELETE FROM students WHERE age &lt; 20;">Load it into the playground</button>
+                            <pre><code>DELETE FROM product_tbl WHERE stock = 0;</code></pre>
+                            <p>1 row changed: the headphones. Press <strong>Reset Database</strong> to bring them back.</p>
+                            <button type="button" class="try-answer" data-query="DELETE FROM product_tbl WHERE stock = 0;">Load it into the playground</button>
                         </details>
                     </div>
 
                     <div class="exercise">
                         <h4>SQL exercise 8: Combining conditions</h4>
-                        <p>Find the students aged 20 or 21 with a grade above 85, highest grade first.</p>
+                        <p>Find the Stationery and Tech products that cost less than €10, cheapest first.</p>
                         <details class="hint">
                             <summary>Show hint</summary>
                             <p>Join conditions with AND and OR. Brackets decide which part is worked out first, just as in maths.</p>
                         </details>
                         <details class="answer">
                             <summary>Show answer</summary>
-                            <pre><code>SELECT * FROM students
-WHERE (age = 20 OR age = 21) AND grade &gt; 85
-ORDER BY grade DESC;</code></pre>
-                            <p>Dmytro Kovalenko (94), Amina Yusuf (89) and Aoife Murphy (88). Mateus Oliveira is 20, but has exactly 85, and <em>above</em> 85 means more than 85.</p>
-                            <button type="button" class="try-answer" data-query="SELECT * FROM students
-WHERE (age = 20 OR age = 21) AND grade &gt; 85
-ORDER BY grade DESC;">Load it into the playground</button>
+                            <pre><code>SELECT * FROM product_tbl
+WHERE (category = 'Stationery' OR category = 'Tech') AND price &lt; 10
+ORDER BY price ASC;</code></pre>
+                            <p>The notebook, the gel pens and the USB stick. The headphones are Tech too, but cost 24.5.</p>
+                            <button type="button" class="try-answer" data-query="SELECT * FROM product_tbl
+WHERE (category = &#x27;Stationery&#x27; OR category = &#x27;Tech&#x27;) AND price &lt; 10
+ORDER BY price ASC;">Load it into the playground</button>
                         </details>
                     </div>
 
                     <div class="exercise">
-                        <h4>SQL exercise 9: Average</h4>
-                        <p>What is the average grade of the students aged 20?</p>
+                        <h4>SQL exercise 9: Items, not orders</h4>
+                        <p>How many items has the shop sold altogether? Careful: that isn't the same as the number of orders.</p>
                         <details class="hint">
                             <summary>Show hint</summary>
-                            <p><code>AVG(column)</code> works like <code>COUNT(*)</code>, but gives the average of the values instead of counting them.</p>
+                            <p><code>COUNT(*)</code> counts rows, but one order can be for several of the same thing. <code>SUM(column)</code> adds up every value in a column.</p>
                         </details>
                         <details class="answer">
                             <summary>Show answer</summary>
-                            <pre><code>SELECT AVG(grade) AS average_grade FROM students WHERE age = 20;</code></pre>
-                            <p>89, the average of Aoife (88), Mateus (85) and Dmytro (94). If you added yourself aged 20 in Exercise 3, you're included too, so your number will be different.</p>
-                            <button type="button" class="try-answer" data-query="SELECT AVG(grade) AS average_grade FROM students WHERE age = 20;">Load it into the playground</button>
+                            <pre><code>SELECT SUM(quantity) AS items_sold FROM order_tbl;</code></pre>
+                            <p>24 items, from 12 orders. <code>COUNT(*)</code> would have said 12, because it counts rows, not items.</p>
+                            <button type="button" class="try-answer" data-query="SELECT SUM(quantity) AS items_sold FROM order_tbl;">Load it into the playground</button>
                         </details>
                     </div>
 
                     <div class="exercise">
-                        <h4>SQL exercise 10: The other table</h4>
-                        <p>Find all the courses worth 4 credits.</p>
+                        <h4>SQL exercise 10: Buying in bulk</h4>
+                        <p>Find every order where someone bought more than one of the same thing.</p>
                         <details class="hint">
                             <summary>Show hint</summary>
-                            <p>The same pattern as Exercise 2, on the <code>courses</code> table.</p>
+                            <p>Look in <code>order_tbl</code>, at the quantity column.</p>
                         </details>
                         <details class="answer">
                             <summary>Show answer</summary>
-                            <pre><code>SELECT * FROM courses WHERE credits = 4;</code></pre>
-                            <p>Introduction to Programming and Database Systems.</p>
-                            <button type="button" class="try-answer" data-query="SELECT * FROM courses WHERE credits = 4;">Load it into the playground</button>
+                            <pre><code>SELECT * FROM order_tbl WHERE quantity &gt; 1;</code></pre>
+                            <p>6 orders. The biggest is order 5: five notebooks.</p>
+                            <button type="button" class="try-answer" data-query="SELECT * FROM order_tbl WHERE quantity &gt; 1;">Load it into the playground</button>
                         </details>
                     </div>
                 </div>
@@ -763,90 +803,89 @@ ORDER BY grade DESC;">Load it into the playground</button>
 
             <div class="lesson" id="join-lesson">
                 <h3>Connecting tables with JOIN</h3>
-                <p>So far each query has used one table. The third table, <code>enrolments</code>, connects the other two: each row says that one student takes one course. It doesn't store any names, only numbers that point at rows in the other tables.</p>
+                <p>So far each query has used one table. <code>order_tbl</code> is where the three tables meet: each row is one line on a receipt, saying who bought what, and how many. It doesn't store any names, only ids that point at rows in the other tables:</p>
                 <ul>
-                    <li><code>student_id</code> matches an <code>id</code> in <code>students</code></li>
-                    <li><code>course_id</code> matches an <code>id</code> in <code>courses</code></li>
+                    <li><code>customer_id</code> matches a <code>customer_id</code> in <code>customer_tbl</code></li>
+                    <li><code>product_id</code> matches a <code>product_id</code> in <code>product_tbl</code></li>
                 </ul>
-                <p>A column that points at another table like this is called a <strong>foreign key</strong>. To see the names instead of the numbers, you <strong>JOIN</strong> the tables: you tell the database which columns should match, and it puts the matching rows side by side.</p>
+                <p>Because each foreign key has the same name as the id it points at, you can see the links just by reading the column names. The <a href="#db-diagram">diagram of the database</a> shows the same links as lines. To see names instead of numbers, you <strong>JOIN</strong> the tables: you tell the database which columns should match, and it puts the matching rows side by side.</p>
 
                 <div class="example-box">
-                    <h4>Example: each enrolment with the student's name</h4>
-                    <pre><code>SELECT students.name, enrolments.course_id
-FROM enrolments
-JOIN students ON students.id = enrolments.student_id;</code></pre>
-                    <p>Read the <code>ON</code> line as "match each enrolment to the student whose id is the same as its student_id". Writing <code>students.name</code> instead of just <code>name</code> says which table the column comes from, which matters once two tables both have a column called <code>name</code>.</p>
-                    <button type="button" class="try-answer" data-query="SELECT students.name, enrolments.course_id
-FROM enrolments
-JOIN students ON students.id = enrolments.student_id;">Load it into the playground</button>
+                    <h4>Example: each order with the customer's name</h4>
+                    <pre><code>SELECT customer_tbl.customer_name, order_tbl.quantity, order_tbl.product_id
+FROM order_tbl
+JOIN customer_tbl ON customer_tbl.customer_id = order_tbl.customer_id;</code></pre>
+                    <p>Read the <code>ON</code> line as "match each order to the customer with the same customer_id". Writing <code>customer_tbl.customer_id</code> instead of just <code>customer_id</code> says which table the column comes from. Here you have to, because both tables have a column called <code>customer_id</code>.</p>
+                    <button type="button" class="try-answer" data-query="SELECT customer_tbl.customer_name, order_tbl.quantity, order_tbl.product_id
+FROM order_tbl
+JOIN customer_tbl ON customer_tbl.customer_id = order_tbl.customer_id;">Load it into the playground</button>
                 </div>
 
                 <div class="exercise-list">
                     <div class="exercise">
-                        <h4>SQL exercise 11: Who takes what</h4>
-                        <p>List every student next to the name of each course they take.</p>
+                        <h4>SQL exercise 11: Reading the receipts</h4>
+                        <p>List every order with the customer's name, the product's name and the quantity.</p>
                         <details class="hint">
                             <summary>Show hint</summary>
-                            <p>Start <code>FROM enrolments</code>, then JOIN <code>students</code> and JOIN <code>courses</code>, each with its own <code>ON</code>. Both tables have a <code>name</code> column, so use <code>AS</code> to give them different names in the results.</p>
+                            <p>Start <code>FROM order_tbl</code>, then JOIN <code>customer_tbl</code> and JOIN <code>product_tbl</code>, each with its own <code>ON</code>.</p>
                         </details>
                         <details class="answer">
                             <summary>Show answer</summary>
-                            <pre><code>SELECT students.name AS student, courses.name AS course
-FROM enrolments
-JOIN students ON students.id = enrolments.student_id
-JOIN courses ON courses.id = enrolments.course_id;</code></pre>
-                            <p>You should see 13 rows. Some students appear more than once, because they take more than one course. If you see fewer, you probably deleted Kwame and Wei in Exercise 7: press <strong>Reset Database</strong> and run it again.</p>
-                            <button type="button" class="try-answer" data-query="SELECT students.name AS student, courses.name AS course
-FROM enrolments
-JOIN students ON students.id = enrolments.student_id
-JOIN courses ON courses.id = enrolments.course_id;">Load it into the playground</button>
+                            <pre><code>SELECT customer_tbl.customer_name, product_tbl.product_name, order_tbl.quantity
+FROM order_tbl
+JOIN customer_tbl ON customer_tbl.customer_id = order_tbl.customer_id
+JOIN product_tbl ON product_tbl.product_id = order_tbl.product_id;</code></pre>
+                            <p>12 rows, one per order. Some customers appear more than once, because they bought more than one thing. If you see fewer, you probably deleted something in Exercise 7: press <strong>Reset Database</strong> and run it again.</p>
+                            <button type="button" class="try-answer" data-query="SELECT customer_tbl.customer_name, product_tbl.product_name, order_tbl.quantity
+FROM order_tbl
+JOIN customer_tbl ON customer_tbl.customer_id = order_tbl.customer_id
+JOIN product_tbl ON product_tbl.product_id = order_tbl.product_id;">Load it into the playground</button>
                         </details>
                     </div>
 
                     <div class="exercise">
-                        <h4>SQL exercise 12: One course</h4>
-                        <p>Who takes Web Development?</p>
+                        <h4>SQL exercise 12: What each line cost</h4>
+                        <p>Add a column showing what each line of the receipt cost: the price times the quantity.</p>
                         <details class="hint">
                             <summary>Show hint</summary>
-                            <p>Take your answer to Exercise 11 and add a <code>WHERE</code> on the course's name. Text goes in single quotes.</p>
+                            <p>Start from your answer to Exercise 11. You can do arithmetic in a SELECT: <code>product_tbl.price * order_tbl.quantity</code> multiplies two columns for each row. Give the result a name with AS.</p>
                         </details>
                         <details class="answer">
                             <summary>Show answer</summary>
-                            <pre><code>SELECT students.name AS student
-FROM enrolments
-JOIN students ON students.id = enrolments.student_id
-JOIN courses ON courses.id = enrolments.course_id
-WHERE courses.name = 'Web Development';</code></pre>
-                            <p>Aoife Murphy, Priya Sharma and Dmytro Kovalenko.</p>
-                            <button type="button" class="try-answer" data-query="SELECT students.name AS student
-FROM enrolments
-JOIN students ON students.id = enrolments.student_id
-JOIN courses ON courses.id = enrolments.course_id
-WHERE courses.name = &#x27;Web Development&#x27;;">Load it into the playground</button>
+                            <pre><code>SELECT customer_tbl.customer_name, product_tbl.product_name, order_tbl.quantity,
+       product_tbl.price * order_tbl.quantity AS line_total
+FROM order_tbl
+JOIN customer_tbl ON customer_tbl.customer_id = order_tbl.customer_id
+JOIN product_tbl ON product_tbl.product_id = order_tbl.product_id;</code></pre>
+                            <p>Mateus Oliveira's five notebooks come to 17.5 (€17.50). SQL doesn't know these numbers are euro, so it drops the final zero. If you ran the sale in Exercise 6, the USB stick lines will be cheaper.</p>
+                            <button type="button" class="try-answer" data-query="SELECT customer_tbl.customer_name, product_tbl.product_name, order_tbl.quantity,
+       product_tbl.price * order_tbl.quantity AS line_total
+FROM order_tbl
+JOIN customer_tbl ON customer_tbl.customer_id = order_tbl.customer_id
+JOIN product_tbl ON product_tbl.product_id = order_tbl.product_id;">Load it into the playground</button>
                         </details>
                     </div>
 
                     <div class="exercise">
-                        <h4>SQL exercise 13: Nobody home (hardest)</h4>
-                        <p>Which student isn't enrolled in any course?</p>
+                        <h4>SQL exercise 13: Left on the shelf (hardest)</h4>
+                        <p>Which product has nobody ordered yet?</p>
                         <details class="hint">
                             <summary>Show hint</summary>
-                            <p>A plain <code>JOIN</code> only keeps rows that match, so a student with no enrolments disappears. A <code>LEFT JOIN</code> keeps every student and leaves the enrolment columns empty (<code>NULL</code>) where nothing matched. Then keep only the rows where the enrolment is <code>NULL</code>.</p>
+                            <p>A plain <code>JOIN</code> only keeps rows that match, so a product with no orders disappears. A <code>LEFT JOIN</code> keeps every product and leaves the order columns empty (<code>NULL</code>) where nothing matched. Then keep only the rows where the order is <code>NULL</code>.</p>
                         </details>
                         <details class="answer">
                             <summary>Show answer</summary>
-                            <pre><code>SELECT students.name
-FROM students
-LEFT JOIN enrolments ON enrolments.student_id = students.id
-WHERE enrolments.id IS NULL;</code></pre>
-                            <p>Wei Chen. If you added yourself in Exercise 3, you'll appear too, since you haven't enrolled in anything. If you deleted Wei in Exercise 7, press <strong>Reset Database</strong> first.</p>
-                            <button type="button" class="try-answer" data-query="SELECT students.name
-FROM students
-LEFT JOIN enrolments ON enrolments.student_id = students.id
-WHERE enrolments.id IS NULL;">Load it into the playground</button>
+                            <pre><code>SELECT product_tbl.product_name
+FROM product_tbl
+LEFT JOIN order_tbl ON order_tbl.product_id = product_tbl.product_id
+WHERE order_tbl.order_id IS NULL;</code></pre>
+                            <p>The headphones, which makes sense: there are none in stock. If you deleted them in Exercise 7, press <strong>Reset Database</strong> first. Now try the same idea for customers: who hasn't bought anything? (Wei Chen, and you too if you added yourself.)</p>
+                            <button type="button" class="try-answer" data-query="SELECT product_tbl.product_name
+FROM product_tbl
+LEFT JOIN order_tbl ON order_tbl.product_id = product_tbl.product_id
+WHERE order_tbl.order_id IS NULL;">Load it into the playground</button>
                         </details>
                     </div>
-
                 </div>
             </div>
             </div>
@@ -874,7 +913,7 @@ WHERE enrolments.id IS NULL;">Load it into the playground</button>
                 <ol>
                     <li>Practise HTML by creating more complex page structures</li>
                     <li>Experiment with CSS to style your pages uniquely</li>
-                    <li>Try more advanced SQL queries (GROUP BY, subqueries, and more kinds of JOIN)</li>
+                    <li>Try more advanced SQL queries: GROUP BY, for example, can total up what each customer has spent</li>
                     <li>Learn JavaScript to make your pages interactive</li>
                     <li>Explore backend development to connect everything together</li>
                 </ol>

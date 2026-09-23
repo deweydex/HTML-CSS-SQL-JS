@@ -163,19 +163,19 @@ For example: `https://johndoe.github.io/sql-tutorial/`
 
 ### Sample Database
 
-The tutorial includes three tables:
+The tutorial's database belongs to a small shop, and follows three naming conventions: every table name ends in `_tbl`, every table's id is named after it (`product_tbl` has `product_id`), and foreign keys sit at the bottom of the table with the same name as the id they point at.
 
-**Students Table:**
-- id, name, age, grade
-- 8 sample students, with names from many backgrounds so every class can see itself in the examples
+**customer_tbl:**
+- customer_id, customer_name, county
+- 8 customers, with names from many backgrounds so every class can see itself in the examples
 
-**Courses Table:**
-- id, name, instructor, credits
-- 5 sample courses
+**product_tbl:**
+- product_id, product_name, category, price, stock
+- 6 products; the headphones are out of stock and nobody has ordered them
 
-**Enrolments Table:**
-- id, student_id, course_id (links students to courses, for the JOIN exercises)
-- 13 enrolments; one student is deliberately enrolled in nothing
+**order_tbl:**
+- order_id, order_date, quantity, customer_id, product_id
+- 12 orders, each one line on a receipt; quantity gives students something to think about (items sold versus orders placed, price × quantity)
 
 ---
 
