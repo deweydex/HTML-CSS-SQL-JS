@@ -36,6 +36,36 @@
  */
 
 /**
+ * @typedef {Object} Student
+ * @property {number} student_id - Unique student identifier
+ * @property {string} student_name - Student's full name
+ * @property {string} county - County the student lives in
+ */
+
+/**
+ * @typedef {Object} Module
+ * @property {number} module_id - Unique module identifier
+ * @property {string} module_name - What the module is called
+ * @property {string} department - Computing, Business...
+ * @property {number} credits - Credits the module is worth
+ * @property {number} hours - Teaching hours a week (0 = not running)
+ */
+
+/**
+ * @typedef {Object} Result
+ * One exam result: which student, which module, what mark
+ * @property {number} result_id - Unique result identifier
+ * @property {string} exam_date - Date as text, YYYY-MM-DD
+ * @property {number} mark - Mark out of 100 (40 is a pass)
+ * @property {number} student_id - Points at a row in student_tbl
+ * @property {number} module_id - Points at a row in module_tbl
+ */
+
+/**
+ * @typedef {'shop' | 'school'} DatasetName
+ */
+
+/**
  * @typedef {Object} QueryResult
  * @property {string[][]} values - 2D array of result values
  * @property {string[]} columns - Array of column names
@@ -98,11 +128,10 @@ async function initializeDatabase() {
         // Create a new database instance in memory
         db = new SQL.Database();
         
-        // Create tables and populate with sample data
-        createTables();
-        populateSampleData();
+        // Create the chosen sample tables and fill them
+        buildDatabase(currentDataset);
         
-        updateStatus('ready', 'Database ready! Try running a query below.');
+        updateStatus('ready', `${DATASETS[currentDataset].label} database ready. Try running a query.`);
         dbStatus = 'ready';
         
     } catch (error) {
@@ -115,152 +144,240 @@ async function initializeDatabase() {
     }
 }
 
-/**
- * Create the customer_tbl, product_tbl and order_tbl tables
- * 
- * @returns {void}
- */
-function createTables() {
-    // SQL CREATE TABLE EXPLAINED:
-    // - Creates a new table in the database
-    // - Defines column names and data types
-    // - PRIMARY KEY: Unique identifier for each row
-    // - NOT NULL: Column cannot be empty
-    //
-    // NAMING CONVENTIONS USED HERE:
-    // - Every table name ends in _tbl
-    // - Every table's id is named after it: product_tbl has product_id
-    // - Foreign keys go at the bottom of the table, with the same name
-    //   as the id they point at
-    
-    const createCustomerTable = `
-        CREATE TABLE IF NOT EXISTS customer_tbl (
-            customer_id INTEGER PRIMARY KEY AUTOINCREMENT,
-            customer_name TEXT NOT NULL,
-            county TEXT NOT NULL
-        );
-    `;
-    
-    const createProductTable = `
-        CREATE TABLE IF NOT EXISTS product_tbl (
-            product_id INTEGER PRIMARY KEY AUTOINCREMENT,
-            product_name TEXT NOT NULL,
-            category TEXT NOT NULL,
-            price REAL NOT NULL,
-            stock INTEGER NOT NULL
-        );
-    `;
-    
-    // FOREIGN KEYS EXPLAINED:
-    // customer_id and product_id hold the id of a row in another table.
-    // REFERENCES records which table and column they point at. That link
-    // is what a JOIN follows to put a name back next to each number.
-    const createOrderTable = `
-        CREATE TABLE IF NOT EXISTS order_tbl (
-            order_id INTEGER PRIMARY KEY AUTOINCREMENT,
-            order_date TEXT NOT NULL,
-            quantity INTEGER NOT NULL,
-            customer_id INTEGER NOT NULL,
-            product_id INTEGER NOT NULL,
-            FOREIGN KEY (customer_id) REFERENCES customer_tbl (customer_id),
-            FOREIGN KEY (product_id) REFERENCES product_tbl (product_id)
-        );
-    `;
-    
-    // TEMPLATE LITERALS EXPLAINED:
-    // Backticks (`) allow multi-line strings and string interpolation
-    // Example: `Hello ${name}` - embeds variables in strings
-    
-    // Execute the CREATE TABLE statements
-    db.run(createCustomerTable);
-    db.run(createProductTable);
-    db.run(createOrderTable);
+// ============================================
+// THE TWO SAMPLE DATABASES
+// ============================================
+// Students choose a shop or a school. Both follow the same conventions:
+// - Every table name ends in _tbl
+// - Every table's id is named after it: product_tbl has product_id
+// - Foreign keys go at the bottom of the table, with the same name
+//   as the id they point at
+//
+// SQL CREATE TABLE EXPLAINED:
+// - Creates a new table in the database
+// - Defines column names and data types
+// - PRIMARY KEY: Unique identifier for each row
+// - NOT NULL: Column cannot be empty
+//
+// FOREIGN KEYS EXPLAINED:
+// A foreign key holds the id of a row in another table. REFERENCES
+// records which table and column it points at. That link is what a JOIN
+// follows to put a name back next to each number.
+//
+// The names come from many backgrounds on purpose: a class should be
+// able to see itself in its examples. Both databases share them.
+
+/** Where the student's choice of database is remembered */
+const DATASET_KEY = 'html-css-sql-tutorial:dataset';
+
+/** @type {Array<[string, string]>} [name, county] */
+const PEOPLE = [
+    ['Aoife Murphy', 'Galway'],
+    ['Kwame Mensah', 'Dublin'],
+    ['Priya Sharma', 'Cork'],
+    ['Mateus Oliveira', 'Dublin'],
+    ['Zofia Nowak', 'Limerick'],
+    ['Wei Chen', 'Cork'],             // person 6 hasn't bought or sat anything yet
+    ['Amina Yusuf', 'Dublin'],
+    ['Dmytro Kovalenko', 'Waterford']
+];
+
+const DATASETS = {
+    shop: {
+        label: 'Shop',
+        defaultQuery: 'SELECT * FROM product_tbl;',
+        // Child tables first, so nothing is dropped while something points at it
+        tables: ['order_tbl', 'customer_tbl', 'product_tbl'],
+        create: [
+            `CREATE TABLE customer_tbl (
+                customer_id INTEGER PRIMARY KEY AUTOINCREMENT,
+                customer_name TEXT NOT NULL,
+                county TEXT NOT NULL
+            );`,
+            `CREATE TABLE product_tbl (
+                product_id INTEGER PRIMARY KEY AUTOINCREMENT,
+                product_name TEXT NOT NULL,
+                category TEXT NOT NULL,
+                price REAL NOT NULL,
+                stock INTEGER NOT NULL
+            );`,
+            `CREATE TABLE order_tbl (
+                order_id INTEGER PRIMARY KEY AUTOINCREMENT,
+                order_date TEXT NOT NULL,
+                quantity INTEGER NOT NULL,
+                customer_id INTEGER NOT NULL,
+                product_id INTEGER NOT NULL,
+                FOREIGN KEY (customer_id) REFERENCES customer_tbl (customer_id),
+                FOREIGN KEY (product_id) REFERENCES product_tbl (product_id)
+            );`
+        ],
+        rows: {
+            'INSERT INTO customer_tbl (customer_name, county) VALUES (?, ?)': PEOPLE,
+            // The headphones are out of stock and nobody has ordered them,
+            // which Exercises 7 and 13 go looking for
+            'INSERT INTO product_tbl (product_name, category, price, stock) VALUES (?, ?, ?, ?)': [
+                ['Notebook', 'Stationery', 3.50, 40],
+                ['Gel pens (pack of 3)', 'Stationery', 4.25, 25],
+                ['Water bottle', 'Accessories', 12.00, 8],
+                ['Hoodie', 'Clothing', 35.00, 6],
+                ['USB stick', 'Tech', 9.99, 15],
+                ['Headphones', 'Tech', 24.50, 0]
+            ],
+            // [order_date, quantity, customer_id, product_id]: one line on a receipt each
+            'INSERT INTO order_tbl (order_date, quantity, customer_id, product_id) VALUES (?, ?, ?, ?)': [
+                ['2026-09-01', 2, 1, 1],   // Aoife: 2 notebooks
+                ['2026-09-01', 1, 1, 3],   // Aoife: a water bottle
+                ['2026-09-02', 3, 2, 2],   // Kwame: 3 packs of gel pens
+                ['2026-09-02', 1, 3, 4],   // Priya: a hoodie
+                ['2026-09-03', 5, 4, 1],   // Mateus: 5 notebooks
+                ['2026-09-03', 2, 4, 5],   // Mateus: 2 USB sticks
+                ['2026-09-04', 1, 5, 3],   // Zofia: a water bottle
+                ['2026-09-05', 4, 7, 2],   // Amina: 4 packs of gel pens
+                ['2026-09-05', 1, 7, 4],   // Amina: a hoodie
+                ['2026-09-06', 2, 8, 5],   // Dmytro: 2 USB sticks
+                ['2026-09-06', 1, 8, 1],   // Dmytro: a notebook
+                ['2026-09-07', 1, 2, 5]    // Kwame: a USB stick
+            ]
+        }
+    },
+    school: {
+        label: 'School',
+        defaultQuery: 'SELECT * FROM module_tbl;',
+        tables: ['result_tbl', 'student_tbl', 'module_tbl'],
+        create: [
+            `CREATE TABLE student_tbl (
+                student_id INTEGER PRIMARY KEY AUTOINCREMENT,
+                student_name TEXT NOT NULL,
+                county TEXT NOT NULL
+            );`,
+            `CREATE TABLE module_tbl (
+                module_id INTEGER PRIMARY KEY AUTOINCREMENT,
+                module_name TEXT NOT NULL,
+                department TEXT NOT NULL,
+                credits INTEGER NOT NULL,
+                hours INTEGER NOT NULL
+            );`,
+            `CREATE TABLE result_tbl (
+                result_id INTEGER PRIMARY KEY AUTOINCREMENT,
+                exam_date TEXT NOT NULL,
+                mark INTEGER NOT NULL,
+                student_id INTEGER NOT NULL,
+                module_id INTEGER NOT NULL,
+                FOREIGN KEY (student_id) REFERENCES student_tbl (student_id),
+                FOREIGN KEY (module_id) REFERENCES module_tbl (module_id)
+            );`
+        ],
+        rows: {
+            'INSERT INTO student_tbl (student_name, county) VALUES (?, ?)': PEOPLE,
+            // Robotics isn't running this year (0 hours) and has no results,
+            // which Exercises 7 and 13 go looking for
+            'INSERT INTO module_tbl (module_name, department, credits, hours) VALUES (?, ?, ?, ?)': [
+                ['Web Development', 'Computing', 15, 4],
+                ['Databases', 'Computing', 10, 3],
+                ['Maths for Computing', 'Computing', 5, 2],
+                ['Communications', 'General Studies', 5, 2],
+                ['Marketing', 'Business', 10, 3],
+                ['Robotics', 'Computing', 15, 0]
+            ],
+            // [exam_date, mark, student_id, module_id]: one exam result each
+            'INSERT INTO result_tbl (exam_date, mark, student_id, module_id) VALUES (?, ?, ?, ?)': [
+                ['2026-05-11', 72, 1, 1],   // Aoife: Web Development
+                ['2026-05-11', 65, 1, 2],   // Aoife: Databases
+                ['2026-05-12', 58, 2, 1],   // Kwame: Web Development
+                ['2026-05-12', 81, 3, 4],   // Priya: Communications
+                ['2026-05-13', 47, 4, 3],   // Mateus: Maths for Computing
+                ['2026-05-13', 90, 4, 1],   // Mateus: Web Development
+                ['2026-05-14', 38, 5, 5],   // Zofia: Marketing
+                ['2026-05-14', 74, 7, 2],   // Amina: Databases
+                ['2026-05-15', 55, 7, 5],   // Amina: Marketing
+                ['2026-05-15', 69, 8, 3],   // Dmytro: Maths for Computing
+                ['2026-05-16', 83, 8, 2],   // Dmytro: Databases
+                ['2026-05-16', 61, 2, 4]    // Kwame: Communications
+            ]
+        }
+    }
+};
+
+/** @type {DatasetName} */
+let currentDataset = readSavedDataset();
+
+/** @returns {DatasetName} */
+function readSavedDataset() {
+    try {
+        const saved = localStorage.getItem(DATASET_KEY);
+        return saved === 'school' ? 'school' : 'shop';
+    } catch (error) {
+        return 'shop';
+    }
 }
 
 /**
- * Populate tables with sample data
+ * Empty the database and fill it with the chosen sample tables
  * 
+ * @param {DatasetName} name
  * @returns {void}
  */
-function populateSampleData() {
-    // The names come from many backgrounds on purpose: a class should be
-    // able to see itself in its examples.
+function buildDatabase(name) {
+    const dataset = DATASETS[name];
     
-    // ARRAY OF OBJECTS EXPLAINED:
-    // Each object represents one row in the database
-    // Keys are column names, values are the data
+    // DROP TABLE EXPLAINED:
+    // Completely removes a table from the database
+    // IF EXISTS prevents errors if table doesn't exist
+    // Both databases' tables are dropped, so switching leaves nothing behind
+    for (const table of [...DATASETS.shop.tables, ...DATASETS.school.tables]) {
+        db.run(`DROP TABLE IF EXISTS ${table}`);
+    }
     
-    /** @type {Array<{customer_name: string, county: string}>} */
-    const customers = [
-        { customer_name: 'Aoife Murphy', county: 'Galway' },
-        { customer_name: 'Kwame Mensah', county: 'Dublin' },
-        { customer_name: 'Priya Sharma', county: 'Cork' },
-        { customer_name: 'Mateus Oliveira', county: 'Dublin' },
-        { customer_name: 'Zofia Nowak', county: 'Limerick' },
-        { customer_name: 'Wei Chen', county: 'Cork' },
-        { customer_name: 'Amina Yusuf', county: 'Dublin' },
-        { customer_name: 'Dmytro Kovalenko', county: 'Waterford' }
-    ];
-    
-    // The headphones are out of stock and nobody has ordered them,
-    // which Exercises 7 and 13 go looking for.
-    /** @type {Array<{product_name: string, category: string, price: number, stock: number}>} */
-    const products = [
-        { product_name: 'Notebook', category: 'Stationery', price: 3.50, stock: 40 },
-        { product_name: 'Gel pens (pack of 3)', category: 'Stationery', price: 4.25, stock: 25 },
-        { product_name: 'Water bottle', category: 'Accessories', price: 12.00, stock: 8 },
-        { product_name: 'Hoodie', category: 'Clothing', price: 35.00, stock: 6 },
-        { product_name: 'USB stick', category: 'Tech', price: 9.99, stock: 15 },
-        { product_name: 'Headphones', category: 'Tech', price: 24.50, stock: 0 }
-    ];
-    
-    // [order_date, quantity, customer_id, product_id]: one line on a receipt each.
-    // Wei Chen (customer 6) hasn't bought anything yet.
-    /** @type {Array<[string, number, number, number]>} */
-    const orders = [
-        ['2026-09-01', 2, 1, 1],   // Aoife: 2 notebooks
-        ['2026-09-01', 1, 1, 3],   // Aoife: a water bottle
-        ['2026-09-02', 3, 2, 2],   // Kwame: 3 packs of gel pens
-        ['2026-09-02', 1, 3, 4],   // Priya: a hoodie
-        ['2026-09-03', 5, 4, 1],   // Mateus: 5 notebooks
-        ['2026-09-03', 2, 4, 5],   // Mateus: 2 USB sticks
-        ['2026-09-04', 1, 5, 3],   // Zofia: a water bottle
-        ['2026-09-05', 4, 7, 2],   // Amina: 4 packs of gel pens
-        ['2026-09-05', 1, 7, 4],   // Amina: a hoodie
-        ['2026-09-06', 2, 8, 5],   // Dmytro: 2 USB sticks
-        ['2026-09-06', 1, 8, 1],   // Dmytro: a notebook
-        ['2026-09-07', 1, 2, 5]    // Kwame: a USB stick
-    ];
+    dataset.create.forEach(sql => db.run(sql));
     
     // PREPARED STATEMENTS EXPLAINED:
     // The ? placeholders prevent SQL injection attacks
     // Values are safely inserted by the database engine
-    const customerStmt = db.prepare('INSERT INTO customer_tbl (customer_name, county) VALUES (?, ?)');
-    const productStmt = db.prepare('INSERT INTO product_tbl (product_name, category, price, stock) VALUES (?, ?, ?, ?)');
-    const orderStmt = db.prepare('INSERT INTO order_tbl (order_date, quantity, customer_id, product_id) VALUES (?, ?, ?, ?)');
-    
-    // FOREACH EXPLAINED:
-    // Loops through each item in the array
-    // customer => {...} is an arrow function
-    // Arrow functions are shorthand for function(customer) {...}
-    customers.forEach(customer => {
-        customerStmt.run([customer.customer_name, customer.county]);
-    });
-    
-    products.forEach(product => {
-        productStmt.run([product.product_name, product.category, product.price, product.stock]);
-    });
-    
-    orders.forEach(order => {
-        orderStmt.run(order);
-    });
-    
-    // CLEANUP:
-    // Free memory used by prepared statements
-    customerStmt.free();
-    productStmt.free();
-    orderStmt.free();
+    //
+    // OBJECT.ENTRIES EXPLAINED:
+    // Turns { key: value, ... } into [[key, value], ...] so we can loop
+    // over it: here each key is an INSERT and each value is its rows
+    for (const [insertSql, rows] of Object.entries(dataset.rows)) {
+        const statement = db.prepare(insertSql);
+        rows.forEach(row => statement.run(row));
+        // CLEANUP: free the memory the prepared statement used
+        statement.free();
+    }
 }
+
+/**
+ * Switch to the other sample database. Starts it fresh.
+ * 
+ * @param {DatasetName} name
+ * @returns {void}
+ */
+function setDataset(name) {
+    currentDataset = name === 'school' ? 'school' : 'shop';
+    
+    // The page shows only the explanations and exercises for this
+    // database: styles.css hides the rest using this attribute
+    document.documentElement.setAttribute('data-dataset', currentDataset);
+    
+    try {
+        localStorage.setItem(DATASET_KEY, currentDataset);
+    } catch (error) {
+        // Private browsing: the choice lasts until the page is closed
+    }
+    
+    setQuery(DATASETS[currentDataset].defaultQuery);
+    
+    if (dbStatus === 'ready') {
+        buildDatabase(currentDataset);
+        updateStatus('ready', `${DATASETS[currentDataset].label} database ready. Try running a query.`);
+        const resultsDiv = document.getElementById('query-results');
+        if (resultsDiv) {
+            resultsDiv.innerHTML = `<h4>Switched to the ${DATASETS[currentDataset].label.toLowerCase()} database</h4>`;
+        }
+    }
+}
+
+// Show the right explanations straight away, before the database loads
+document.documentElement.setAttribute('data-dataset', currentDataset);
 
 /**
  * Update the database status display
@@ -569,16 +686,8 @@ function resetDatabase() {
     }
     
     try {
-        // DROP TABLE EXPLAINED:
-        // Completely removes a table from the database
-        // IF EXISTS prevents errors if table doesn't exist
-        db.run('DROP TABLE IF EXISTS order_tbl');
-        db.run('DROP TABLE IF EXISTS customer_tbl');
-        db.run('DROP TABLE IF EXISTS product_tbl');
-        
-        // Recreate tables and populate with sample data
-        createTables();
-        populateSampleData();
+        // Drop every table and rebuild the chosen sample database
+        buildDatabase(currentDataset);
         
         alert('Database reset successfully!');
         
@@ -615,6 +724,17 @@ document.addEventListener('DOMContentLoaded', function() {
     
     console.log('Page loaded. Initializing database...');
     initializeDatabase();
+    
+    // CHOOSE YOUR DATABASE:
+    // The radio buttons at the top of Part 3 switch between the shop and
+    // the school. Tick the one that matches the saved choice first.
+    for (const radio of document.querySelectorAll('input[name="dataset"]')) {
+        radio.checked = radio.value === currentDataset;
+        radio.addEventListener('change', function() {
+            if (radio.checked) setDataset(radio.value);
+        });
+    }
+    setQuery(DATASETS[currentDataset].defaultQuery);
     
     // "LOAD IT INTO THE PLAYGROUND" BUTTONS:
     // Each answer's button keeps its query in a data-query attribute.
@@ -664,6 +784,7 @@ window.setQuery = setQuery;
 window.clearQuery = clearQuery;
 window.resetDatabase = resetDatabase;
 window.showTables = showTables;
+window.setDataset = setDataset;
 
 // ============================================
 // DEVELOPER NOTES

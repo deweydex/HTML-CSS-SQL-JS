@@ -888,6 +888,70 @@ button[type="submit"]:hover {
     50% { opacity: 0.4; }
 }
 
+/* Choose your database: the page holds a shop version and a school
+   version of everything in Part 3. tutorial.js sets data-dataset on
+   <html>, and this hides whichever version wasn't chosen. */
+:root:not([data-dataset="school"]) [data-for-dataset="school"],
+:root[data-dataset="school"] [data-for-dataset="shop"] {
+    display: none !important;
+}
+
+.dataset-picker {
+    border: 2px solid var(--accent);
+    border-radius: 10px;
+    padding: 16px 20px 20px;
+    margin: 20px 0 10px;
+    background: var(--accent-soft);
+}
+
+.dataset-picker legend {
+    font-weight: 700;
+    font-size: 1.1em;
+    color: var(--accent);
+    padding: 0 8px;
+}
+
+.dataset-picker p {
+    margin: 0 0 12px;
+}
+
+.dataset-options {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 12px;
+}
+
+.dataset-option {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin: 0;
+    padding: 12px 14px;
+    font-weight: 400;
+    background: var(--surface);
+    border: 2px solid var(--border);
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.dataset-option:hover {
+    border-color: var(--accent);
+}
+
+.dataset-option:has(input:checked) {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 2px var(--accent);
+}
+
+.dataset-option input {
+    margin-top: 4px;
+    accent-color: var(--accent);
+}
+
+.dataset-option strong {
+    display: block;
+}
+
 /* Database diagram (an inline SVG in index.html). Its colours come
    from the same variables as everything else, so it follows the theme. */
 .erd-figure {
