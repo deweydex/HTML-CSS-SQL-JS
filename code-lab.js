@@ -113,7 +113,15 @@
                 if (cssBox && typeof css === 'string') cssBox.value = css;
                 render();
                 save();
-                lab.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                // On a wide screen the editor is pinned beside the exercises,
+                // so the page stays put and only the pinned column scrolls
+                // back to its top. On a narrow screen, bring the editor into view.
+                const side = lab.closest('.workspace-side');
+                if (side && getComputedStyle(side).position === 'sticky') {
+                    side.scrollTop = 0;
+                } else {
+                    lab.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                }
                 htmlBox.focus({ preventScroll: true });
             }
         };

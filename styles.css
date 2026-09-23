@@ -17,6 +17,7 @@
     --font-size: 16px;
     --line-width: 62rem;
     --code-line-height: 1.5;
+    --nav-h: 3.5rem;   /* height of the sticky bar; page-nav.js measures the real one */
     --mono: ui-monospace, 'Cascadia Mono', 'SF Mono', Menlo, Consolas, 'Courier New', monospace;
 
     /* Page */
@@ -286,7 +287,7 @@ a:hover {
 header {
     background: linear-gradient(135deg, var(--header-from) 0%, var(--header-to) 100%);
     color: #ffffff;
-    padding: 40px 20px;
+    padding: 32px 20px 36px;
     text-align: center;
     box-shadow: 0 4px 6px var(--shadow);
 }
@@ -300,67 +301,55 @@ header h1 {
 
 .subtitle {
     font-size: 1.2em;
-    margin-bottom: 20px;
 }
 
 
-/* The "Choose Your Learning Path" box. It sits inside the white-text
-   header on a light card, so it sets its own text colour rather than
-   inheriting white (which is what made it unreadable before). */
-.learning-paths {
-    max-width: 760px;
-    margin: 24px auto;
-    padding: 20px 24px;
+/* ============================================
+   STICKY SECTION BAR
+============================================= */
+.page-nav {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 16px;
     background: var(--surface);
-    color: var(--fg);
-    border-radius: 10px;
-    text-align: left;
-    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18);
+    border-bottom: 1px solid var(--border);
+    box-shadow: 0 2px 8px var(--shadow);
 }
 
-.learning-paths h3 {
-    margin-top: 0;
-    margin-bottom: 8px;
+/* The links scroll sideways on a narrow screen rather than wrapping
+   onto a second line and taking up more of the screen */
+.page-nav-links {
+    flex: 1;
+    display: flex;
+    justify-content: safe center;
+    gap: 4px;
+    overflow-x: auto;
+    scrollbar-width: thin;
+}
+
+.page-nav-links a {
+    white-space: nowrap;
+    padding: 7px 12px;
+    border-radius: 6px;
+    color: var(--fg);
+    font-weight: 600;
+    font-size: 0.95em;
+    text-decoration: none;
+}
+
+.page-nav-links a:hover {
+    background: var(--accent-soft);
     color: var(--accent);
 }
 
-.learning-paths p {
-    margin: 8px 0;
-}
-
-.learning-paths-note {
-    font-style: italic;
-    color: var(--muted);
-}
-
-nav {
-    margin-top: 25px;
-    display: flex;
-    justify-content: center;
-    gap: 15px;
-    flex-wrap: wrap;
-}
-
-nav a {
-    background: rgba(255, 255, 255, 0.14);
-    color: #ffffff;
-    padding: 12px 24px;
-    text-decoration: none;
-    border-radius: 25px;
-    transition: all 0.3s ease;
-    font-weight: 600;
-    border: 2px solid rgba(255, 255, 255, 0.55);
-}
-
-nav a:hover {
-    color: #ffffff;
-    background: rgba(255, 255, 255, 0.26);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-}
-
-nav a:focus-visible {
-    outline-color: #ffffff;
+/* page-nav.js marks the part you're reading with aria-current */
+.page-nav-links a[aria-current] {
+    background: var(--accent);
+    color: var(--on-accent);
 }
 
 /* ============================================
@@ -379,7 +368,42 @@ main {
     padding: 40px;
     margin-bottom: 30px;
     box-shadow: 0 2px 10px var(--shadow);
-    scroll-margin-top: 16px;
+    scroll-margin-top: calc(var(--nav-h) + 16px);
+}
+
+/* Headings, text and lists directly inside a section (as in "Start
+   here") get the same spacing as those inside a lesson */
+.tutorial-section > h3 {
+    font-size: 1.5em;
+    margin: 28px 0 12px;
+}
+
+.tutorial-section > p {
+    margin-bottom: 15px;
+    line-height: 1.8;
+}
+
+.tutorial-section > ol {
+    margin: 0 0 15px 25px;
+}
+
+.tutorial-section > ul li,
+.tutorial-section > ol li {
+    margin-bottom: 8px;
+    line-height: 1.7;
+}
+
+.page-map-note {
+    background: var(--accent-soft);
+    border-left: 5px solid var(--accent);
+    border-radius: 6px;
+    padding: 12px 16px;
+}
+
+/* Parts you jump to from the bar stop below it, not underneath it */
+.lesson[id],
+.code-lab {
+    scroll-margin-top: calc(var(--nav-h) + 16px);
 }
 
 .tutorial-section h2 {
@@ -403,9 +427,14 @@ main {
     border-radius: 6px;
 }
 
-.exploration-prompt h4 {
+.exploration-prompt h3 {
+    font-size: 1.1em;
     margin-top: 0;
     margin-bottom: 8px;
+}
+
+.exploration-prompt p {
+    margin: 0;
 }
 
 .exploration-prompt ul {
@@ -417,23 +446,16 @@ main {
 }
 
 .callout-html { background: var(--html-bg); border-left-color: var(--html-line); }
-.callout-html h4 { color: var(--html-head); }
+.callout-html h3 { color: var(--html-head); }
 .callout-css { background: var(--css-bg); border-left-color: var(--css-line); }
-.callout-css h4 { color: var(--css-head); }
+.callout-css h3 { color: var(--css-head); }
 .callout-sql { background: var(--sql-bg); border-left-color: var(--sql-line); }
-.callout-sql h4 { color: var(--sql-head); }
+.callout-sql h3 { color: var(--sql-head); }
 .callout-together { background: var(--all-bg); border-left-color: var(--all-line); }
-.callout-together h4 { color: var(--all-head); }
+.callout-together h3 { color: var(--all-head); }
 
 :root[data-contrast="high"] .exploration-prompt {
     border-color: var(--border);
-}
-
-.callout-footnote {
-    margin: 12px 0 0 0;
-    padding-top: 10px;
-    border-top: 1px solid var(--border);
-    font-style: italic;
 }
 
 /* ============================================
@@ -529,12 +551,6 @@ pre code {
     margin: 20px 0;
 }
 
-.demo-caption {
-    margin-top: 10px;
-    font-size: 0.9em;
-    color: var(--muted);
-}
-
 /* Sample Form Styling */
 form {
     display: flex;
@@ -601,7 +617,6 @@ button[type="submit"]:hover {
     border-radius: 8px;
     padding: 20px;
     margin: 20px 0 25px;
-    scroll-margin-top: 16px;
 }
 
 .code-lab-editors {
@@ -698,6 +713,88 @@ button[type="submit"]:hover {
 .load-into-lab:hover {
     background: var(--chip-fg);
     color: var(--chip-bg);
+}
+
+/* ============================================
+   WORKSPACES: EDITOR BESIDE ITS EXERCISES
+   ============================================
+   Each part puts its editor (.workspace-side) and its exercises
+   (.workspace-main) in one .workspace. On a narrow screen they stack,
+   editor first. On a wide screen the exercises sit on the left and the
+   editor stays pinned on the right as you scroll ("position: sticky"),
+   so reading, typing and checking the result need no scrolling back.
+============================================= */
+.workspace {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);   /* never wider than the page */
+    gap: 24px;
+    margin: 20px 0;
+}
+
+@media (min-width: 1100px) {
+    .workspace {
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
+        align-items: start;
+        /* Wider than the reading column, so both halves have room: the
+           negative margins let it spread past the card's edges, and its
+           own background covers them */
+        margin-inline: calc(50% - min(50vw - 32px, 45rem));
+        padding: 20px;
+        background: var(--bg);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        box-shadow: 0 4px 16px var(--shadow);
+    }
+
+    .workspace-main {
+        grid-column: 1;
+        grid-row: 1;
+    }
+
+    .workspace-side {
+        grid-column: 2;
+        grid-row: 1;
+        position: sticky;
+        top: calc(var(--nav-h) + 12px);
+        max-height: calc(100vh - var(--nav-h) - 24px);
+        overflow-y: auto;
+        background: var(--surface);
+        border: 2px solid var(--accent);
+        border-radius: 10px;
+        padding: 16px 18px;
+        box-shadow: 0 6px 20px var(--shadow);
+    }
+
+    /* Inside the pinned column the editor, preview and buttons stack */
+    .workspace .code-lab {
+        grid-template-columns: 1fr;
+        margin: 0;
+        padding: 0;
+        border: none;
+        background: none;
+    }
+
+    .workspace .code-lab-preview {
+        min-height: 170px;
+    }
+
+    .workspace-side .lesson {
+        margin-bottom: 0;
+    }
+
+    .workspace-side .lesson h3 {
+        margin-top: 0;
+    }
+
+    .workspace-side .sql-editor,
+    .workspace-side .query-results {
+        margin: 16px 0 0;
+        padding: 16px;
+    }
+
+    .workspace-side .query-examples {
+        margin: 12px 0 0;
+    }
 }
 
 /* ============================================
@@ -1130,7 +1227,7 @@ kbd {
     transform: translateY(-5px);
 }
 
-.tech-card h4 {
+.tech-card h3 {
     margin: 0 0 10px 0;
     font-size: 1.8em;
     color: #ffffff;
@@ -1179,21 +1276,17 @@ footer a:hover {
    APPEARANCE PANEL (built by appearance.js)
 ============================================= */
 .appearance-toggle {
-    position: fixed;
-    top: 12px;
-    right: 12px;
-    z-index: 1100;
+    flex-shrink: 0;
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    padding: 9px 16px;
+    padding: 6px 14px;
     font-size: 0.95em;
     font-weight: 600;
     color: var(--fg);
     background: var(--surface);
     border: 2px solid var(--accent);
     border-radius: 999px;
-    box-shadow: 0 2px 10px var(--shadow);
     cursor: pointer;
 }
 
@@ -1408,21 +1501,23 @@ footer a:hover {
         transform: rotate(90deg);
     }
 
-    nav {
-        flex-direction: column;
-        align-items: stretch;
+    .page-nav {
+        padding: 6px 8px;
+        gap: 6px;
     }
 
-    nav a {
-        text-align: center;
+    .page-nav-links a {
+        padding: 7px 9px;
     }
 
-    /* On a phone the toggle moves to the bottom corner, clear of the
-       page title */
-    .appearance-toggle {
-        top: auto;
-        bottom: 14px;
-        right: 14px;
+    /* Just "Aa" on a phone, to leave room for the links */
+    .appearance-toggle-text {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip: rect(0 0 0 0);
+        white-space: nowrap;
     }
 }
 
@@ -1448,6 +1543,7 @@ footer a:hover {
    PRINT
 ============================================= */
 @media print {
+    .page-nav,
     .appearance-toggle,
     .appearance-panel,
     .skip-link {

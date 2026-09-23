@@ -21,6 +21,7 @@ sql-tutorial-site/
 ├── tutorial.js         # JavaScript for SQL functionality
 ├── appearance.js       # The Appearance panel (theme, font, size, contrast)
 ├── code-lab.js         # The live HTML/CSS editors in Parts 1 and 2
+├── page-nav.js         # The bar at the top: highlights the part you're reading
 ├── fonts/              # Lexend and OpenDyslexic, self-hosted (SIL Open Font Licence)
 └── README.md          # This file
 ```
@@ -66,6 +67,7 @@ Follow these steps to host the tutorial online so students can access it via a l
    - `tutorial.js`
    - `appearance.js`
    - `code-lab.js`
+   - `page-nav.js`
    - the `fonts` folder
    - `README.md` (optional - there's already one)
 3. Scroll down and click **"Commit changes"**
@@ -78,7 +80,7 @@ git clone https://github.com/YOUR-USERNAME/sql-tutorial.git
 cd sql-tutorial
 
 # Copy the tutorial files into this directory
-# (copy index.html, styles.css, tutorial.js, appearance.js, code-lab.js and fonts/ here)
+# (copy index.html, styles.css, tutorial.js, appearance.js, code-lab.js, page-nav.js and fonts/ here)
 
 # Add and commit
 git add .
@@ -112,7 +114,7 @@ For example: `https://johndoe.github.io/sql-tutorial/`
 
 ### File Names Matter!
 - Keep the file named `index.html` (this is the default page GitHub Pages serves)
-- All other files (`styles.css`, `tutorial.js`, `appearance.js`, `code-lab.js`) and the `fonts` folder must be in the same directory
+- All other files (`styles.css`, `tutorial.js`, `appearance.js`, `code-lab.js`, `page-nav.js`) and the `fonts` folder must be in the same directory
 - File names are case-sensitive!
 
 ### HTTPS is Automatic
@@ -161,15 +163,19 @@ For example: `https://johndoe.github.io/sql-tutorial/`
 
 ### Sample Database
 
-The tutorial includes two tables:
+The tutorial includes three tables:
 
 **Students Table:**
 - id, name, age, grade
-- 8 sample students
+- 8 sample students, with names from many backgrounds so every class can see itself in the examples
 
 **Courses Table:**
 - id, name, instructor, credits
-- 6 sample courses
+- 5 sample courses
+
+**Enrolments Table:**
+- id, student_id, course_id (links students to courses, for the JOIN exercises)
+- 13 enrolments; one student is deliberately enrolled in nothing
 
 ---
 
