@@ -221,7 +221,7 @@ const PEOPLE = [
     ['Priya Sharma', 'Cork'],
     ['Mateus Oliveira', 'Dublin'],
     ['Zofia Nowak', 'Limerick'],
-    ['Wei Chen', 'Cork'],             // person 6 hasn't bought or sat anything yet
+    ['Wei Chen', 'Cork'],             // the newest: only just joined, so no orders or results yet
     ['Amina Yusuf', 'Dublin'],
     ['Dmytro Kovalenko', 'Waterford']
 ];
@@ -341,7 +341,7 @@ const DATASETS = {
                 [3, 4, '2026-05-12', 81],   // Priya: Communications
                 [4, 3, '2026-05-13', 47],   // Mateus: Maths for Computing
                 [4, 1, '2026-05-13', 90],   // Mateus: Web Development
-                [5, 5, '2026-05-14', 38],   // Zofia: Marketing
+                [5, 5, '2026-05-14', 48],   // Zofia: Marketing
                 [7, 2, '2026-05-14', 74],   // Amina: Databases
                 [7, 5, '2026-05-15', 55],   // Amina: Marketing
                 [8, 3, '2026-05-15', 69],   // Dmytro: Maths for Computing

@@ -1136,7 +1136,7 @@ ORDER BY hours DESC;">Load it into the playground</button>
                         <details class="answer">
                             <summary>Show answer</summary>
                             <pre><code>SELECT ROUND(AVG(mark), 1) AS average_mark FROM result_tbl;</code></pre>
-                            <p>66.1, across 12 exams. Without ROUND you'd see 66.08333333333333.</p>
+                            <p>66.9, across 12 exams. Without ROUND you'd see 66.91666666666667.</p>
                             <button type="button" class="try-answer" data-query="SELECT ROUND(AVG(mark), 1) AS average_mark FROM result_tbl;">Load it into the playground</button>
                         </details>
                     </div>
@@ -1258,7 +1258,7 @@ JOIN product_tbl ON product_tbl.product_id = order_tbl.product_id;">Load it into
 FROM product_tbl
 LEFT JOIN order_tbl ON order_tbl.product_id = product_tbl.product_id
 WHERE order_tbl.order_id IS NULL;</code></pre>
-                            <p>The headphones, which makes sense: there are none in stock. If you deleted them in Exercise 7, press <strong>Reset Database</strong> first. Now try the same idea for customers: who hasn't bought anything? (Wei Chen, and you too if you added yourself.)</p>
+                            <p>The headphones, which makes sense: there are none in stock. If you deleted them in Exercise 7, press <strong>Reset Database</strong> first. Now try the same idea for customers: who hasn't bought anything yet? (Wei Chen, the shop's newest customer, who only joined this week. You too, if you added yourself.)</p>
                             <button type="button" class="try-answer" data-query="SELECT product_tbl.product_name
 FROM product_tbl
 LEFT JOIN order_tbl ON order_tbl.product_id = product_tbl.product_id
@@ -1326,7 +1326,7 @@ ORDER BY result_tbl.mark DESC;">Load it into the playground</button>
 FROM module_tbl
 LEFT JOIN result_tbl ON result_tbl.module_id = module_tbl.module_id
 WHERE result_tbl.result_id IS NULL;</code></pre>
-                            <p>Robotics, which makes sense: it isn't running this year. If you deleted it in Exercise 7, press <strong>Reset Database</strong> first. Now try the same idea for students: who hasn't sat any exams? (Wei Chen, and you too if you added yourself.)</p>
+                            <p>Robotics, which makes sense: it isn't running this year. If you deleted it in Exercise 7, press <strong>Reset Database</strong> first. Now try the same idea for students: who hasn't sat any exams yet? (Wei Chen, the school's newest student, who has only just started. You too, if you added yourself.)</p>
                             <button type="button" class="try-answer" data-query="SELECT module_tbl.module_name
 FROM module_tbl
 LEFT JOIN result_tbl ON result_tbl.module_id = module_tbl.module_id
