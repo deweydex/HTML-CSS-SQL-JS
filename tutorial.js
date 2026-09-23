@@ -62,10 +62,10 @@
  * @typedef {Object} Order
  * One line on a receipt: who bought what, and how many
  * @property {number} order_id - Unique order identifier
- * @property {string} order_date - Date as text, YYYY-MM-DD
- * @property {number} quantity - How many were bought
  * @property {number} customer_id - Points at a row in customer_tbl
  * @property {number} product_id - Points at a row in product_tbl
+ * @property {string} order_date - Date as text, YYYY-MM-DD
+ * @property {number} quantity - How many were bought
  */
 
 /**
@@ -88,10 +88,10 @@
  * @typedef {Object} Result
  * One exam result: which student, which module, what mark
  * @property {number} result_id - Unique result identifier
- * @property {string} exam_date - Date as text, YYYY-MM-DD
- * @property {number} mark - Mark out of 100 (40 is a pass)
  * @property {number} student_id - Points at a row in student_tbl
  * @property {number} module_id - Points at a row in module_tbl
+ * @property {string} exam_date - Date as text, YYYY-MM-DD
+ * @property {number} mark - Mark out of 100 (40 is a pass)
  */
 
 /**
@@ -193,8 +193,9 @@ async function initializeDatabase() {
 // Students choose a shop or a school. Both follow the same conventions:
 // - Every table name ends in _tbl
 // - Every table's id is named after it: product_tbl has product_id
-// - Foreign keys go at the bottom of the table, with the same name
-//   as the id they point at
+// - Foreign keys go directly under the table's own id, with the same
+//   name as the id they point at. Every table then opens the same way:
+//   its own id, then the ids it points at, then its data.
 //
 // SQL CREATE TABLE EXPLAINED:
 // - Creates a new table in the database
@@ -256,10 +257,10 @@ const DATASETS = {
             );`,
             `CREATE TABLE order_tbl (
                 order_id INTEGER PRIMARY KEY AUTOINCREMENT,
-                order_date TEXT NOT NULL,
-                quantity INTEGER NOT NULL,
                 customer_id INTEGER NOT NULL,
                 product_id INTEGER NOT NULL,
+                order_date TEXT NOT NULL,
+                quantity INTEGER NOT NULL,
                 FOREIGN KEY (customer_id) REFERENCES customer_tbl (customer_id),
                 FOREIGN KEY (product_id) REFERENCES product_tbl (product_id)
             );`
@@ -276,20 +277,20 @@ const DATASETS = {
                 ['USB stick', 'Tech', 9.99, 15],
                 ['Headphones', 'Tech', 24.50, 0]
             ],
-            // [order_date, quantity, customer_id, product_id]: one line on a receipt each
-            'INSERT INTO order_tbl (order_date, quantity, customer_id, product_id) VALUES (?, ?, ?, ?)': [
-                ['2026-09-01', 2, 1, 1],   // Aoife: 2 notebooks
-                ['2026-09-01', 1, 1, 3],   // Aoife: a water bottle
-                ['2026-09-02', 3, 2, 2],   // Kwame: 3 packs of gel pens
-                ['2026-09-02', 1, 3, 4],   // Priya: a hoodie
-                ['2026-09-03', 5, 4, 1],   // Mateus: 5 notebooks
-                ['2026-09-03', 2, 4, 5],   // Mateus: 2 USB sticks
-                ['2026-09-04', 1, 5, 3],   // Zofia: a water bottle
-                ['2026-09-05', 4, 7, 2],   // Amina: 4 packs of gel pens
-                ['2026-09-05', 1, 7, 4],   // Amina: a hoodie
-                ['2026-09-06', 2, 8, 5],   // Dmytro: 2 USB sticks
-                ['2026-09-06', 1, 8, 1],   // Dmytro: a notebook
-                ['2026-09-07', 1, 2, 5]    // Kwame: a USB stick
+            // [customer_id, product_id, order_date, quantity]: one line on a receipt each
+            'INSERT INTO order_tbl (customer_id, product_id, order_date, quantity) VALUES (?, ?, ?, ?)': [
+                [1, 1, '2026-09-01', 2],   // Aoife: 2 notebooks
+                [1, 3, '2026-09-01', 1],   // Aoife: a water bottle
+                [2, 2, '2026-09-02', 3],   // Kwame: 3 packs of gel pens
+                [3, 4, '2026-09-02', 1],   // Priya: a hoodie
+                [4, 1, '2026-09-03', 5],   // Mateus: 5 notebooks
+                [4, 5, '2026-09-03', 2],   // Mateus: 2 USB sticks
+                [5, 3, '2026-09-04', 1],   // Zofia: a water bottle
+                [7, 2, '2026-09-05', 4],   // Amina: 4 packs of gel pens
+                [7, 4, '2026-09-05', 1],   // Amina: a hoodie
+                [8, 5, '2026-09-06', 2],   // Dmytro: 2 USB sticks
+                [8, 1, '2026-09-06', 1],   // Dmytro: a notebook
+                [2, 5, '2026-09-07', 1]    // Kwame: a USB stick
             ]
         }
     },
@@ -312,10 +313,10 @@ const DATASETS = {
             );`,
             `CREATE TABLE result_tbl (
                 result_id INTEGER PRIMARY KEY AUTOINCREMENT,
-                exam_date TEXT NOT NULL,
-                mark INTEGER NOT NULL,
                 student_id INTEGER NOT NULL,
                 module_id INTEGER NOT NULL,
+                exam_date TEXT NOT NULL,
+                mark INTEGER NOT NULL,
                 FOREIGN KEY (student_id) REFERENCES student_tbl (student_id),
                 FOREIGN KEY (module_id) REFERENCES module_tbl (module_id)
             );`
@@ -332,20 +333,20 @@ const DATASETS = {
                 ['Marketing', 'Business', 10, 3],
                 ['Robotics', 'Computing', 15, 0]
             ],
-            // [exam_date, mark, student_id, module_id]: one exam result each
-            'INSERT INTO result_tbl (exam_date, mark, student_id, module_id) VALUES (?, ?, ?, ?)': [
-                ['2026-05-11', 72, 1, 1],   // Aoife: Web Development
-                ['2026-05-11', 65, 1, 2],   // Aoife: Databases
-                ['2026-05-12', 58, 2, 1],   // Kwame: Web Development
-                ['2026-05-12', 81, 3, 4],   // Priya: Communications
-                ['2026-05-13', 47, 4, 3],   // Mateus: Maths for Computing
-                ['2026-05-13', 90, 4, 1],   // Mateus: Web Development
-                ['2026-05-14', 38, 5, 5],   // Zofia: Marketing
-                ['2026-05-14', 74, 7, 2],   // Amina: Databases
-                ['2026-05-15', 55, 7, 5],   // Amina: Marketing
-                ['2026-05-15', 69, 8, 3],   // Dmytro: Maths for Computing
-                ['2026-05-16', 83, 8, 2],   // Dmytro: Databases
-                ['2026-05-16', 61, 2, 4]    // Kwame: Communications
+            // [student_id, module_id, exam_date, mark]: one exam result each
+            'INSERT INTO result_tbl (student_id, module_id, exam_date, mark) VALUES (?, ?, ?, ?)': [
+                [1, 1, '2026-05-11', 72],   // Aoife: Web Development
+                [1, 2, '2026-05-11', 65],   // Aoife: Databases
+                [2, 1, '2026-05-12', 58],   // Kwame: Web Development
+                [3, 4, '2026-05-12', 81],   // Priya: Communications
+                [4, 3, '2026-05-13', 47],   // Mateus: Maths for Computing
+                [4, 1, '2026-05-13', 90],   // Mateus: Web Development
+                [5, 5, '2026-05-14', 38],   // Zofia: Marketing
+                [7, 2, '2026-05-14', 74],   // Amina: Databases
+                [7, 5, '2026-05-15', 55],   // Amina: Marketing
+                [8, 3, '2026-05-15', 69],   // Dmytro: Maths for Computing
+                [8, 2, '2026-05-16', 83],   // Dmytro: Databases
+                [2, 4, '2026-05-16', 61]    // Kwame: Communications
             ]
         }
     }
