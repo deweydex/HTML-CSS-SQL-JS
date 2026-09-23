@@ -16,8 +16,22 @@
 // This script is loaded in <head>, before the page is drawn, so saved
 // settings apply straight away instead of flashing the default theme
 // first. The panel itself is built once the rest of the page has loaded.
+//
+// IDEAS IN THIS FILE: the IIFE pattern, strict mode, localStorage and
+// JSON, the spread operator (...), matchMedia (asking the computer about
+// dark mode), CSS variables set from JavaScript, and building HTML from
+// strings.
 
+// IIFE (IMMEDIATELY INVOKED FUNCTION EXPRESSION) EXPLAINED:
+//     (function () { ... })();
+// The whole file is one function that runs the moment it's defined (the
+// () at the very end calls it). Variables made inside it, like
+// STORAGE_KEY below, stay inside it: they can't clash with a variable of
+// the same name in another script on the page.
 (function () {
+    // STRICT MODE EXPLAINED:
+    // 'use strict' makes JavaScript refuse some easy mistakes instead of
+    // quietly guessing, such as using a variable that was never declared.
     'use strict';
 
     /** Key the settings are saved under in localStorage */
@@ -48,7 +62,12 @@
     /** Column widths, in rem (1rem = the chosen text size) */
     const WIDTHS = { narrow: 48, medium: 62, wide: 75 };
 
-    const root = document.documentElement;
+    const root = document.documentElement;   // the <html> element
+
+    // MATCHMEDIA EXPLAINED:
+    // matchMedia asks the browser the same questions a CSS media query
+    // can: here, "is the computer set to dark mode?". .matches holds the
+    // answer, and it can tell us when the answer changes (see below).
     const systemDark = window.matchMedia
         ? window.matchMedia('(prefers-color-scheme: dark)')
         : null;
@@ -60,7 +79,17 @@
      */
     function load() {
         try {
+            // LOCALSTORAGE AND JSON EXPLAINED:
+            // localStorage keeps text in the browser between visits, one
+            // value per key. It only stores text, so the settings object is
+            // turned into text with JSON.stringify when saving (see save()),
+            // and back into an object with JSON.parse when loading.
             const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+
+            // SPREAD EXPLAINED:
+            // { ...DEFAULTS, ...saved } copies every setting from DEFAULTS,
+            // then every saved one on top. Anything never saved keeps its
+            // default; anything saved wins.
             return { ...DEFAULTS, ...saved };
         } catch (error) {
             // Private browsing or blocked storage: use the defaults
@@ -93,6 +122,8 @@
         setOrRemove('data-contrast', settings.contrast, 'normal');
         setOrRemove('data-motion', settings.motion, 'normal');
 
+        // CSS variables can be set from JavaScript too. Every rule in
+        // styles.css that uses var(--font-size) updates at once.
         root.style.setProperty('--font-size', settings.size + 'px');
         root.style.setProperty('--line-width', (WIDTHS[settings.width] || WIDTHS.medium) + 'rem');
         root.style.setProperty('--code-line-height', String(settings.codeLineHeight));

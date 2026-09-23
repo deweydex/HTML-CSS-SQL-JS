@@ -9,7 +9,7 @@ An interactive, browser-based tutorial for teaching web development fundamentals
 - **Hands-on Learning**: Students can experiment and see results immediately
 - **Hints and Answers**: Every exercise has a hint first, then an answer that can be loaded straight into the editor
 - **Appearance Panel**: Each reader can pick light or dark, a font (including Lexend and OpenDyslexic), text size, page width, high contrast and reduced motion; choices are remembered in their browser
-- **Mobile Responsive**: Works on all devices
+- **Made for Laptops and Desktops**: On a wide screen each editor stays beside its exercises; on smaller screens the page still works, stacked
 - **No Installation Required**: Runs entirely in the browser
 
 ## Files Included
@@ -17,7 +17,7 @@ An interactive, browser-based tutorial for teaching web development fundamentals
 ```
 sql-tutorial-site/
 ├── index.html          # Main student tutorial page
-├── styles.css          # Stylesheet for both pages (colours live in CSS variables at the top)
+├── styles.css          # All the styling (colours live in CSS variables at the top)
 ├── tutorial.js         # JavaScript for SQL functionality
 ├── appearance.js       # The Appearance panel (theme, font, size, contrast)
 ├── code-lab.js         # The live HTML/CSS editors in Parts 1 and 2
@@ -25,6 +25,21 @@ sql-tutorial-site/
 ├── fonts/              # Lexend and OpenDyslexic, self-hosted (SIL Open Font Licence)
 └── README.md          # This file
 ```
+
+## Learning from the Code
+
+The code is written to be read. Every file opens with a comment saying what it does and which ideas it shows, and comments point out each HTML, CSS, JavaScript or SQL idea the first time the code uses it. You can read the files here on GitHub (click any file above), or open the tutorial and use your browser's **View Page Source** (Ctrl+U, or ⌘+Option+U on a Mac).
+
+A good order to read them in:
+
+1. **`index.html`**: the page itself. Every tag Part 1 teaches, used for real: semantic elements, forms and labels, `<details>`, `data-` attributes, an `<iframe>`, and an SVG diagram written as code.
+2. **`styles.css`**: how the page looks. Starts with CSS variables, the idea behind the light and dark themes, then works through selectors, the box model, flexbox and grid, `position: sticky`, media queries and animation. Its opening comment lists where each idea is.
+3. **`page-nav.js`**: the shortest script. A good first JavaScript file: events, measuring elements on screen, and `aria-current`.
+4. **`appearance.js`**: saving settings in the browser with `localStorage` and JSON, and changing CSS variables from JavaScript.
+5. **`code-lab.js`**: the live editors. Iframes, debouncing and closures.
+6. **`tutorial.js`**: the SQL playground and the sample databases. The biggest file, so it starts with an index: search for a word like `ASYNC/AWAIT EXPLAINED` to jump to where that idea is explained and used.
+
+A useful habit: change something small, reload the page, and see what happens. Nothing you change on your own computer can break the tutorial for anyone else.
 
 ## Quick Start (Local Testing)
 
@@ -146,12 +161,14 @@ For example: `https://johndoe.github.io/sql-tutorial/`
 - Selectors and properties
 - Box model
 - Basic styling and layout
+- CSS variables (through the Appearance panel)
 
 **SQL:**
-- SELECT queries with WHERE clauses
+- SELECT queries with WHERE clauses, AND and OR
 - ORDER BY sorting
 - INSERT, UPDATE, DELETE operations
-- Aggregate functions (COUNT, AVG, etc.)
+- COUNT, SUM, AVG and ROUND, and arithmetic in a SELECT
+- Primary keys, foreign keys, JOIN and LEFT JOIN
 
 ### Teaching Tips
 
@@ -183,38 +200,30 @@ The names come from many backgrounds so every class can see itself in the exampl
 
 ### Adding More Exercises
 
-Edit `index.html` and add to the exercises section:
+Each exercise in `index.html` has a hint, then an answer with a button that loads it into the playground. Copy an existing one and change it:
 
 ```html
 <div class="exercise">
-    <h4>Exercise X: Your Title</h4>
+    <h4>SQL exercise 14: Your title</h4>
     <p>Your question here</p>
-    <details>
-        <summary>Show Hint</summary>
+    <details class="hint">
+        <summary>Show hint</summary>
         <p>Your hint here</p>
+    </details>
+    <details class="answer">
+        <summary>Show answer</summary>
+        <pre><code>SELECT * FROM product_tbl;</code></pre>
+        <p>What the student should see</p>
+        <button type="button" class="try-answer" data-query="SELECT * FROM product_tbl;">Load it into the playground</button>
     </details>
 </div>
 ```
 
+Part 3 is written twice, once for each database. Put a shop exercise inside the list marked `data-for-dataset="shop"` and a school one inside `data-for-dataset="school"`. HTML and CSS exercises use `class="load-into-lab"` buttons instead; copy one from Part 1 or 2.
+
 ### Changing the Database
 
-Edit `tutorial.js` - look for the `initializeDatabase()` function:
-
-```javascript
-// Add more sample data
-db.run(`
-    INSERT INTO students (name, age, grade) VALUES
-        ('New Student', 20, 88.0);
-`);
-
-// Create new tables
-db.run(`
-    CREATE TABLE your_table (
-        id INTEGER PRIMARY KEY,
-        column1 TEXT
-    );
-`);
-```
+Both sample databases are in `tutorial.js`, in the object called `DATASETS`. Each has its `CREATE TABLE` statements (`create`) and its rows (`rows`). Add a row to one of the lists, or a column to a `CREATE TABLE` and a matching value to every row. If you change what a query returns, update the answers in `index.html` to match.
 
 ### Styling Changes
 

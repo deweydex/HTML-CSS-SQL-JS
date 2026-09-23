@@ -13,6 +13,11 @@
 //
 // Work is saved in localStorage, so refreshing the page doesn't lose it.
 // "Start over" puts the original example back.
+//
+// IDEAS IN THIS FILE: iframes and srcdoc, sandboxing, debouncing with
+// setTimeout, closures, a function that returns an object, and
+// event delegation. (The (function () { ... })() wrapper is an IIFE:
+// see the top of appearance.js.)
 
 (function () {
     'use strict';
@@ -26,6 +31,16 @@
      * @param {number} ms
      */
     function debounce(fn, ms) {
+        // CLOSURE EXPLAINED:
+        // debounce returns a new function, and that function can still
+        // use `timer` after debounce itself has finished. Each debounced
+        // function keeps its own private timer this way.
+        //
+        // DEBOUNCE EXPLAINED:
+        // Every key press cancels the previous countdown (clearTimeout)
+        // and starts a new one (setTimeout). fn only runs once the
+        // countdown finishes: when the typing has paused for `ms`
+        // milliseconds.
         let timer = null;
         return function () {
             clearTimeout(timer);

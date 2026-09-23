@@ -1,8 +1,41 @@
 // ============================================
 // INTERACTIVE SQL TUTORIAL - JAVASCRIPT
 // ============================================
-// This file handles all SQL database operations using SQL.js
-// (SQLite compiled to JavaScript - runs entirely in browser!)
+// This file runs the SQL playground in Part 3. It uses SQL.js: SQLite,
+// a real database engine, compiled so that it runs inside the browser.
+// There's no server anywhere: the whole database lives in this page.
+//
+// READING THIS FILE:
+// Comments marked "EXPLAINED" introduce a JavaScript or SQL idea the
+// first time the code uses it. Search the file for a word below to find
+// where it's explained and used:
+//
+// JavaScript
+//   let and const                          LET AND CONST EXPLAINED
+//   arrays and objects                     OBJECTS AND ARRAYS EXPLAINED
+//   async / await and Promises             ASYNC/AWAIT EXPLAINED
+//   try / catch                            TRY-CATCH EXPLAINED
+//   template literals (`...${x}...`)       TEMPLATE LITERALS EXPLAINED
+//   arrow functions and forEach            ARROW FUNCTIONS EXPLAINED
+//   map and join                           MAP EXPLAINED
+//   destructuring                          DESTRUCTURING EXPLAINED
+//   the ternary operator (a ? b : c)       TERNARY
+//   guard clauses (return early)           GUARD CLAUSE EXPLAINED
+//   the DOM and innerHTML                  DOM MANIPULATION EXPLAINED
+//   escaping text to stay safe             SECURITY EXPLAINED
+//   events and event delegation            EVENT OBJECT EXPLAINED, delegation
+//   localStorage                           readSavedDataset (and the
+//                                          top of appearance.js)
+//   JSDoc type comments (/** ... */)       TYPE DEFINITIONS
+//
+// SQL
+//   CREATE TABLE, primary and foreign keys CREATE TABLE EXPLAINED
+//   INSERT with prepared statements        PREPARED STATEMENTS EXPLAINED
+//   DROP TABLE                             DROP TABLE EXPLAINED
+//   the database's own catalogue           SQLITE_MASTER EXPLAINED
+//
+// The queries students write (SELECT, WHERE, JOIN...) aren't in this
+// file: they're typed into the playground and passed to executeQuery().
 
 // ============================================
 // TYPE DEFINITIONS (JSDoc)
@@ -78,6 +111,13 @@
 // ============================================
 // GLOBAL VARIABLES
 // ============================================
+// LET AND CONST EXPLAINED:
+// Both create a variable. A `let` variable can be given a new value
+// later (db starts as null and becomes the database once it's ready);
+// a `const` one can't. Use const unless you know the value will change:
+// it tells the reader, and the browser, that it won't.
+// (A const array or object can still have its contents changed: const
+// only stops the name being pointed at a different array or object.)
 
 /** @type {any} - SQL.js database instance */
 let db = null;
@@ -125,7 +165,8 @@ async function initializeDatabase() {
             locateFile: file => `https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.8.0/${file}`
         });
         
-        // Create a new database instance in memory
+        // Create a new, empty database. It lives in memory (RAM), which
+        // is why refreshing the page gives you a fresh one.
         db = new SQL.Database();
         
         // Create the chosen sample tables and fill them
@@ -135,9 +176,11 @@ async function initializeDatabase() {
         dbStatus = 'ready';
         
     } catch (error) {
-        // INSTANCEOF EXPLAINED:
-        // Checks if error is an instance of a specific class
-        // Helps us understand what type of error occurred
+        // THE ERROR OBJECT:
+        // Whatever went wrong arrives here as `error`. Its .message is a
+        // human-readable description, which we show on the page;
+        // console.error also prints the full details in the browser's
+        // DevTools console (F12), for whoever is debugging.
         console.error('Failed to initialize database:', error);
         updateStatus('error', `Database initialization failed: ${error.message}`);
         dbStatus = 'error';
@@ -182,6 +225,16 @@ const PEOPLE = [
     ['Dmytro Kovalenko', 'Waterford']
 ];
 
+// OBJECTS AND ARRAYS EXPLAINED:
+// An array [a, b, c] is a list, read by position: PEOPLE[0] is the first.
+// An object { name: value, ... } is a set of labelled values, read by
+// name: DATASETS.shop.label is 'Shop'. Here they're nested: an object
+// of datasets, each holding arrays of rows, each row an array of values.
+//
+// TEMPLATE LITERALS EXPLAINED:
+// Strings in backticks (`...`) can run over several lines, like the
+// CREATE TABLE statements below, and can include values with ${...}:
+// `Hello ${name}` puts the value of name into the string.
 const DATASETS = {
     shop: {
         label: 'Shop',
@@ -328,11 +381,20 @@ function buildDatabase(name) {
         db.run(`DROP TABLE IF EXISTS ${table}`);
     }
     
+    // ARROW FUNCTIONS EXPLAINED:
+    // sql => db.run(sql) is a short way to write
+    //     function (sql) { return db.run(sql); }
+    // forEach calls it once for every item in the array, in order.
     dataset.create.forEach(sql => db.run(sql));
     
     // PREPARED STATEMENTS EXPLAINED:
-    // The ? placeholders prevent SQL injection attacks
-    // Values are safely inserted by the database engine
+    // The ? placeholders are filled in by the database engine, which
+    // treats each value as data, never as part of the SQL command. Gluing
+    // values into the SQL text yourself would let a value like
+    //     '); DROP TABLE customer_tbl; --
+    // become a command. That attack is called SQL injection.
+    // (The playground deliberately runs whatever SQL you type: here,
+    // that's the point.)
     //
     // OBJECT.ENTRIES EXPLAINED:
     // Turns { key: value, ... } into [[key, value], ...] so we can loop
@@ -388,19 +450,24 @@ document.documentElement.setAttribute('data-dataset', currentDataset);
  */
 function updateStatus(status, message) {
     // DOM MANIPULATION EXPLAINED:
-    // document.getElementById() gets an HTML element by its ID
-    // We then modify its properties (className, textContent)
+    // The DOM (Document Object Model) is the browser's live copy of the
+    // HTML, which JavaScript can read and change. document.getElementById()
+    // finds the element with that id; changing its className or innerHTML
+    // changes what's on screen straight away.
     
     const statusDiv = document.getElementById('db-status');
     if (!statusDiv) return;
     
     // CONDITIONAL (TERNARY) OPERATOR EXPLAINED:
+    // (Search word: TERNARY)
     // condition ? valueIfTrue : valueIfFalse
     // Shorthand for if-else statements
     const statusClass = status === 'ready' ? 'ready' : status === 'error' ? 'error' : '';
     
     statusDiv.className = `db-status ${statusClass}`;
-    statusDiv.innerHTML = `<span class="status-indicator"></span> ${message}`;
+    // innerHTML treats the text as HTML, so the message is escaped first
+    // (see escapeHtml below for why)
+    statusDiv.innerHTML = `<span class="status-indicator"></span> ${escapeHtml(message)}`;
 }
 
 /**
@@ -514,8 +581,9 @@ function resultToHtml(result) {
     
     // TABLE HEADER
     // MAP EXPLAINED:
-    // Transforms each element in an array
-    // Returns a new array with the transformed elements
+    // map() builds a new array by running a function on every item:
+    // here, each column name becomes '<th>name</th>'. join('') then glues
+    // the array of strings into one long string, with nothing between.
     const headerRow = columns.map(col => `<th>${escapeHtml(col)}</th>`).join('');
     
     // TABLE ROWS
@@ -574,13 +642,21 @@ function displayError(message) {
 }
 
 /**
- * Escape HTML to prevent XSS attacks
+ * Escape text so it can be put inside HTML safely
+ * 
  * SECURITY EXPLAINED:
- * If user input contains <script> tags, they could execute malicious code
- * This function converts < > & " ' to safe HTML entities
+ * Anything put into innerHTML is read as HTML. If a result from the
+ * database contained <img src=x onerror="...">, the browser would run
+ * the code in it. That's called cross-site scripting (XSS).
+ * 
+ * The trick here: setting textContent stores the text as plain text,
+ * and reading innerHTML back gives it with & < and > turned into
+ * &amp; &lt; and &gt;, which the browser displays but never runs.
+ * (Quotes aren't changed, so this is safe between tags, as it's used
+ * here, but not inside an attribute's value.)
  * 
  * @param {string} text - Text to escape
- * @returns {string} - Escaped text
+ * @returns {string} - The same text, safe to put between HTML tags
  */
 function escapeHtml(text) {
     const div = document.createElement('div');
@@ -706,13 +782,8 @@ function resetDatabase() {
 // EVENT LISTENERS
 // ============================================
 // EVENT LISTENERS EXPLAINED:
-// Wait for the DOM to fully load before running code
-// This ensures all HTML elements exist before we try to access them
-
-// IIFE (Immediately Invoked Function Expression) EXPLAINED:
-// (function() { ... })();
-// Creates a private scope to avoid polluting global namespace
-// The function runs immediately when the script loads
+// addEventListener('something', fn) asks the browser to run fn every
+// time "something" happens: a click, a key press, the page loading.
 
 /**
  * Initialize when DOM is ready
@@ -737,8 +808,13 @@ document.addEventListener('DOMContentLoaded', function() {
     setQuery(DATASETS[currentDataset].defaultQuery);
     
     // "LOAD IT INTO THE PLAYGROUND" BUTTONS:
-    // Each answer's button keeps its query in a data-query attribute.
-    // One listener on the whole page handles all of them (event delegation)
+    // Each answer's button keeps its query in a data-query attribute,
+    // which JavaScript reads as button.dataset.query.
+    //
+    // EVENT DELEGATION:
+    // Instead of one listener per button (there are dozens), one listener
+    // on the whole document hears every click. closest() then checks
+    // whether the click landed on, or inside, one of those buttons.
     document.addEventListener('click', function(event) {
         const button = event.target.closest('.try-answer');
         if (!button) return;
@@ -775,9 +851,14 @@ document.addEventListener('DOMContentLoaded', function() {
 // MAKE FUNCTIONS GLOBALLY ACCESSIBLE
 // ============================================
 // WINDOW OBJECT EXPLAINED:
-// The global object in browsers
-// Assigning to window makes functions available to HTML onclick handlers
-// Without this, onclick="executeQuery()" wouldn't work
+// window is the browser's global object: anything on it can be used from
+// anywhere, including onclick="..." attributes in the HTML.
+//
+// Functions declared at the top level of an ordinary script like this
+// one are already on window, so these lines don't change anything. They
+// are here to say out loud which functions the HTML relies on. The other
+// three scripts (appearance.js, code-lab.js, page-nav.js) do the opposite:
+// they wrap themselves in an IIFE so that nothing leaks out.
 
 window.executeQuery = executeQuery;
 window.setQuery = setQuery;
@@ -785,43 +866,3 @@ window.clearQuery = clearQuery;
 window.resetDatabase = resetDatabase;
 window.showTables = showTables;
 window.setDataset = setDataset;
-
-// ============================================
-// DEVELOPER NOTES
-// ============================================
-// 
-// JAVASCRIPT CONCEPTS DEMONSTRATED:
-// ✅ Variables (let, const)
-// ✅ Data types (string, number, boolean, object, array)
-// ✅ Functions (regular, arrow, async)
-// ✅ Promises & async/await
-// ✅ Error handling (try-catch)
-// ✅ DOM manipulation
-// ✅ Event listeners
-// ✅ Array methods (forEach, map, join)
-// ✅ Template literals
-// ✅ Destructuring
-// ✅ Ternary operators
-// ✅ JSDoc type hints
-// 
-// SQL CONCEPTS DEMONSTRATED:
-// ✅ CREATE TABLE
-// ✅ INSERT INTO
-// ✅ SELECT with WHERE
-// ✅ JOIN and LEFT JOIN (foreign keys)
-// ✅ ORDER BY
-// ✅ COUNT, SUM and arithmetic (price * quantity)
-// ✅ UPDATE and DELETE
-// ✅ Prepared statements
-// 
-// BEST PRACTICES USED:
-// ✅ Type hints with JSDoc
-// ✅ Error handling
-// ✅ Input validation
-// ✅ Security (HTML escaping)
-// ✅ Clear variable names
-// ✅ Extensive comments
-// ✅ Modular functions
-// ✅ Guard clauses
-// 
-// ============================================
