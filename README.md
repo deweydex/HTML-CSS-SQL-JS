@@ -180,17 +180,17 @@ For example: `https://johndoe.github.io/sql-tutorial/`
 
 ### Sample Database
 
-Part 3 lets each student choose between two sample databases, a shop or a school. The explanations, diagram and all 13 exercises switch with the choice, and the exercises teach the same thing in both, so a class can mix choices. Both follow three naming conventions: every table name ends in `_tbl`, every table's id is named after it (`product_tbl` has `product_id`), and foreign keys sit at the bottom of the table with the same name as the id they point at.
+Part 3 lets each student choose between two sample databases, a shop or a school. The explanations, diagram and all 13 exercises switch with the choice, and the exercises teach the same thing in both, so a class can mix choices. Both follow three naming conventions: every table name ends in `_tbl`, every table's id is named after it (`product_tbl` has `product_id`), and foreign keys sit directly under the table's own id, with the same name as the id they point at (the same convention as the Database Methods course on dewlab).
 
 **The shop:**
 - `customer_tbl`: customer_id, customer_name, county (8 customers)
 - `product_tbl`: product_id, product_name, category, price, stock (6 products; the headphones are out of stock and nobody has ordered them)
-- `order_tbl`: order_id, order_date, quantity, customer_id, product_id (12 orders, each one line on a receipt; quantity gives students something to think about: items sold versus orders placed, price × quantity)
+- `order_tbl`: order_id, customer_id, product_id, order_date, quantity (12 orders, each one line on a receipt; quantity gives students something to think about: items sold versus orders placed, price × quantity)
 
 **The school:**
 - `student_tbl`: student_id, student_name, county (the same 8 people)
 - `module_tbl`: module_id, module_name, department, credits, hours (6 modules; Robotics has 0 hours and no results)
-- `result_tbl`: result_id, exam_date, mark, student_id, module_id (12 exam results, marked out of 100)
+- `result_tbl`: result_id, student_id, module_id, exam_date, mark (12 exam results, marked out of 100)
 
 The names come from many backgrounds so every class can see itself in the examples.
 
