@@ -1,9 +1,40 @@
 <!DOCTYPE html>
+<!-- ================================================================
+     HTML, CSS & SQL TUTORIAL: THE PAGE ITSELF
+     ================================================================
+     This file is the page you see. Reading it is one of the lessons:
+     every tag in it is one Part 1 teaches, used for real.
+
+     How the files fit together:
+       index.html     the content and its structure (this file)
+       styles.css     how it all looks
+       tutorial.js    the SQL playground in Part 3
+       code-lab.js    the live HTML and CSS editors in Parts 1 and 2
+       appearance.js  the Appearance panel (theme, font, text size)
+       page-nav.js    the bar that stays at the top of the screen
+
+     Comments like this one point out an HTML idea the first time the
+     page uses it. Browsers ignore everything between the comment
+     markers, so comments are for people only.
+
+     A good way to read it: open the page in a browser beside this
+     file, and find each part of the page in the code.
+     ================================================================ -->
+<!-- lang="en" tells browsers, translation tools and screen readers
+     which language the page is written in -->
 <html lang="en">
+<!-- <head> holds information ABOUT the page, which isn't shown in it -->
 <head>
+    <!-- charset: which character set the file uses. UTF-8 covers every
+         language's letters and symbols, so the € sign and letters with
+         a fada, like á, display correctly -->
     <meta charset="UTF-8">
+    <!-- viewport: without this, phones pretend to be a wide desktop
+         screen and shrink the whole page to fit -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- The title appears on the browser tab and in bookmarks -->
     <title>HTML, CSS & SQL Tutorial</title>
+    <!-- An EXTERNAL stylesheet: all the CSS lives in its own file -->
     <link rel="stylesheet" href="styles.css">
     <!-- Applies saved Appearance settings before the page is drawn -->
     <script src="appearance.js"></script>
@@ -11,8 +42,17 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.8.0/sql-wasm.js"></script>
 </head>
 <body>
+    <!-- <body> holds everything that's shown on the page.
+         
+         A "skip link": the first thing a keyboard user reaches when they press
+         Tab. It jumps past the header to the tutorial itself. styles.css hides
+         it off-screen until it has keyboard focus. -->
     <a class="skip-link" href="#main">Skip to the tutorial</a>
 
+    <!-- SEMANTIC ELEMENTS: <header>, <nav>, <main>, <section> and <footer>
+         work like <div>, but their names say what each part of the page IS.
+         Screen readers let people jump between them, and search engines use
+         them to understand the page. -->
     <header>
         <h1>Interactive Web Development &amp; SQL Tutorial</h1>
         <p class="subtitle">Learn HTML, CSS and SQL with hands-on examples that run in your browser</p>
@@ -21,6 +61,9 @@
     <!-- Stays at the top of the screen while you scroll. page-nav.js
          highlights the part you're reading; appearance.js adds its
          button to the end of this bar. -->
+    <!-- aria-label gives the nav a name that screen readers announce.
+         Each href="#something" jumps to the element with id="something"
+         further down this page. -->
     <nav class="page-nav" aria-label="Parts of this page">
         <div class="page-nav-links">
             <a href="#start">Start here</a>
@@ -46,6 +89,8 @@
                         <p>Structure and content</p>
                         <p class="tech-description">What goes on the page</p>
                     </div>
+                    <!-- aria-hidden="true" hides this "+" from screen readers: it's
+                         decoration, and "plus" read aloud between the cards would be noise -->
                     <div class="plus" aria-hidden="true">+</div>
                     <div class="tech-card">
                         <h3>CSS</h3>
@@ -93,6 +138,9 @@
                 <h3>What is HTML?</h3>
                 <p><strong>HTML (HyperText Markup Language)</strong> is the standard language for creating web pages. It uses <strong>tags</strong> to structure content.</p>
                 
+                <!-- <pre> keeps spaces and line breaks exactly as typed. <code> marks text as
+                     code. Inside them, &lt; and &gt; stand for < and >: written plainly,
+                     the browser would treat <html> as a real tag instead of showing it. -->
                 <div class="example-box">
                     <h4>An HTML page</h4>
                     <pre><code>&lt;!DOCTYPE html&gt;
@@ -125,6 +173,14 @@
                 <p>Forms collect information from the person using the page. Try this one:</p>
                 
                 <div class="interactive-demo">
+                    <!-- for="name" on each <label> matches id="name" on its input: clicking
+                         the label then puts the cursor in the box, and screen readers read
+                         the label aloud. "required" and type="email" make the browser check
+                         the answer before the form can be sent.
+                         
+                         onsubmit runs a little JavaScript when the form is sent:
+                         event.preventDefault() stops the page from reloading, as a real form
+                         would, so we just show a message instead. -->
                     <form id="sample-form" onsubmit="event.preventDefault(); alert('Form submitted!');">
                         <label for="name">Name:</label>
                         <input type="text" id="name" name="name" required>
@@ -160,8 +216,19 @@
                 <h3>Try it: write some HTML</h3>
                 <p>Type HTML in the editor and the preview shows what a browser makes of it. It updates as you type, and your work is saved in this browser, so refreshing the page won't lose it.</p>
 
+                <!-- A "workspace": the editor (workspace-side) and its exercises
+                     (workspace-main) side by side. styles.css pins the editor in place on
+                     wide screens so it stays beside whatever exercise you're reading. -->
                 <div class="workspace">
                 <div class="workspace-side">
+                <!-- DATA ATTRIBUTES: any attribute starting data- is yours to invent.
+                     The browser ignores it, but JavaScript can read it: code-lab.js reads
+                     data-lab to tell the editors apart (element.dataset.lab).
+                     
+                     The text between <textarea> and </textarea> is the starting example.
+                     The <iframe> is a page inside the page, where your HTML is shown.
+                     "sandbox" stops anything inside it from running scripts or reaching
+                     this page; "title" names it for screen readers. -->
                 <div class="code-lab" data-lab="html-lab">
                     <div class="code-lab-editors">
                         <div class="code-lab-pane">
@@ -186,6 +253,8 @@
                     <div class="exercise">
                         <h4>HTML exercise 1: Headings</h4>
                         <p>Under the paragraph, add a smaller heading and a paragraph about a hobby of yours.</p>
+                        <!-- <details> and <summary>: a box that opens and closes with no
+                             JavaScript at all. Only the <summary> shows until it's clicked. -->
                         <details class="hint">
                             <summary>Show hint</summary>
                             <p>Headings go from <code>&lt;h1&gt;</code> (the biggest) to <code>&lt;h6&gt;</code> (the smallest). Try <code>&lt;h2&gt;</code>.</p>
@@ -314,6 +383,8 @@ p {
             <div class="lesson">
                 <h3>The box model</h3>
                 <p>Every HTML element is a rectangular box, built in layers from the inside out:</p>
+                <!-- Four boxes nested inside each other, drawn as the four layers of the
+                     box model. The CSS for .margin-layer and friends is in styles.css. -->
                 <div class="box-model-demo">
                     <div class="box-layer margin-layer">
                         <span>Margin</span>
@@ -500,6 +571,9 @@ body {
                 <p>Read the commands first, or jump straight to the playground and click an example query. Both work. The database starts fresh every time you refresh the page, so you can't break anything permanently.</p>
             </div>
             
+            <!-- <fieldset> groups related form controls, and <legend> names the
+                 group. Radio buttons with the same name="dataset" belong together:
+                 ticking one unticks the others. tutorial.js listens for changes. -->
             <fieldset class="dataset-picker">
                 <legend>Choose your database</legend>
                 <p>Every example and exercise in this part works with the database you pick. You can switch whenever you like: switching starts the database fresh.</p>
@@ -520,6 +594,9 @@ body {
                 <p><strong>SQL (Structured Query Language)</strong> is used to manage and query databases. It lets you store, retrieve, update, and delete data.</p>
                 
                 <h4>The sample database</h4>
+                <!-- Part 3 is written twice: once for the shop, once for the school.
+                     data-for-dataset marks which version each block belongs to, and
+                     styles.css hides whichever one wasn't chosen. -->
                 <div data-for-dataset="shop">
                 <p>The shop database has three tables:</p>
                 <ul>
@@ -534,6 +611,13 @@ body {
                     <li>A column that points at another table's id is called a <strong>foreign key</strong>. Foreign keys always go at the bottom of a table, and they have the same name as the id they point at.</li>
                 </ul>
 
+                <!-- <figure> holds a picture and <figcaption> its caption.
+                     
+                     The diagram is SVG (Scalable Vector Graphics): a picture written as
+                     code, with <rect> for boxes, <text> for words and <line> or
+                     <polyline> for lines. It stays sharp at any size, and styles.css
+                     colours it, so it follows the dark theme too. role="img" and <title>
+                     give screen readers a description of the whole picture. -->
                 <figure class="erd-figure" id="db-diagram-shop">
                     <svg class="erd" viewBox="-2 -2 784 164" role="img" aria-labelledby="db-diagram-title-shop db-diagram-caption-shop"><title id="db-diagram-title-shop">The three tables and how they link</title><rect class="erd-box" x="0" y="0" width="210" height="108" rx="5"/><rect class="erd-head" x="0" y="0" width="210" height="30" rx="5"/><rect class="erd-head" x="0" y="24" width="210" height="6"/><line class="erd-rule" x1="0" y1="30" x2="210" y2="30"/><text class="erd-title" x="105.0" y="20" text-anchor="middle">customer_tbl</text><text class="erd-col" x="12" y="47.0">customer_id</text><text class="erd-key" x="198" y="47.0" text-anchor="end">PK</text><text class="erd-col" x="12" y="73.0">customer_name</text><text class="erd-col" x="12" y="99.0">county</text><rect class="erd-box" x="285" y="0" width="210" height="160" rx="5"/><rect class="erd-head" x="285" y="0" width="210" height="30" rx="5"/><rect class="erd-head" x="285" y="24" width="210" height="6"/><line class="erd-rule" x1="285" y1="30" x2="495" y2="30"/><text class="erd-title" x="390.0" y="20" text-anchor="middle">order_tbl</text><text class="erd-col" x="297" y="47.0">order_id</text><text class="erd-key" x="483" y="47.0" text-anchor="end">PK</text><text class="erd-col" x="297" y="73.0">order_date</text><text class="erd-col" x="297" y="99.0">quantity</text><text class="erd-col" x="297" y="125.0">customer_id</text><text class="erd-key" x="483" y="125.0" text-anchor="end">FK</text><text class="erd-col" x="297" y="151.0">product_id</text><text class="erd-key" x="483" y="151.0" text-anchor="end">FK</text><rect class="erd-box" x="570" y="0" width="210" height="160" rx="5"/><rect class="erd-head" x="570" y="0" width="210" height="30" rx="5"/><rect class="erd-head" x="570" y="24" width="210" height="6"/><line class="erd-rule" x1="570" y1="30" x2="780" y2="30"/><text class="erd-title" x="675.0" y="20" text-anchor="middle">product_tbl</text><text class="erd-col" x="582" y="47.0">product_id</text><text class="erd-key" x="768" y="47.0" text-anchor="end">PK</text><text class="erd-col" x="582" y="73.0">product_name</text><text class="erd-col" x="582" y="99.0">category</text><text class="erd-col" x="582" y="125.0">price</text><text class="erd-col" x="582" y="151.0">stock</text><polyline class="erd-link" points="210,43.0 247,43.0 247,121.0 285,121.0"/><line class="erd-link" x1="220" y1="35.0" x2="220" y2="51.0"/><line class="erd-link" x1="269" y1="121.0" x2="285" y2="113.0"/><line class="erd-link" x1="269" y1="121.0" x2="285" y2="121.0"/><line class="erd-link" x1="269" y1="121.0" x2="285" y2="129.0"/><polyline class="erd-link" points="570,43.0 532,43.0 532,147.0 495,147.0"/><line class="erd-link" x1="560" y1="35.0" x2="560" y2="51.0"/><line class="erd-link" x1="511" y1="147.0" x2="495" y2="139.0"/><line class="erd-link" x1="511" y1="147.0" x2="495" y2="147.0"/><line class="erd-link" x1="511" y1="147.0" x2="495" y2="155.0"/></svg>
                     <figcaption id="db-diagram-caption-shop">Each line joins a table's own id (PK, its <strong>primary key</strong>) to the foreign key (FK) that points at it. The forked end means "many": one customer can have many orders, and one product can be in many orders.</figcaption>
@@ -712,6 +796,10 @@ WHERE module_name = 'Databases';</code></pre>
                 <h3>The SQL playground</h3>
                 <p>Click an example to load it, or write your own query, then press <strong>Run Query</strong>.</p>
 
+                <!-- onclick="..." is the oldest way to connect a button to JavaScript:
+                     the code sits right in the HTML. The rest of the page uses
+                     addEventListener in the .js files instead, which keeps the HTML and
+                     the JavaScript apart. Compare them both. -->
                 <div class="query-examples" data-for-dataset="shop">
                     <button onclick="setQuery('SELECT * FROM product_tbl;')">Show All Products</button>
                     <button onclick="setQuery('SELECT * FROM customer_tbl;')">Show All Customers</button>
@@ -1252,7 +1340,7 @@ WHERE result_tbl.result_id IS NULL;">Load it into the playground</button>
         </section>
 
         <!-- ============================================
-             PUTTING IT ALL TOGETHER
+             WRAPPING UP
         ============================================= -->
         <section id="wrap-up" class="tutorial-section">
             <h2>Wrapping up</h2>
@@ -1284,6 +1372,10 @@ WHERE result_tbl.result_id IS NULL;">Load it into the playground</button>
         <p>Created by Joshua Aaron (<a href="https://jsaaron.com">jsaaron.com</a>) for teaching. Built with HTML, CSS and SQL.js.</p>
     </footer>
 
+    <!-- These scripts load at the END of <body>, so the HTML above them
+         already exists when they run and they can find its elements.
+         appearance.js is the exception: it loads in <head>, so saved
+         settings apply before the page is first drawn. -->
     <!-- JavaScript for SQL functionality -->
     <script src="tutorial.js"></script>
     <!-- JavaScript for the live HTML/CSS editors -->

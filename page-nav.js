@@ -6,6 +6,12 @@
 //    --nav-h, so the pinned editors and the "jump to" links can stop
 //    just below it instead of underneath it.
 // 2. Highlight the link for the part of the page you're reading.
+//
+// IDEAS IN THIS FILE: reading an element's size and position
+// (offsetHeight, getBoundingClientRect), the scroll and resize events,
+// requestAnimationFrame, ResizeObserver, and aria-current. (The
+// (function () { ... })() wrapper is an IIFE: see the top of
+// appearance.js.)
 
 (function () {
     'use strict';
@@ -26,7 +32,10 @@
     let lastCurrent;
     function highlight() {
         // The current part is the last one whose top has scrolled up past
-        // a line a little below the bar
+        // a line a little below the bar.
+        // getBoundingClientRect() says where an element is on the screen
+        // right now: its .top is the distance from the top of the window,
+        // and goes negative once the element has scrolled up past it.
         const line = nav.offsetHeight + 80;
         let current = null;
         for (const target of targets) {
@@ -36,6 +45,11 @@
         lastCurrent = current;
         for (const link of links) {
             if (current && link.getAttribute('href') === '#' + current.id) {
+                // ARIA-CURRENT EXPLAINED:
+                // Screen readers announce this link as "current location".
+                // styles.css uses the same attribute to colour it, so
+                // what sighted readers see and what screen readers hear
+                // come from one source.
                 link.setAttribute('aria-current', 'location');
                 centreInBar(link);
             } else {

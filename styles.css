@@ -1,4 +1,31 @@
 /* ============================================
+   STYLES FOR THE WHOLE TUTORIAL
+   ============================================
+   One stylesheet for the whole page, read from top to bottom. Later
+   rules win over earlier ones when they are equally specific: that's the
+   "cascade" in Cascading Style Sheets.
+
+   IDEAS IN THIS FILE, roughly in order:
+   - custom properties (variables) and themes      DESIGN TOKENS
+   - attribute selectors, like [data-theme="dark"] Dark theme
+   - @font-face: using your own font files         Font choices
+   - media queries: prefers-reduced-motion,
+     screen width, print                           @media
+     (the dark-mode question, prefers-color-scheme, is asked from
+     JavaScript instead: see matchMedia in appearance.js)
+   - the box-sizing reset                          GLOBAL STYLES
+   - :focus-visible and a skip link                GLOBAL STYLES
+   - gradients                                     HEADER
+   - position: sticky                              STICKY SECTION BAR
+   - flexbox and grid layouts                      display: flex / grid
+   - repeat(auto-fit, minmax(...))                 SQL Command Cards
+   - transitions and @keyframes animation          pulse
+   - :has(), a parent selector                     Choose your database
+   - styling SVG with CSS                          Database diagram
+   - visually hiding an element but keeping it
+     for screen readers                            Segmented control
+
+   ============================================
    DESIGN TOKENS (CSS CUSTOM PROPERTIES)
    ============================================
    Every colour, font and size the page uses is stored once here as a
@@ -30,8 +57,11 @@
     --shadow: rgba(15, 23, 42, 0.08);
     --focus: #f59e0b;
 
-    /* Brand: a deeper indigo and purple than before, so white text on
-       the header clears 7:1 instead of 3.7:1 */
+    /* Brand colours. White text on the darkest of these has a contrast
+       ratio of about 7:1. Accessibility guidelines (WCAG) ask for at
+       least 4.5:1 for normal text, so text stays readable for people
+       with low vision and on dim or glary screens. A lighter purple
+       looks similar but can drop below 4:1. */
     --accent: #4338ca;
     --accent-hover: #3730a3;
     --accent-soft: #eef0ff;
@@ -230,6 +260,12 @@
 /* ============================================
    GLOBAL STYLES & RESET
 ============================================= */
+/* * matches every element. Browsers give many elements their own
+   margins and padding; this starts everything from zero.
+
+   box-sizing: border-box makes an element's width include its padding
+   and border. Without it, width: 200px plus padding: 20px would take up
+   240px, which surprises nearly everyone. */
 * {
     margin: 0;
     padding: 0;
@@ -306,6 +342,10 @@ header h1 {
 
 /* ============================================
    STICKY SECTION BAR
+   ============================================
+   position: sticky keeps an element in the normal flow of the page until
+   it would scroll off the top (top: 0), then holds it there. z-index puts
+   it in front of the content scrolling underneath.
 ============================================= */
 .page-nav {
     position: sticky;
@@ -883,6 +923,9 @@ button[type="submit"]:hover {
     animation: none;
 }
 
+/* @keyframes describes an animation step by step: fully visible at the
+   start and end, faded at the halfway point. The loading light above uses
+   it with animation: pulse 1.5s ease-in-out infinite. */
 @keyframes pulse {
     0%, 100% { opacity: 1; }
     50% { opacity: 0.4; }
@@ -938,6 +981,9 @@ button[type="submit"]:hover {
     border-color: var(--accent);
 }
 
+/* :has() styles an element by what's inside it: here, the whole option
+   is outlined when the radio button inside it is ticked. CSS used to have
+   no way to select a parent like this. */
 .dataset-option:has(input:checked) {
     border-color: var(--accent);
     box-shadow: 0 0 0 2px var(--accent);
@@ -1026,7 +1072,10 @@ button[type="submit"]:hover {
     color: var(--chip-fg);
 }
 
-/* SQL Command Cards */
+/* SQL Command Cards
+   repeat(auto-fit, minmax(280px, 1fr)) means: fit in as many columns as
+   will go, each at least 280px wide, sharing any spare room equally. The
+   grid rearranges itself for any screen width without a media query. */
 .sql-command-list {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -1040,6 +1089,8 @@ button[type="submit"]:hover {
     border-radius: 8px;
     padding: 20px;
     min-width: 0;   /* lets a grid card shrink below its code's width */
+    /* transition: when a property changes (as on :hover below), animate
+       the change over 0.3 seconds instead of jumping */
     transition: all 0.3s ease;
 }
 
@@ -1609,6 +1660,10 @@ footer a:hover {
 
 /* ============================================
    RESPONSIVE DESIGN
+   ============================================
+   A media query applies its rules only when its condition is true.
+   (max-width: 768px) means "on screens 768 pixels wide or narrower". The
+   rules inside override the ones above, because they come later.
 ============================================= */
 @media (max-width: 768px) {
     header h1 {
